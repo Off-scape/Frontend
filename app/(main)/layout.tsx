@@ -1,15 +1,14 @@
+import Footer from "../components/footer/Footer";
 
 export default function MainLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    return (
-        <>
-            <main>Header
-                {children}
-                footer
-            </main>
-        </>
-    )
+  return (
+    <>
+      <main>{children}</main>
+      <Footer />
+    </>
+  );
 }
