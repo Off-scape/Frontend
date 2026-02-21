@@ -19,11 +19,11 @@ const HeaderActions = ({ isMobile = false }: HeaderActionsProps) => {
         <div className="flex gap-x-2">
           <GlobeIcon />
           <select
-            className="text-[#F5F5DC] bg-transparent"
+            className="text-[#F5F5DC] bg-transparent cursor-pointer"
             name="language"
             id="language"
           >
-            <option value="az" className="text-black">
+            <option value="az" className="text-[#F5F5DC]  ">
               Az
             </option>
           </select>

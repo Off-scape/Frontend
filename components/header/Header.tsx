@@ -43,7 +43,7 @@ const Header = () => {
   return (
     <header
       ref={headerRef}
-      className="w-[98%] mx-auto mt-4 rounded-[20px] lg:rounded-[40px] py-3.5 px-6 bg-[#0B3E35B2]"
+      className="w-[98%] mx-auto mt-4 rounded-[20px] lg:rounded-[40px] py-3.5 px-6 bg-[#0B3E35B2] "
     >
       <div className="flex items-center justify-between roboto-medium">
         <HeaderLogo />
@@ -58,11 +58,11 @@ const Header = () => {
           <div className="flex gap-x-2">
             <GlobeIcon />
             <select
-              className="text-white bg-transparent"
+              className="text-white bg-transparent cursor-pointer"
               name="language"
               id="language"
             >
-              <option value="az" className="text-black">
+              <option value="az" className="text-[#F5F5DC] ">
                 Az
               </option>
             </select>
