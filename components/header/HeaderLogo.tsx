@@ -11,6 +11,7 @@ const HeaderLogo = () => {
       className={`${playfair.className} text-3xl lg:text-[44px] font-medium text-[#F5F5DC]`}
     >
       OFFscape
+
     </h1>
   );
 };
