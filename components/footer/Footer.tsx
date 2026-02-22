@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Playfair_Display, Roboto } from "next/font/google";
-import LocationIcon from "@/icons/locotionIcon";
-import EmailIcon from "@/icons/emailIcon";
-import PhoneIcon from "@/icons/phoneIcon";
+import LocationIcon from "@/icons/locationIcon";
+import EmailIcon from "@/icons/email-icon";
+import PhoneIcon from "@/icons/phone-icon";
 import Instagram from "@/icons/Instagram";
-import WhatsappIcon from "@/icons/whatsappIcon";
-import TikTokIcon from "@/icons/tiktokIcon";
-import YoutubeIcon from "@/icons/youtubeIcon";
-import FooterBottom from "@/components/footer/footerBottom";
+import WhatsappIcon from "@/icons/Whatsapp-icon";
+import TikTokIcon from "@/icons/Tik-tok-icon";
+import YoutubeIcon from "@/icons/Youtube-icon";
+import FooterBottom from "./FooterBottom";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
