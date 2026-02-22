@@ -1,24 +1,36 @@
 import Link from "next/link";
-import { Playfair_Display } from "next/font/google";
+import { Playfair_Display, Roboto } from "next/font/google";
+import LocationIcon from "@/icons/locotionIcon";
+import EmailIcon from "@/icons/emailIcon";
+import PhoneIcon from "@/icons/phoneIcon";
+import Instagram from "@/icons/Instagram";
+import WhatsappIcon from "@/icons/whatsappIcon";
+import TikTokIcon from "@/icons/tiktokIcon";
+import YoutubeIcon from "@/icons/youtubeIcon";
+import FooterBottom from "@/components/footer/footerBottom";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 export default function Footer() {
   return (
-    <div className="bg-white">
+    <div className={`${roboto.className} bg-white`}>
       <footer className="bg-[#0B3E35] text-white rounded-t-3xl">
         <div className="max-w-7xl  px-14 py-13">
           <h2 className={`${playfair.className} text-4xl font-medium mb-12`}>
             Offscape
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
+          <div className="grid grid-cols-1  xl:grid-cols-4  lg:grid-cols-2 sm:grid-cols-2 gap-12 items-start ">
             <div>
-              <h3 className="font-black mb-6 text-lg ">Sürətli Keçidlər</h3>
-              <ul className="space-y-4 text-sm text-white">
+              <h3 className="font-black mb-6 text-2xl">Sürətli Keçidlər</h3>
+              <ul className="space-y-4 text-lg text-white">
                 <li>
                   <Link href="/" className="hover:underline">
                     Ana səhifə
@@ -43,8 +55,8 @@ export default function Footer() {
             </div>
 
             <div>
-              <h3 className="font-black mb-6 text-lg">Aktivliklər</h3>
-              <ul className="space-y-4 text-sm text-white">
+              <h3 className="font-black mb-6 text-2xl">Aktivliklər</h3>
+              <ul className="space-y-4 text-lg text-white">
                 <li>
                   <Link href="/camping" className="hover:underline">
                     Camping
@@ -70,8 +82,73 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
+            <div>
+              <h3 className="font-black mb-6 text-2xl">Əlaqə</h3>
+              <ul className="space-y-4 text-lg text-white">
+                <li className="hover:underline cursor-pointer flex items-center gap-2.5">
+                  <LocationIcon /> Azərbaycan
+                </li>
+                <li className="hover:underline cursor-pointer flex items-center gap-2.5">
+                  <EmailIcon /> info@layiheadi.az
+                </li>
+                <li className="hover:underline cursor-pointer flex items-center gap-2.5">
+                  <PhoneIcon /> +994 XX XXX XX XX
+                </li>
+                <li className="flex items-center gap-5">
+                  <Instagram /> <WhatsappIcon /> <TikTokIcon /> <YoutubeIcon />
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="text-white text-sm leading-[100%] ">
+                <span className={`${playfair.className} font-bold`}>
+                  OFFSCAPE{" "}
+                </span>
+                <span className="font-normal">
+                  dən son xəbərləri qaçırmayın
+                </span>
+              </div>
+              <div
+                className="border-2 relative border-[#6A6A6D] rounded-[20px]
+                w-75 
+                sm:w-75 
+                lg:w-100
+                 h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
+              >
+                <input
+                  type="text"
+                  placeholder="E-poctunuz burada"
+                  className="text-white text-base outline-0 w-3/4 h-full"
+                />
+                <div className="absolute right-28 bottom-0 w-px h-full bg-[#6A6A6D]"></div>
+                <button className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer">
+                  Abunə ol
+                </button>
+              </div>
+              <div
+                className="flex mt-4 w-full 
+                lg:w-75 
+                min-[1388px]:w-75 
+                items-start"
+              >
+                <input
+                  type="checkbox"
+                  id="newsletter-checkbox"
+                  className="accent-[#6A6A6D] w-5 h-5 sm:w-6 sm:h-6 border-2 mt-1 shrink-0"
+                />
+
+                <label
+                  htmlFor="newsletter-checkbox"
+                  className="text-white text-sm ml-2 w-full block font-normal leading-6"
+                >
+                  Qutunu işarələməklə, ən azı 18 yaşınızın olduğunu qəbul
+                  edirsiniz.
+                </label>
+              </div>
+            </div>
           </div>
         </div>
+        <FooterBottom />
       </footer>
     </div>
   );
