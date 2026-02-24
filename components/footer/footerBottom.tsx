@@ -5,7 +5,7 @@ const roboto = Roboto({
 });
 const FooterBottom = () => {
   return (
-    <div className={`${roboto.className}  px-14 py-6`}>
+    <div className={`${roboto.className}  px-14 py-6 max-[400px]:px-8 max-[400px]:pt-3 max-[400px]:pb-8`}>
       <div className="border-t-4 border-[#6A6A6D] pt-6">
         <div>
           <ul className="flex gap-12 max-[729px]:flex-col ">
