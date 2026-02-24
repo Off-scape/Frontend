@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Playfair_Display, Roboto } from "next/font/google";
 import LocationIcon from "@/icons/locationIcon";
@@ -7,7 +10,9 @@ import Instagram from "@/icons/Instagram";
 import WhatsappIcon from "@/icons/Whatsapp-icon";
 import TikTokIcon from "@/icons/Tik-tok-icon";
 import YoutubeIcon from "@/icons/Youtube-icon";
-import FooterBottom from "./FooterBottom";
+import FooterBottom from "@/components/footer/footerBottom";
+import { EMAIL_REGEX } from "@/common/utils/validation";
+
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -19,10 +24,23 @@ const roboto = Roboto({
 });
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!EMAIL_REGEX.test(email)) {
+      setError("Düzgün email daxil edin");
+      return;
+    }
+
+    setError("");
+    console.log("Email doğrudur:", email);
+  };
   return (
     <div className={`${roboto.className} bg-white`}>
       <footer className="bg-[#0B3E35] text-white rounded-t-3xl">
-        <div className="max-w-7xl  px-14 py-13">
+        <div className="max-w-7xl  px-14 py-13 max-[400px]:px-8 max-[400px]:py-8">
           <h2 className={`${playfair.className} text-4xl font-medium mb-12`}>
             Offscape
           </h2>
@@ -108,24 +126,33 @@ export default function Footer() {
                   dən son xəbərləri qaçırmayın
                 </span>
               </div>
-              <div
-                className="border-2 relative border-[#6A6A6D] rounded-[20px]
-                w-75 
-                sm:w-75 
-                lg:w-100
-                 h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
-              >
-                <input
-                  type="text"
-                  placeholder="E-poctunuz burada"
-                  className="text-white text-base outline-0 w-3/4 h-full"
-                />
-                <div className="absolute right-28 bottom-0 w-px h-full bg-[#6A6A6D]"></div>
-                <button className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer">
-                  Abunə ol
-                </button>
-              </div>
-              <div
+              <form onSubmit={handleSubmit}>
+                <div
+                  className="border-2 relative border-[#6A6A6D] rounded-[20px]
+        w-75 sm:w-75 lg:w-100
+        h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
+                >
+                  <input
+                    type="text"
+                    placeholder="E-poçtunuz burada"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="text-white text-base outline-0 w-3/4 h-full bg-transparent"
+                  />
+
+                  <div className="absolute right-28 bottom-0 w-px h-full bg-[#6A6A6D]" />
+
+                  <button
+                    type="submit"
+                    className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer"
+                  >
+                    Abunə ol
+                  </button>
+                </div>
+
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+              </form>
+              {/* <div
                 className="flex mt-4 w-full 
                 lg:w-75 
                 min-[1388px]:w-75 
@@ -144,7 +171,7 @@ export default function Footer() {
                   Qutunu işarələməklə, ən azı 18 yaşınızın olduğunu qəbul
                   edirsiniz.
                 </label>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
