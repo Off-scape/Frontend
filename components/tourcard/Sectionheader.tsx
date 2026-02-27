@@ -5,7 +5,7 @@ interface SectionHeaderProps {
   title: string;
   actionText?: string;
   onAction?: () => void;
-  actionHref?: string; // For Next.js Link (Server Component friendly)
+  actionHref?: string; 
   isActionDisabled?: boolean;
 }
 
@@ -36,14 +36,14 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 
       {actionText && (
         <>
-          {/* Use Next.js Link for Server Components (navigation) */}
+          
           {actionHref && !isActionDisabled ? (
             <Link href={actionHref} className="text-[#142A12]">
               {actionText}
               
             </Link>
           ) : (
-            /* Use button for Client Components (interactive features) */
+            
             <button
               onClick={handleAction}
               disabled={isActionDisabled}

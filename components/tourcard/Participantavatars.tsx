@@ -1,5 +1,5 @@
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
 interface Participant {
   id: string;
@@ -19,11 +19,10 @@ const ParticipantAvatars: React.FC<ParticipantAvatarsProps> = ({
   maxDisplay = 4,
 }) => {
   const displayedParticipants = participants.slice(0, maxDisplay);
-  const remainingCount = Math.max(0, count - maxDisplay);
+  
 
   return (
     <div className="flex items-center">
-      {/* Avatar Stack */}
       <div className="flex -space-x-2">
         {displayedParticipants.map((participant, index) => (
           <div
@@ -43,10 +42,7 @@ const ParticipantAvatars: React.FC<ParticipantAvatarsProps> = ({
         ))}
       </div>
 
-      {/* Participant Count */}
-      <span className="ml-3 text-sm text-gray-600">
-        {count} iştirakçı
-      </span>
+      <span className="ml-3 text-sm text-gray-600">{count} iştirakçı</span>
     </div>
   );
 };
