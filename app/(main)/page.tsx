@@ -1,9 +1,10 @@
-import Image from "next/image";
+import ToursSection from "@/components/tourcard/ToursSection";
+
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-white">
-      main
+    <div className=" bg-zinc-50 font-sans dark:bg-white">
+      <ToursSection />
     </div>
   );
 }
