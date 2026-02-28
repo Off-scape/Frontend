@@ -34,12 +34,10 @@ export default function PopularCategories() {
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16">
-      {/* Section Title */}
       <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
         Ən populyar kateqoriyalar
       </h2>
 
-      {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {categories.map((category) => (
           <div
@@ -58,12 +56,10 @@ export default function PopularCategories() {
                 group-hover:shadow-xl
               `}
             >
-              {/* Category Title */}
               <h3 className="text-3xl font-bold  text-gray-700 mx-2  leading-tight">
                 {category.title}
               </h3>
 
-              {/* Icon */}
               <div className="self-end mt-auto">
                 <Image
                   src={category.icon}
@@ -75,15 +71,14 @@ export default function PopularCategories() {
               </div>
             </div>
 
-            {/* Hover Effect - Bottom Gradient Border */}
             <div
               className={`
-                absolute bottom-0 left-0 right-0 h-[15px]
+                absolute bottom-0 left-0 right-0 h-[12px]
                 bg-gradient-to-r ${category.hoverGradient}
                 rounded-b-[17px]
                 transform translate-y-full
                 group-hover:translate-y-0
-                transition-transform duration-500 ease-out
+                transition-transform duration-400 ease-in-out
               `}
             />
           </div>
