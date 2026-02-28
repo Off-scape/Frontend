@@ -53,7 +53,8 @@ export default function PopularCategories() {
                 flex flex-col items-start justify-between
                 min-h-[180px]
                 relative
-                group-hover:shadow-xl
+                z-10
+                
               `}
             >
               <h3 className="text-3xl font-bold  text-gray-700 mx-2  leading-tight">
@@ -73,12 +74,12 @@ export default function PopularCategories() {
 
             <div
               className={`
-                absolute bottom-0 left-0 right-0 h-[12px]
-                bg-gradient-to-r ${category.hoverGradient}
-                rounded-b-[17px]
-                transform translate-y-full
-                group-hover:translate-y-0
-                transition-transform duration-400 ease-in-out
+                 relative bottom-3 left-0 right-0 h-[15px] 
+                bg-gradient-to-b ${category.hoverGradient}
+                rounded-[20px]
+                opacity-30 group-hover:opacity-100
+                transform  scale-y-120 group-hover:scale-y-200 rounded-b-2xl
+                transition-all duration-600 ease-in-out
               `}
             />
           </div>
