@@ -11,7 +11,7 @@ import WhatsappIcon from "@/icons/Whatsapp-icon";
 import TikTokIcon from "@/icons/Tik-tok-icon";
 import YoutubeIcon from "@/icons/Youtube-icon";
 import FooterBottom from "@/components/footer/footerBottom";
-import { EMAIL_REGEX } from "@/common/utils/validation";
+import { EMAIL_REGEX } from "@/utils/validation";
 
 
 const playfair = Playfair_Display({
