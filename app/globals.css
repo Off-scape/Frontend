@@ -27,3 +27,7 @@
 .playfair-display {
   font-family: "Playfair Display", serif;
 }
+.shadow {
+ box-shadow: 4px 4px 11px 0px #33443a52;
+
+}
