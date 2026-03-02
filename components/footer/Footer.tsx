@@ -129,15 +129,15 @@ export default function Footer() {
               <form onSubmit={handleSubmit}>
                 <div
                   className="border-2 relative border-[#6A6A6D] rounded-[20px]
-        w-75 sm:w-75 lg:w-100
-        h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
+                    w-75 sm:w-75 lg:w-100 max-[1285px]:w-75!
+                    h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
                 >
                   <input
                     type="text"
                     placeholder="E-poçtunuz burada"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="text-white text-base outline-0 w-3/4 h-full bg-transparent"
+                    className="text-white text-base outline-0 w-[75%] max-[1285px]:w-[63%] max-sm:w-[75%] h-full bg-transparent"
                   />
 
                   <div className="absolute right-28 bottom-0 w-px h-full bg-[#6A6A6D]" />

@@ -19,56 +19,68 @@ const moreInfo: MoreInfoItem[] = [
     {
         title: "Görüş yeri",
         icon: <MeetPlaceIcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
+        desc: "Gəncilk metrosu, Sumqayıt dairəsi , Lökbaran dairəsi , Sulutəpə dairəsi"
 
     },
     {
         title: "Avadanlıq",
         icon: <Equipment />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
-
+        desc: "Bel çantası, əsas çanta 40-50 litr, Yuxu çantası, Mövsumə uyğun dəyişik ayaqqabı (idman ayaqqabısı,sandallar və ya çəkələk), Mövsümə uyğun geyim forması, Baş fənəri + batareyalar dəsti, Gigiyena vasitələri, Günəşdən qoruyucu krem, su  qabı (1-2 l)."
     },
     {
         title: "Nəyə hazır olmalıyıq",
         icon: <ToDoIcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
-
+        desc: (
+            <div>
+                <span className="font-bold">
+                    Hazır olmalı olduğunuz:{" "}
+                </span>
+                Rahat geyim və ayaqqabı, kifayət qədər su, enerji verən yüngül qidalar,
+                hava şəraitinə uyğun avadanlıqlar, fiziki və zehni hazırlıq.
+                <br />
+                <span className="font-bold">
+                    Hazır olmamalı olduğunuz:{" "}
+                </span>
+                Qaydalara əməl etməmək, təhlükəli hərəkətlər, tullantı buraxmaq,
+                təbiəti zədələmək, lazımsız əşyalar daşımaq.
+            </div>
+        )
     },
     {
         title: "Yaşayış şərtləri",
         icon: <LivingConditionsİcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
+        desc: "Hər turun formatına uyğun olaraq çadırda gecələmə, hiking düşərgələri və ya kirayə evlərdə qalmatəmin edilir. Rahatlıq və təhlükəsizlik hər zaman əsas prioritetdir."
 
     },
     {
         title: "Qida qaydası",
         icon: <FoodIcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
+        desc: "Hər bir turun formatına uyğun qida növləri (ana yemək, yüngül qəlyanaltı, vegan).Tədbir zamanı yüngül və enerji verən qidalar tövsiyə olunur. Şirniyyat və qazlı içkilərdən mümkün qədər uzaq durun, tullantını təbiətdə buraxma.Ətrafı təmiz saxlamaq hər kəsin öhdəliyidir."
 
     },
     {
         title: "Təhlükəsizlik",
         icon: <SecurityIcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
+        desc: "Tədbir zamanı hər zaman təhlükəsizliyə diqqət yetirin. Yüksək səslə çağırış etməyin, dağlıq və ya sərt ərazilərdə ehtiyatlı olun, təlimatlara əməl edin. Zədələnmə riskini azaltmaq üçün qoruyucu avadanlıqlardan istifadə edin və bir-birinizə dəstək olun. Tur bələdçisinin qaydalarına əməl edin."
 
     },
     {
         title: "Şəbəkə",
         icon: <NetworkIcon />,
-        desc: "Təqdim edilən fəliyyetlərə qatılmaq üçün etibralı şəxsiyyət vəsiqəsi tələb olunur."
+        desc: "Bəzi ərazilərdə mobil əlaqə zəif ola bilər. Əlaqə və koordinasiya üçün əvvəlcədən qrup mesajlaşma proqramlarından istifadə edin."
 
     },
 ]
 const MoreInfo = () => {
     return (
-        <div>
+        <section className="max-[1285px]:px-5">
             <MoreInfoTitle />
 
             {moreInfo.map((item, index) => (
                 <MoreInfoAccordion key={index} item={item} />
             ))}
 
-        </div>
+        </section>
     )
 }
 
