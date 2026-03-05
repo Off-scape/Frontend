@@ -1,5 +1,5 @@
 import Image from "next/image"
-import image from '@/images/whatsapp.svg'
+import image from '@/public/common/assets/images/whatsapp.svg'
 const WhatsappIcon = () => {
     return (
         <div  className="cursor-pointer">
