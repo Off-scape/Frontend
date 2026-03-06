@@ -144,7 +144,7 @@ export default function Footer() {
 
                   <button
                     type="submit"
-                    className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer"
+                    className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer max-[860px]:ml-3 max-sm:ml-0"
                   >
                     Abunə ol
                   </button>
