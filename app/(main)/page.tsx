@@ -4,6 +4,7 @@ import Landscape from "@/components/landingpage/Landscape";
 import MoreInfo from "@/components/landingpage/MoreInfo";
 import PopularCategories from "@/components/landingpage/PopularCategories";
 import Question from "@/components/landingpage/Question";
+import TourGuides from "@/components/landingpage/TourGuides";
 import WhyChooseUs from "@/components/landingpage/WhyChooseUs";
 import ToursSection from "@/components/tourcard/ToursSection";
 
@@ -13,6 +14,7 @@ export default function Home() {
       <HeroSection />
       <div className="max-w-7xl mx-auto">
         <ToursSection />
+        <TourGuides />
         <PopularCategories />
         <WhyChooseUs />
         <MoreInfo />
