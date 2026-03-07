@@ -14,8 +14,8 @@ export default function Home() {
       <HeroSection />
       <div className="max-w-7xl mx-auto">
         <ToursSection />
-        <TourGuides />
         <PopularCategories />
+        <TourGuides />
         <WhyChooseUs />
         <MoreInfo />
         <Community />
