@@ -1,25 +1,22 @@
 "use client";
-
 import { CalendarIcon } from "@/icons/CalendarIcon";
 import LocationIcon from "@/icons/locationIcon";
 import { useState } from "react";
-
 function HeroSection() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-
   return (
     <section
       id="hero-section"
       className="h-full min-h-[90vh] py-36 sm:py-0 bg-[url(../images/scenery.jpg)] bg-no-repeat bg-cover flex flex-col justify-center"
     >
       <div className="flex flex-col justify-center lg:justify-start gap-y-16.75 px-16.75">
-        <h1 className="text-[64px] lg:text-[88px] text-center md:text-left text-[#F5F5DC] leading-[100%] tracking-[0%] max-w-[800px] w-full">
+        <h1 className="text-[64px] lg:text-[88px] text-center md:text-left text-[#F5F5DC] leading-[100%] tracking-[0%] max-w-200 w-full">
           Macəraya birlikdə
           <br />
           başla
         </h1>
-        <div className="flex flex-col justify-center md:flex-row items-center bg-[#0B3E3566] backdrop-blur-sm rounded-3xl md:rounded-full max-w-[700px] w-full">
+        <div className="flex flex-col justify-center md:flex-row items-center bg-[#0B3E3566] backdrop-blur-sm rounded-3xl md:rounded-full max-w-175   w-full">
           {/* Location Input */}
           <div className="flex items-center gap-3 px-6 py-4 flex-1 w-full">
             <LocationIcon />

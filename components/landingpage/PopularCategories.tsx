@@ -1,36 +1,8 @@
+import { categories } from "@/data/Categories";
 import Image from "next/image";
 
 export default function PopularCategories() {
-  const categories = [
-    {
-      id: 1,
-      title: "Səyahət və təbiət",
-      icon: "/tebietImg.svg",
-      borderColor: "border-[#6A6A6D]",
-      hoverGradient: "from-[#699033] to-[#80C737]",
-    },
-    {
-      id: 2,
-      title: "Sosial Aktivliklər",
-      icon: "/socialImg.svg",
-      borderColor: "border-[#6A6A6D]",
-      hoverGradient: "from-[#EF8819] to-[#FC8C0C]",
-    },
-    {
-      id: 3,
-      title: "Hobilər və Tutqular",
-      icon: "/hobbyImg.svg",
-      borderColor: "border-[#6A6A6D]",
-      hoverGradient: "from-[#2D4872] via-[#E15609] to-[#FC8C0C]",
-    },
-    {
-      id: 4,
-      title: "Sağlam Həyat",
-      icon: "/lifeImg.svg",
-      borderColor: "border-[#6A6A6D]",
-      hoverGradient: "from-[#80C737] to-[#006738]",
-    },
-  ];
+
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16">
@@ -51,7 +23,7 @@ export default function PopularCategories() {
                 p-6
                 transition-all duration-300 ease-in-out
                 flex flex-col items-start justify-between
-                min-h-[180px]
+                min-h-45
                 relative
                 z-10
                 
@@ -74,8 +46,8 @@ export default function PopularCategories() {
 
             <div
               className={`
-                 relative bottom-3 left-0 right-0 h-[15px] 
-                bg-gradient-to-b ${category.hoverGradient}
+                 relative bottom-3 left-0 right-0 h-3.75
+                bg-linear-to-b ${category.hoverGradient}
                 rounded-[20px]
                 opacity-30 group-hover:opacity-100
                 transform  scale-y-120 group-hover:scale-y-200 rounded-b-2xl

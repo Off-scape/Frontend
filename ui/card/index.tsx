@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "./Participantavatars";
+import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 
-interface TourCardProps {
-  tour: Tour;
+interface CardProps {
+  data: Tour;
 }
 
-const TourCard: React.FC<TourCardProps> = ({ tour }) => {
+const Card: React.FC<CardProps> = ({ data }) => {
   const {
     image,
     price,
@@ -15,10 +15,9 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
     time,
     activity,
     organizer,
-
     participantCount,
     participants,
-  } = tour;
+  } = data;
 
   return (
     <div className="tour-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -64,4 +63,4 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   );
 };
 
-export default TourCard;
+export default Card;

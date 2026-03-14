@@ -1,7 +1,7 @@
 import React from "react";
-import TourCard from "./TourCard";
 import SectionHeader from "./Sectionheader";
 import { Tour } from "@/types/Tour";
+import Card from "@/ui/card";
 
 interface ToursGridSectionProps {
   title: string;
@@ -35,7 +35,7 @@ const ToursGridSection: React.FC<ToursGridSectionProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {displayedTours.map((tour) => (
-            <TourCard key={tour.id} tour={tour} />
+            <Card key={tour.id} data={tour} />
           ))}
         </div>
 
