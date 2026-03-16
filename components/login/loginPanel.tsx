@@ -5,11 +5,7 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, PassField, PrimaryBtn } from "./formFields";
 import { validations } from "../../utils/validation";
-
-type LoginInputs = {
-  email: string;
-  password: string;
-};
+import { LoginInputs } from "@/types/auth";
 
 export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
   const [rem, setRem] = useState(true);

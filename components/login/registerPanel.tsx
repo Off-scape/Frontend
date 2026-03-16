@@ -10,15 +10,9 @@ import {
   GoogleBtn,
   OrDivider,
 } from "./formFields";
-import { validations } from "../../utils/validation";
 
-type RegisterInputs = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import { RegisterInputs } from "@/types/auth";
+import { validations } from "../../utils/validation";
 
 export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,20 +28,19 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
     setIsLoading(true);
+
     try {
-      console.log("Register data:", data);
-      // await registerUser(data);
+      console.log(data);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full flex flex-col">
-      {/* Geri qayıt */}
+    <>
       <Link
         href="/"
-        className="flex items-center gap-1.5 mb-6 w-fit group"
+        className="flex items-start gap-1.5 mb-6 w-fit group"
         style={{ color: "rgba(255,255,255,0.55)", textDecoration: "none" }}
       >
         <svg
@@ -67,20 +60,15 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
           Ana səhifəyə qayıt
         </span>
       </Link>
+      <div className="w-full flex flex-col items-center">
+        <h1 className="text-white flex items-center text-3xl font-bold mb-6">
+          Qeydiyyatdan keç
+        </h1>
 
-      <h1
-        className="text-white font-extrabold tracking-tight mb-8 text-center max-w-[416px]"
-        style={{ fontSize: "clamp(22px,2.4vw,30px)" }}
-      >
-        Qeydiyyatdan keç
-      </h1>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full flex flex-col"
-        noValidate
-      >
-        <div className="flex flex-col gap-3 mb-3">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-2 items-center w-full"
+        >
           <Field
             placeholder="Ad"
             register={register("firstName", validations.firstName())}
@@ -114,28 +102,24 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
             )}
             error={errors.confirmPassword}
           />
-        </div>
 
-        <div className="max-w-[416px] mt-2 mb-5">
           <OrDivider />
-          <GoogleBtn />
-          <PrimaryBtn isLoading={isLoading}>Qeydiyyatdan keç</PrimaryBtn>
-        </div>
-      </form>
 
-      <p
-        className="text-[13px] max-w-[416px]"
-        style={{ color: "rgba(255,255,255,0.65)" }}
-      >
-        Artıq hesabınız var?{" "}
-        <button
-          type="button"
-          onClick={onSwitch}
-          className="text-white font-extrabold underline underline-offset-2 bg-transparent border-0 cursor-pointer p-0 text-[13px]"
-        >
-          Daxil ol
-        </button>
-      </p>
-    </div>
+          <GoogleBtn />
+
+          <PrimaryBtn isLoading={isLoading}>Qeydiyyatdan keç</PrimaryBtn>
+        </form>
+
+        <p className="text-white/70 mt-5 text-sm">
+          Artıq hesabınız var?{" "}
+          <button
+            onClick={onSwitch}
+            className="text-white font-extrabold underline underline-offset-2 bg-transparent border-0 cursor-pointer p-0 text-[13px]"
+          >
+            Daxil ol
+          </button>
+        </p>
+      </div>
+    </>
   );
 }

@@ -80,7 +80,7 @@ export default function AuthClient() {
       <div className="hidden lg:block w-full h-full">
         {/* z:1 — Form */}
         <div
-          className="absolute top-0 bottom-0 bg-[#0B3E35] flex items-center overflow-y-auto"
+          className="absolute top-0 bottom-0 bg-[#0B3E35] flex items-center overflow-hidden"
           style={{ left: isLogin ? "56%" : "0%", width: "44%", zIndex: 1 }}
         >
           <div className="w-full px-[clamp(24px,3.5vw,52px)] py-[clamp(24px,4vw,48px)]">
@@ -154,7 +154,7 @@ export default function AuthClient() {
       </div>
 
       {/* ══ MOBILE + TABLET <1024px — şəkil yoxdur, form tam ekran ══ */}
-      <div className="lg:hidden w-full h-full bg-[#0B3E35] flex items-center overflow-y-auto">
+      <div className="lg:hidden w-full h-full bg-[#0B3E35] flex items-center overflow-hidden">
         <div className="w-full px-6 py-8 max-w-[480px] mx-auto">
           {formContent}
         </div>
