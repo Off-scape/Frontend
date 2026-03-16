@@ -1,9 +1,7 @@
-import React from 'react'
+import AuthClient from "@/components/login/authClient";
 
-const Login = () => {
-  return (
-    <div>Login</div>
-  )
+export const metadata = { title: "Daxil ol" };
+
+export default function LoginPage() {
+  return <AuthClient />;
 }
-
-export default Login

@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -13,20 +12,22 @@
   }
 }
 
-/* body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 .roboto-medium {
-  font-family: "Roboto", sans-serif;
   font-weight: 500;
   color: #0b3e35;
 }
+
 .playfair-display {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-playfair);
 }
+
 .shadow {
   box-shadow: 4px 4px 11px 0px #33443a52;
 }

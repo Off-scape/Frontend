@@ -9,7 +9,7 @@ const HeaderActions = ({ isMobile = false }: HeaderActionsProps) => {
   return (
     <>
       <Link
-        href={"/auth/login"}
+        href={"/login"}
         className={`text-black bg-[#F5F5DC] rounded-xl py-2.5 px-3 ${isMobile ? "block text-center" : ""}`}
       >
         Daxil ol
