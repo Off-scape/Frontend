@@ -16,5 +16,12 @@ export interface Tour {
   participantCount: number;
   participants: Participant[];
   isVisible?: boolean; // Admin panel can control visibility
-  type: 'nature' | 'activity'; // To differentiate between "Təbiət" and "Aktivitilər"
+  type: 'nature' | 'activity' | 'hiking' | 'health' | 'social' | 'camping' | 'psychology'; // To differentiate between various tour types
 }
+
+export type TourFilter = {
+  id: number;
+  name: string;
+  value: string;
+  icon: string;
+};

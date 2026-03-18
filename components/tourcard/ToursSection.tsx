@@ -15,7 +15,7 @@ export default function ToursSection() {
       <ToursGridSection
         title="Yaxın vaxtda keçiriləcək Aktivitilər turlar"
         tours={mockActivityTours}
-         viewAllHref="/tours?type=active"
+         viewAllHref="/tours?type=activity"
       />
     </main>
   );

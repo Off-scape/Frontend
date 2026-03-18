@@ -10,14 +10,11 @@ const TourFilter = () => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            console.log(event, 'event');
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setOpen(false)
             }
         }
-
         document.addEventListener("mousedown", handleClickOutside)
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside)
         }
