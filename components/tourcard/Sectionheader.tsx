@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -16,12 +18,13 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   actionHref,
   isActionDisabled = false,
 }) => {
+  
   const handleAction = () => {
     if (!isActionDisabled && onAction) {
       onAction();
     }
   };
-
+  
   const actionClasses = `text-sm md:text-base font-medium transition-colors duration-200 ${
     isActionDisabled
       ? 'text-gray-400 cursor-not-allowed'
