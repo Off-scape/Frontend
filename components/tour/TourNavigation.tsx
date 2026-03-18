@@ -22,7 +22,7 @@ const TourNavigation = () => {
 
 
   return (
-    <ul className={`flex flex-wrap sm:flex-nowrap items-center justify-between mb-11 border-b border-[#6A6A6D] px-3 sm:px-5 ${roboto.className}`}>
+    <ul className={`flex flex-wrap sm:flex-nowrap items-center justify-between  mb-11 border-b border-[#6A6A6D] px-3 sm:px-5 max-lg:justify-items-center max-[1000px]-w-[100px] max-[1000px]:overflow-x-auto ${roboto.className}`}>
       {tourFilters.map((filter, id) => (
         <li
           key={id}

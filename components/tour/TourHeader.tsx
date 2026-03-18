@@ -17,7 +17,7 @@ const TourHeader = () => {
         <h3 className="text-[#142A12] text-2xl sm:text-[32px] font-bold mb-4 sm:mb-0">
           Yaxın vaxtda keçiriləcək turlar
         </h3>
-        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap max-[1025px]:justify-end">
           <TourCalendar />
           <TourFilter />
         </div>
