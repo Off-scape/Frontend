@@ -1,7 +1,10 @@
+"use client"
+
 import React from "react";
 import Image from "next/image";
 import { Tour } from "@/types/Tour";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
+import { useRouter } from "next/navigation";
 
 interface CardProps {
   data: Tour;
@@ -18,9 +21,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
     participantCount,
     participants,
   } = data;
-
+  const router = useRouter();
   return (
-    <div className="tour-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div   onClick={()=>router.push(`tours/${data.id}`)} className="tour-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer">
       <div className="relative w-full h-48 md:h-52">
         <Image
           src={image}

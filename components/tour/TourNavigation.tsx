@@ -47,7 +47,7 @@ const TourNavigation = () => {
             height={40}
             className="sm:w-10 sm:h-10 w-8 h-8"
           />
-          <span className="truncate max-w-[80px] sm:max-w-none">{filter.name}</span>
+          <span className="truncate max-w-20 sm:max-w-none">{filter.name}</span>
         </li>
       ))}
     </ul>
