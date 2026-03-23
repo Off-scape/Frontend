@@ -25,7 +25,7 @@ const TourDetailPage = () => {
             Tour not found
           </h1>
           <p className="text-gray-600">
-            The tour you're looking for doesn't exist.
+            The tour you&apos;re looking for doesn&apos;t exist.
           </p>
         </div>
       </section>
