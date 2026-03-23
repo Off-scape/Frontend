@@ -1,6 +1,12 @@
 import { HTMLAttributes, ReactNode } from "react";
 
-type BadgeVariant = "default" | "success" | "warning" | "danger" | "info" | "neutral";
+type BadgeVariant =
+  | "default"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "neutral";
 type BadgeSize = "sm" | "md";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -43,11 +49,16 @@ export default function Badge({
         "inline-flex items-center gap-1 rounded-full font-medium",
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
       {...props}
     >
-      {dot && <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />}
+      {dot && (
+        <span
+          className="h-1.5 w-1.5 rounded-full bg-current"
+          aria-hidden="true"
+        />
+      )}
       {icon}
       {children}
     </span>

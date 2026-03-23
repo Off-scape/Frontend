@@ -20,7 +20,7 @@ export default function LoadingState({
       className={cx(
         "flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-[#D0D5DD] bg-[#FCFCFD] p-6",
         fullWidth && "w-full",
-        className
+        className,
       )}
       role="status"
       aria-live="polite"

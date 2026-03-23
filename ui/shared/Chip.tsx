@@ -27,7 +27,8 @@ export default function Chip({
   type = "button",
   ...props
 }: ChipProps) {
-  const base = "inline-flex h-8 items-center gap-1 rounded-full px-3 text-sm font-medium transition-colors";
+  const base =
+    "inline-flex h-8 items-center gap-1 rounded-full px-3 text-sm font-medium transition-colors";
   const filled = selected
     ? "bg-[#0B3E35] text-white"
     : "bg-[#E7F1EE] text-[#0B3E35] hover:bg-[#D9E9E5]";
@@ -39,7 +40,11 @@ export default function Chip({
     <span className="inline-flex items-center gap-1">
       <button
         type={type}
-        className={cx(base, variant === "filled" ? filled : outlined, className)}
+        className={cx(
+          base,
+          variant === "filled" ? filled : outlined,
+          className,
+        )}
         {...props}
       >
         {leadingIcon}

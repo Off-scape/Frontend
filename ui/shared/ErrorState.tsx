@@ -26,7 +26,7 @@ export default function ErrorState({
     <div
       className={cx(
         "flex w-full flex-col items-center justify-center gap-3 rounded-xl border border-[#FEE4E2] bg-[#FEF3F2] p-6 text-center",
-        className
+        className,
       )}
       role="alert"
       {...props}

@@ -64,7 +64,7 @@ export default function RatingStars({
                 "leading-none transition-transform duration-150",
                 sizeMap[size],
                 isActive ? "text-[#F59E0B]" : "text-[#D0D5DD]",
-                !readOnly && "hover:scale-110"
+                !readOnly && "hover:scale-110",
               )}
               onMouseEnter={() => !readOnly && setHoveredValue(starValue)}
               onMouseLeave={() => !readOnly && setHoveredValue(null)}
@@ -80,7 +80,9 @@ export default function RatingStars({
         })}
       </div>
 
-      {showValue && <span className="text-sm text-[#344054]">{safeValue.toFixed(1)}</span>}
+      {showValue && (
+        <span className="text-sm text-[#344054]">{safeValue.toFixed(1)}</span>
+      )}
     </div>
   );
 }

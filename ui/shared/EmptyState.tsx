@@ -28,7 +28,7 @@ export default function EmptyState({
     <div
       className={cx(
         "flex w-full flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-[#D0D5DD] bg-[#F9FAFB] p-6 text-center",
-        className
+        className,
       )}
       {...props}
     >

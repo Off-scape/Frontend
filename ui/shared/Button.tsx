@@ -53,7 +53,7 @@ export default function Button({
         "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3E35]/50 disabled:cursor-not-allowed disabled:opacity-60",
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
       disabled={isDisabled}
       aria-busy={isLoading}

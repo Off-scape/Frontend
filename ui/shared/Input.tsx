@@ -27,7 +27,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     containerClassName,
     ...props
   },
-  ref
+  ref,
 ) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
@@ -37,7 +37,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className={cx("w-full", containerClassName)}>
       {label && (
-        <label htmlFor={inputId} className="mb-2 block text-sm font-medium text-[#0B3E35]">
+        <label
+          htmlFor={inputId}
+          className="mb-2 block text-sm font-medium text-[#0B3E35]"
+        >
           {label}
         </label>
       )}
@@ -47,7 +50,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           "flex h-10 w-full items-center rounded-lg border bg-white px-3 transition-colors duration-200 focus-within:ring-2",
           hasError
             ? "border-[#B42318] focus-within:ring-[#B42318]/30"
-            : "border-[#D0D5DD] focus-within:border-[#0B3E35] focus-within:ring-[#0B3E35]/20"
+            : "border-[#D0D5DD] focus-within:border-[#0B3E35] focus-within:ring-[#0B3E35]/20",
         )}
       >
         {leftIcon && <span className="mr-2 text-[#667085]">{leftIcon}</span>}
@@ -56,7 +59,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={inputId}
           className={cx(
             "h-full w-full border-none bg-transparent text-sm text-[#101828] outline-none placeholder:text-[#98A2B3]",
-            className
+            className,
           )}
           aria-invalid={hasError}
           aria-describedby={error || helperText ? helperId : undefined}
@@ -68,7 +71,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {(error || helperText) && (
         <p
           id={helperId}
-          className={cx("mt-1 text-xs", hasError ? "text-[#B42318]" : "text-[#667085]")}
+          className={cx(
+            "mt-1 text-xs",
+            hasError ? "text-[#B42318]" : "text-[#667085]",
+          )}
         >
           {error || helperText}
         </p>
