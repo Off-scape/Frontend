@@ -166,6 +166,7 @@ export const mockActivityTours: Tour[] = [
     },
 ];
 
+
 export const allTours: Tour[] = [
     {
         id: 'n1',
@@ -709,6 +710,7 @@ export const allTours: Tour[] = [
         type: 'psychology',
     },
 ];
+
 
 export const tourFilters: TourFilter[] = [
     {
