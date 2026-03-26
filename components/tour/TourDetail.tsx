@@ -1,59 +1,71 @@
 "use client";
 
-// import Image from "next/image";
-// import React, { useMemo, useState } from "react";
+import Image from "next/image";
+import React, { useMemo, useState } from "react";
 import ReviewsSection from "@/components/tour/ReviewsSection";
 import { Tour } from "@/types/Tour";
-// import Avatar from "@/ui/shared/Avatar";
-// import RatingStars from "@/ui/shared/RatingStars";
-// import { ratingSummary } from "@/data/Reviews";
-// import { FiHeart, FiMapPin, FiPhoneCall } from "react-icons/fi";
-// import { GoShieldCheck } from "react-icons/go";
-// import { LuCircleCheckBig } from "react-icons/lu";
+import Avatar from "@/ui/shared/Avatar";
+import RatingStars from "@/ui/shared/RatingStars";
+import { ratingSummary } from "@/data/Reviews";
+import { FiHeart, FiMapPin, FiPhoneCall } from "react-icons/fi";
+import { GoShieldCheck } from "react-icons/go";
+import { LuCircleCheckBig } from "react-icons/lu";
+import {
+  includedItems,
+  instructorRoles,
+  tourDescription,
+  tourRoute,
+  tourContact,
+  tourCancellationPolicy,
+  tourSubtitle,
+  instructorsDescription,
+  scheduleExtraDates,
+} from "@/data/TourDetailData";
 
 interface TourDetailProps {
   tour: Tour;
 }
 
 const TourDetail = ({ tour }: TourDetailProps) => {
-  // const [selectedDate, setSelectedDate] = useState<string>(tour.date);
-  // const scheduleOptions = useMemo(
-  //   () => [tour.date, "6 Dekabr", "13 Dekabr"],
-  //   [tour.date],
-  // );
+  const [selectedDate, setSelectedDate] = useState<string>(tour.date);
+  const scheduleOptions = useMemo(
+    () => [tour.date, ...scheduleExtraDates],
+    [tour.date],
+  );
 
-  // const includedItems = [
-  //   "Hiking ərazisi və təlimatçılıq",
-  //   "Əlçatan çadır ilə açıq hava əyləncəsi",
-  //   "Kreativ fəaliyyətlər və oyunlar",
-  //   "Limitsiz çay, isti içkilər və şirniyyatlar",
-  //   "Tonqal ətrafında isti və səmimi anlar",
-  //   "Rahatladıcı nəfəs məşqləri",
-  //   "Unudulmaz anlar üçün möhtəşəm mənzərələr",
-  //   "Yüngül əyləncəli fəaliyyətlər",
-  // ];
+  const includedItems = [
+    "Hiking ərazisi və təlimatçılıq",
+    "Əlçatan çadır ilə açıq hava əyləncəsi",
+    "Kreativ fəaliyyətlər və oyunlar",
+    "Limitsiz çay, isti içkilər və şirniyyatlar",
+    "Tonqal ətrafında isti və səmimi anlar",
+    "Rahatladıcı nəfəs məşqləri",
+    "Unudulmaz anlar üçün möhtəşəm mənzərələr",
+    "Yüngül əyləncəli fəaliyyətlər",
+  ];
 
-  // const instructorRoles = [
-  //   "Kamp mütəxəssisi",
-  //   "Psixoloq",
-  //   "Yoga təlimçisi",
-  //   "Psixoloq",
-  // ];
+  const instructorRoles = [
+    "Kamp mütəxəssisi",
+    "Psixoloq",
+    "Yoga təlimçisi",
+    "Psixoloq",
+  ];
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
-      {/* <header className="border-b border-zinc-300 pb-4">
+      <header className="border-b border-zinc-300 pb-4">
         <h1 className="text-2xl font-bold text-zinc-900 md:text-4xl">
           {tour.activity}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           Təbiətin qoynunda gecələmə və paylaşım dolu anlar
         </p>
-      </header> */}
+      </header>
 
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
-        <div>
-          {/* <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
+        {/* MAIN CONTENT — həmişə HTML-də əvvəl, mobilədə şəkildən sonra aside gəlir */}
+        <div className="xl:col-start-1 xl:row-start-1">
+          <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
               src={tour.image}
               alt={tour.activity}
@@ -140,13 +152,14 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 müddət qaldıqda bilet geri qaytarılmır və dəyişdirilmir.
               </p>
             </div>
-          </div> */}
+          </div>
 
           <ReviewsSection />
         </div>
 
-        <aside className="space-y-5 xl:sticky xl:top-28 xl:self-start">
-          {/* <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+        {/* ASIDE — HTML-də sonra, xl-də CSS grid ilə sağ kolona çıxır */}
+        <aside className="space-y-5 xl:sticky xl:top-28 xl:self-start xl:col-start-2 xl:row-start-1">
+          <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
                 <RatingStars
@@ -192,7 +205,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
               <FiMapPin className="mt-0.5 size-4 shrink-0 text-zinc-500" />
               <div>
                 <p className="font-semibold text-zinc-900">{tour.location}</p>
-                <p className="text-zinc-500">Bakı - Şuşa</p>
+                <p className="text-zinc-500">Bakı - {tour.location}</p>
               </div>
             </div>
 
@@ -225,7 +238,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 </div>
               ))}
             </div>
-          </div> */}
+          </div>
         </aside>
       </div>
     </section>
