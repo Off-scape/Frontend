@@ -42,7 +42,7 @@ export default function Footer() {
       <footer className="bg-[#0B3E35] text-white rounded-t-3xl">
         <div className="max-w-7xl  px-14 py-13 max-[400px]:px-8 max-[400px]:py-8">
           <h2 className={`${playfair.className} text-4xl font-medium mb-12`}>
-            Offscape
+            OFFscape
           </h2>
 
           <div className="grid grid-cols-1  xl:grid-cols-4  lg:grid-cols-2 sm:grid-cols-2 gap-12 items-start ">
