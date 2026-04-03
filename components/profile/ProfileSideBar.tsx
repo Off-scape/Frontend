@@ -27,7 +27,7 @@ const ProfileSideBar = () => {
   const pathname = usePathname()
 
   return (
-    <aside className="w-88 bg-[#F6F7F8] py-6 px-4 rounded-xl">
+    <aside className="w-88 max-h-max bg-[#F6F7F8] py-6 px-4 rounded-xl">
       <h4 className="mb-9 text-black text-[28px] font-bold pl-2">
         Parametrlər
       </h4>
