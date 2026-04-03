@@ -33,24 +33,6 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     [tour.date],
   );
 
-  const includedItems = [
-    "Hiking ərazisi və təlimatçılıq",
-    "Əlçatan çadır ilə açıq hava əyləncəsi",
-    "Kreativ fəaliyyətlər və oyunlar",
-    "Limitsiz çay, isti içkilər və şirniyyatlar",
-    "Tonqal ətrafında isti və səmimi anlar",
-    "Rahatladıcı nəfəs məşqləri",
-    "Unudulmaz anlar üçün möhtəşəm mənzərələr",
-    "Yüngül əyləncəli fəaliyyətlər",
-  ];
-
-  const instructorRoles = [
-    "Kamp mütəxəssisi",
-    "Psixoloq",
-    "Yoga təlimçisi",
-    "Psixoloq",
-  ];
-
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
       <header className="border-b border-zinc-300 pb-4">
@@ -58,12 +40,12 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           {tour.activity}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
-          Təbiətin qoynunda gecələmə və paylaşım dolu anlar
+          {tourSubtitle}
         </p>
       </header>
 
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
-        {/* MAIN CONTENT — həmişə HTML-də əvvəl, mobilədə şəkildən sonra aside gəlir */}
+        {/* MAIN CONTENT */}
         <div className="xl:col-start-1 xl:row-start-1">
           <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
@@ -100,10 +82,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             <div>
               <h2 className="text-2xl font-bold text-zinc-900">Təsvir:</h2>
               <p className="mt-3 text-sm leading-7 text-zinc-700 md:text-base">
-                "Mafia Oyunu" - gündəlik stressdən uzaq, birlikdə düşünmək,
-                əylənmək və qrup olaraq balans tapmaq üçün hazırlanmış
-                təcrübədir. Hər tur iştirakçılar arasında güclü ünsiyyət yaradır
-                və komanda ruhunu ön plana çıxarır.
+                {tourDescription}
               </p>
             </div>
 
@@ -112,10 +91,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 Marşrut və proqram:
               </h2>
               <p className="mt-3 text-sm leading-7 text-zinc-700 md:text-base">
-                Təcrübə oyun sessiyası ilə başlayır, daha sonra təbiətdə komanda
-                tapşırıqları, fasilələr və paylaşım dairəsi ilə davam edir.
-                Proqram strukturunda həm aktiv, həm də rahatlaşdırıcı mərhələlər
-                balanslı şəkildə yerləşdirilib.
+                {tourRoute}
               </p>
             </div>
 
@@ -138,7 +114,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
               <p className="mt-3 flex items-center gap-2 text-sm text-zinc-700 md:text-base">
                 <FiPhoneCall className="size-4 text-rose-500" />
                 Özəl tur və əlavə suallar üçün bizimlə WhatsApp vasitəsilə əlaqə
-                saxlayın: xxx-xxx-xx-xx
+                saxlayın: {tourContact}
               </p>
             </div>
 
@@ -147,9 +123,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 Ləğv Qaydası:
               </h2>
               <p className="mt-3 text-sm leading-7 text-zinc-700 md:text-base">
-                Xidmətin baş tutmasına 72 saat və ya daha çox müddət qaldıqda
-                bilet geri qaytarıla və ya dəyişdirilə bilər. 72 saatdan az
-                müddət qaldıqda bilet geri qaytarılmır və dəyişdirilmir.
+                {tourCancellationPolicy}
               </p>
             </div>
           </div>
@@ -157,7 +131,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           <ReviewsSection />
         </div>
 
-        {/* ASIDE — HTML-də sonra, xl-də CSS grid ilə sağ kolona çıxır */}
+        {/* ASIDE */}
         <aside className="space-y-5 xl:sticky xl:top-28 xl:self-start xl:col-start-2 xl:row-start-1">
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
@@ -182,7 +156,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
 
             <h3 className="mt-4 text-3xl font-bold leading-tight text-zinc-900">
-              "{tour.activity}" - birlikdə qrup oyunu
+              {`"${tour.activity}" - birlikdə qrup oyunu`}
             </h3>
             <p className="mt-2 text-sm text-zinc-600">{tour.location}</p>
 
@@ -221,8 +195,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <h3 className="text-lg font-bold text-zinc-900">Təlimçilər</h3>
             <p className="mt-2 text-sm text-zinc-600">
-              Təcrübəli yoga və psixoloji təlimçilərlə bədən və ruhunuzu
-              rahatladın, enerji dolu sessiyalarla yeni bacarıqlar kəşf edin.
+              {instructorsDescription}
             </p>
 
             <div className="mt-4 space-y-4">
