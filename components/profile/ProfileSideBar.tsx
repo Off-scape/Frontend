@@ -90,7 +90,7 @@ const ProfileSideBar = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (is
           </li>
 
         </ul>
-        <div className=' items-center justify-between gap-8 flex border-t mt-6 border-[#828282] pt-6'>
+        <div className=' lg:hidden items-center justify-between gap-8 flex border-t mt-6 border-[#828282] pt-6'>
           <div className="cursor-pointer flex  items-center gap-1 text-[#828282] text-[16px] font-medium">
             <IoIosNotificationsOutline size={28} color="#828282" />
             Bildirişlər

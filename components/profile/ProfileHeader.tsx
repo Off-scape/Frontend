@@ -22,9 +22,7 @@ const ProfileHeader = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) 
                 </button>
             </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProfileHeader;
