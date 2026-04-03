@@ -30,10 +30,14 @@ interface FieldErrors {
   phone?: string;
   email?: string;
   password?: string;
+  gender?: string;
 }
 
-const PHONE_RE = /^\+?[0-9]{6,15}$/;
+const PHONE_RE = /^\+994\d{9}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NAME_RE = /^[a-zA-ZəöğüşıçƏÖĞÜŞİÇ\s\-']+$/i;
+const PASSWORD_RE =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 function validateBasic(
   firstName: string,
@@ -42,18 +46,31 @@ function validateBasic(
 ): FieldErrors {
   const e: FieldErrors = {};
   if (!firstName.trim()) e.firstName = "Ad məcburidir";
+  else if (!NAME_RE.test(firstName))
+    e.firstName = "Ad yalnız hərflərdən ibarət olmalıdır";
   if (!lastName.trim()) e.lastName = "Soyad məcburidir";
-  if (phone && !PHONE_RE.test(phone.replace(/\s/g, "")))
-    e.phone = "Nömrə formatı yanlışdır";
+  else if (!NAME_RE.test(lastName))
+    e.lastName = "Soyad yalnız hərflərdən ibarət olmalıdır";
+  if (!phone.trim()) e.phone = "Mobil nömrə məcburidir";
+  else if (!PHONE_RE.test(phone.replace(/\s/g, "")))
+    e.phone = "Nömrə formatı yanlışdır (+994xxxxxxxxx)";
   return e;
 }
 
-function validateAccount(email: string, password: string): FieldErrors {
+function validateAccount(
+  email: string,
+  password: string,
+  gender: Gender,
+): FieldErrors {
   const e: FieldErrors = {};
   if (!email.trim()) e.email = "E-poçt məcburidir";
   else if (!EMAIL_RE.test(email)) e.email = "E-poçt formatı yanlışdır";
-  if (password && password !== "**********" && password.length < 6)
-    e.password = "Şifrə minimum 6 simvol olmalıdır";
+  if (!password.trim() || password === "**********")
+    e.password = "Şifrə məcburidir";
+  else if (!PASSWORD_RE.test(password))
+    e.password =
+      "Şifrə güclü olmalıdır (ən az 8 simvol, böyük və kiçik hərf, rəqəm və xüsusi simvol)";
+  if (!gender) e.gender = "Cins seçilməlidir";
   return e;
 }
 
@@ -149,7 +166,7 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
 
   /* Account */
   const handleAccountSave = async () => {
-    const errors = validateAccount(email, password);
+    const errors = validateAccount(email, password, gender);
     if (Object.keys(errors).length) {
       setAccountErrors(errors);
       return;
@@ -347,6 +364,7 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-5">
           <Field
             label="Ad"
+            required
             error={basicErrors.firstName}
             value={firstName}
             onChange={(v) => {
@@ -370,6 +388,7 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
           />
           <Field
             label="Mobile nömrə"
+            required
             error={basicErrors.phone}
             value={phone}
             onChange={(v) => {
@@ -377,7 +396,7 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
               setBasicErrors((e) => ({ ...e, phone: undefined }));
             }}
             readOnly={!basicEdit}
-            placeholder="(994) xx-xxx-xx-xx"
+            placeholder="+994xxxxxxxxx"
             type="tel"
           />
         </div>
@@ -398,6 +417,7 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
           {/* E-poçt */}
           <Field
             label="E-poçt"
+            required
             error={accountErrors.email}
             value={email}
             onChange={(v) => {
@@ -484,6 +504,11 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
               </button>
             ))}
           </div>
+          {accountErrors.gender && (
+            <p className="mt-1 text-xs text-[#FF0004]">
+              {accountErrors.gender}
+            </p>
+          )}
         </div>
 
         <ActionRow
