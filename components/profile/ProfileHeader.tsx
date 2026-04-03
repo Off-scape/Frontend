@@ -1,3 +1,4 @@
+
 import HeaderLogo from '@/components/header/HeaderLogo'
 import Notification from '@/components/profile/Notification'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
@@ -21,7 +22,9 @@ const ProfileHeader = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) 
                 </button>
             </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default ProfileHeader
+export default ProfileHeader;

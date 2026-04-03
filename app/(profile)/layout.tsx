@@ -1,12 +1,14 @@
+
 "use client"
 import ProfileHeader from "@/components/profile/ProfileHeader"
 import ProfileSideBar from "@/components/profile/ProfileSideBar"
 import { useState } from "react"
 
+
 export default function ProfileLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
     const [isOpen, setIsOpen] = useState(false)
   return (
@@ -17,5 +19,5 @@ export default function ProfileLayout({
       {children}
       </div>
     </main>
-  )
+  );
 }
