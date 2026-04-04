@@ -221,7 +221,7 @@ function GenderSelector({
             type="button"
             disabled={disabled}
             onClick={() => onChange(g)}
-            className={`flex items-center gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-sm font-semibold border transition-all duration-150
+            className={`flex items-center gap-2.5 px-9 py-2 sm:px-9 sm:py-2.5 rounded-xl text-sm font-semibold border transition-all duration-150
               ${value === g ? "bg-[#0B3E35] text-white border-[#0B3E35]" : "bg-white text-[#828282] border-gray-200"}
               ${disabled ? "cursor-default" : "cursor-pointer active:scale-[.97]"}`}
           >
