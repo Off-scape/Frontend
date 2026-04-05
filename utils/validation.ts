@@ -1,11 +1,14 @@
-export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 import { RegisterOptions, FieldValues, Path } from "react-hook-form";
 
 const REGEXES = {
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  onlyLetters: /^[a-zA-ZəƏıİöÖüÜğĞşŞçÇ\s]+$/,
-  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+  onlyLetters: /^[a-zA-ZəƏıİöÖüÜğĞşŞçÇ\s\-']+$/,
+  phone: /^\+994\d{9}$/,
+  password:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 };
+
+export const EMAIL_REGEX = REGEXES.email;
 
 export const validations = {
   firstName: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
@@ -26,6 +29,14 @@ export const validations = {
     },
   }),
 
+  phone: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Mobil nömrə tələb olunur",
+    pattern: {
+      value: REGEXES.phone,
+      message: "Nömrə formatı yanlışdır (+994xxxxxxxxx)",
+    },
+  }),
+
   email: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
     required: "E-poçt tələb olunur",
     pattern: {
@@ -39,7 +50,8 @@ export const validations = {
     minLength: { value: 8, message: "Şifrə minimum 8 simvol olmalıdır" },
     pattern: {
       value: REGEXES.password,
-      message: "Böyük hərf, kiçik hərf və rəqəm daxil edilməlidir",
+      message:
+        "Böyük hərf, kiçik hərf, rəqəm və xüsusi simvol daxil edilməlidir",
     },
   }),
 
