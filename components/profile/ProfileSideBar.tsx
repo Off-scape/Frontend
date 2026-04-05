@@ -43,7 +43,7 @@ const ProfileSideBar = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (is
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static top-0 left-0 h-full lg:h-max w-72 lg:w-88 bg-[#F6F7F8] py-6 px-4 rounded-none lg:rounded-xl z-50 lg:z-1  transform transition-transform duration-300
+        className={`fixed lg:static top-0 left-0 h-full lg:h-max w-72 min-w-72 lg:w-88 bg-[#F6F7F8] py-6 px-4 rounded-none lg:rounded-xl z-50 lg:z-1  transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
         {/* Close button mobile */}
