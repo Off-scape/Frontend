@@ -1,5 +1,4 @@
 import AuthClient from "@/components/login/authClient";
-import { div } from "framer-motion/client";
 
 export const metadata = { title: "Daxil ol" };
 
