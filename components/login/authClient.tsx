@@ -21,12 +21,6 @@ const STR_R = "M500,0 C500,120 440,280 440,400 C440,520 500,680 500,800";
 // Mobile/tablet SVG paths (horizontal — yuxarı/aşağı split)
 // Login:    şəkil yuxarı, əyri aşağıda qabarıq
 // Register: form yuxarı, əyri yuxarıda qabarıq
-const CLIP_T =
-  "M0,0 L0,420 C200,420 400,480 500,480 C600,480 800,420 1000,420 L1000,0 Z";
-const CLIP_B =
-  "M0,800 L0,380 C200,380 400,320 500,320 C600,320 800,380 1000,380 L1000,800 Z";
-const STR_T = "M0,420 C200,420 400,480 500,480 C600,480 800,420 1000,420";
-const STR_B = "M0,380 C200,380 400,320 500,320 C600,320 800,380 1000,380";
 
 export default function AuthClient() {
   const [mode, setMode] = useState<Mode>("login");

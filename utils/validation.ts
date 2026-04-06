@@ -62,4 +62,22 @@ export const validations = {
     validate: (val) =>
       val === watchedPassword || "Şifrələr bir-biri ilə uyğun gəlmir",
   }),
+  cardNumber: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Kart nömrəsi tələb olunur",
+    minLength: { value: 16, message: "Kart nömrəsi minimum 16 simvol olmalıdır" },
+    maxLength: { value: 16, message: "Kart nömrəsi maksimum 16 simvol olmalıdır" },
+  }),
+  expiryDate: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Vaxt bitmə vaxtı tələb olunur",
+    pattern: {
+      value: /^(0[1-9]|1[0-2])\/?([0-9]{2})$/,
+      message: "Düzgün tarix formatı daxil edin (AA/İİ)",
+    },
+  }),
+  cvc: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "CVC tələb olunur",
+    minLength: { value: 3, message: "CVC minimum 3 simvol olmalıdır" },
+    maxLength: { value: 3, message: "CVC maksimum 3 simvol olmalıdır" },
+  }),
+
 };
