@@ -40,12 +40,12 @@ export default function Footer() {
   return (
     <div className={`${roboto.className} bg-white`}>
       <footer className="bg-[#0B3E35] text-white rounded-t-3xl">
-        <div className="max-w-7xl  px-14 py-13 max-[400px]:px-8 max-[400px]:py-8">
+        <div className="  px-14 py-13 max-[400px]:px-8 max-[400px]:py-8">
           <h2 className={`${playfair.className} text-4xl font-medium mb-12`}>
             OFFscape
           </h2>
 
-          <div className="grid grid-cols-1  xl:grid-cols-4  lg:grid-cols-2 sm:grid-cols-2 gap-12 items-start ">
+          <div className="grid grid-cols-1  xl:grid-cols-3  lg:grid-cols-2 sm:grid-cols-2 gap-12 items-start   ">
             <div>
               <h3 className="font-black mb-6 text-2xl">Sürətli Keçidlər</h3>
               <ul className="space-y-4 text-lg text-white">
@@ -72,7 +72,8 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div>
+            <div className="flex xl:justify-center ">
+              <div>
               <h3 className="font-black mb-6 text-2xl">Aktivliklər</h3>
               <ul className="space-y-4 text-lg text-white">
                 <li>
@@ -99,9 +100,13 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
+
+              </div>
             </div>
-            <div>
-              <h3 className="font-black mb-6 text-2xl">Əlaqə</h3>
+            <div className=" flex flex-col xl:items-end">
+              <div>
+
+              <h3 className="font-black mb-6 text-2xl text-left">Əlaqə</h3>
               <ul className="space-y-4 text-lg text-white">
                 <li className="hover:underline cursor-pointer flex items-center gap-2.5">
                   <LocationIcon /> Azərbaycan
@@ -116,8 +121,10 @@ export default function Footer() {
                   <Instagram /> <WhatsappIcon /> <TikTokIcon /> <YoutubeIcon />
                 </li>
               </ul>
+
+              </div>
             </div>
-            <div>
+            {/* <div>
               <div className="text-white text-sm leading-[100%] ">
                 <span className={`${playfair.className} font-bold`}>
                   OFFSCAPE{" "}
@@ -152,7 +159,7 @@ export default function Footer() {
 
                 {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
               </form>
-              {/* <div
+              <div
                 className="flex mt-4 w-full 
                 lg:w-75 
                 min-[1388px]:w-75 
@@ -171,8 +178,8 @@ export default function Footer() {
                   Qutunu işarələməklə, ən azı 18 yaşınızın olduğunu qəbul
                   edirsiniz.
                 </label>
-              </div> */}
-            </div>
+              </div>
+            </div> */}
           </div>
         </div>
         <FooterBottom />

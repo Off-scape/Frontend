@@ -26,7 +26,7 @@ const FooterBottom = () => {
         </div>
         <div className="mt-8">
           <p className="text-base text-center sm:text-left sm:text-lg font-medium ">
-            © 2025 Grounded, MMC. Bütün hüquqları qorunur.
+            © 2025 OFFscape, MMC. Bütün hüquqları qorunur.
           </p>
         </div>
       </div>

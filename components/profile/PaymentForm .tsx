@@ -131,7 +131,7 @@ const PaymentForm = () => {
                         </p>
                     </div>
                     <button className="cursor-pointer mt-12.5 w-48  py-4 px-6 bg-[#003CFF] text-white rounded-[14px] text-base font-medium">
-                        Davam et
+                       Təsdiqlə
                     </button>
                 </div>
 

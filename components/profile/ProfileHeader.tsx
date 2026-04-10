@@ -1,5 +1,4 @@
 import HeaderLogo from "@/components/header/HeaderLogo";
-import Notification from "@/components/profile/Notification";
 import ProfileAvatar from "@/components/profile/ProfileAvatar";
 import { MdOutlineMenu } from "react-icons/md";
 
@@ -13,7 +12,7 @@ const ProfileHeader = ({
       <div className="flex items-center justify-between">
         <HeaderLogo />
         <div className=" items-center gap-8 hidden lg:flex">
-          <Notification />
+          {/* <Notification /> */}
           <ProfileAvatar />
         </div>
         <button onClick={() => setIsOpen(true)} className="lg:hidden">
