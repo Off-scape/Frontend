@@ -71,10 +71,10 @@ const ProfileSideBar = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (is
 
                       <item.icon />
 
-                      <p className="font-medium text-base">{item.name}</p>
-                      <PrivacyIcon />
+                      <div className="font-medium text-base cursor-not-allowed flex items-center  gap-2">{item.name}    <PrivacyIcon size="16"  /></div>
+
                     </> : <>
-                      <item.icon />
+                      <item.icon  /> 
                       <p className="font-medium text-base">{item.name}</p></>
                   }
 

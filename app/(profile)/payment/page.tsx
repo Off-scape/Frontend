@@ -2,15 +2,21 @@
 
 import Invoices from "@/components/profile/Invoices";
 import PaymentRecords from "@/components/profile/PaymentRecords";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PaymentPage = () => {
-  const [activeTab, setActiveTab] = useState("records");
+const [activeTab, setActiveTab] = useState("");
+
+useEffect(() => {
+  const savedTab = localStorage.getItem("activeTab");
+  if (savedTab) setActiveTab(savedTab);
+}, []);
+
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-  };
-
+   setActiveTab(tab);
+  localStorage.setItem("activeTab", tab);
+  }
   return (
     <div className="w-full ">
       <div className="border-b border-black pb-3 mb-8 w-full">
@@ -77,7 +83,7 @@ const PaymentPage = () => {
         </div>
       </div>
       <div className="mt-8">
-        {activeTab === "records" ? <PaymentRecords /> : <Invoices />}
+        {activeTab === "records" ? <PaymentRecords /> : activeTab === "invoices" ? <Invoices /> : null}
       </div>
     </div>
   );
