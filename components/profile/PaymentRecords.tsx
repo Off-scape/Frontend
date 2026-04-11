@@ -1,23 +1,20 @@
 'use client'
 import PaymentCart from "@/icons/PaymentCart"
-import PaymentCard from "@/components/profile/PaymentCard";
 import PaymentForm from "@/components/profile/PaymentForm ";
-import { cards } from "@/data/Profile";
-import { useRef, useState } from "react";
 
 const PaymentRecords = () => {
-    const [isCardFormOpen, setIsCardFormOpen] = useState(false);
-    const formRef = useRef<HTMLDivElement | null>(null);
-    const handleOpenForm = () => {
-  setIsCardFormOpen(true);
+    // const [isCardFormOpen, setIsCardFormOpen] = useState(false);
+    // const formRef = useRef<HTMLDivElement | null>(null);
+//     const handleOpenForm = () => {
+//   setIsCardFormOpen(true);
 
-  setTimeout(() => {
-    formRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, 100);
-};
+//   setTimeout(() => {
+//     formRef.current?.scrollIntoView({
+//       behavior: "smooth",
+//       block: "start",
+//     });
+//   }, 100);
+// };
     return (
         <div>
             <div className="grid gap-8 grid-cols-1 xl:grid-cols-[380px_480px]">

@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import HeaderActions from "./HeaderActions";
@@ -61,6 +62,8 @@ const regionlarItems = [
 const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const pathname = usePathname();
+
 
   const toggleAccordion = (name: string) => {
     setOpenAccordion(openAccordion === name ? null : name);
@@ -76,10 +79,33 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
     >
       <Link
         href={"/"}
-        className={`p-3.5 text-[#F5F5DC] hover:text-amber-300 transition-all duration-300 ${isMobile ? "block" : ""}`}
+        className={` relative p-3.5 text-[#F5F5DC] hover:text-amber-300 transition-all duration-300 ${isMobile ? "block" : ""}  `}
         onClick={onLinkClick}
       >
         Ana Səhifə
+        {
+          pathname === "/" && <svg
+            className={` absolute left-0 bottom-0 transition-all duration-300 
+              ${pathname === "/"
+                ? "opacity-100 scale-x-100"
+                : "opacity-0 scale-x-0"
+              } origin-left`}
+            width="90"
+            height="13"
+            viewBox="0 0 90 13"
+            fill="none"
+          >
+            <line
+              x1="1.00013"
+              y1="11.1056"
+              x2="162.685"
+              y2="1.00032"
+              stroke="#FFDD00"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        }
       </Link>
 
       {/* Fəaliyyət - Mobile -> Accordion / Desktop -> Dropdown */}
@@ -90,6 +116,7 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
             className="p-3.5 text-[#F5F5DC] hover:text-amber-300 transition-all duration-300 flex items-center justify-between w-full"
           >
             <span>Fəaliyyət</span>
+
             <ChevronDownIcon
               className={`transition-transform duration-300 ${openAccordion === "fealiyyet" ? "rotate-180" : ""}`}
             />
@@ -115,12 +142,38 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
           onMouseEnter={() => setOpenDropdown("fealiyyet")}
           onMouseLeave={() => setOpenDropdown(null)}
         >
-          <div className="p-3.5 text-[#F5F5DC] hover:text-amber-300 cursor-pointer transition-all duration-300 flex items-center gap-x-2">
-            <span>Fəaliyyət</span>
-            <ChevronDownIcon
-              className={`transition-transform duration-300 ${openDropdown === "fealiyyet" ? "rotate-180" : ""}`}
-            />
+          <div className="p-3.5 text-[#F5F5DC] hover:text-amber-300 cursor-pointer transition-all duration-300">
+            <div className=" flex items-center gap-x-2 relative">
+              <span>Fəaliyyət</span>
+
+              <ChevronDownIcon
+                className={`transition-transform duration-300 ${openDropdown === "fealiyyet" ? "rotate-180" : ""}`}
+              />
+
+            </div>
+            <svg
+              className={`absolute left-0 bottom-0 transition-all duration-300 
+              ${pathname === "/fealiyyet"
+                  ? "opacity-100 scale-x-100"
+                  : "opacity-0 scale-x-0"
+                } origin-left`}
+              width="91"
+              height="13"
+              viewBox="0 0 91 13"
+              fill="none"
+            >
+              <line
+                x1="1.00013"
+                y1="11.1056"
+                x2="162.685"
+                y2="1.00032"
+                stroke="#FFDD00"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
           </div>
+
           {openDropdown === "fealiyyet" && (
             <div className="absolute top-full left-1/2 -translate-x-1/2 bg-[#1a1a1ac1] rounded-lg shadow-lg py-6 px-8 z-50 before:content-[''] before:absolute before:bottom-full before:left-0 before:right-0 before:h-2 min-w-max">
               <div className="grid grid-cols-2 gap-x-8 gap-y-3">
@@ -172,11 +225,35 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
           onMouseEnter={() => setOpenDropdown("regionlar")}
           onMouseLeave={() => setOpenDropdown(null)}
         >
-          <div className="p-3.5 text-[#F5F5DC] hover:text-amber-300 cursor-pointer transition-all duration-300 flex items-center gap-x-2">
-            <span>Regionlar</span>
-            <ChevronDownIcon
-              className={`transition-transform duration-300 ${openDropdown === "regionlar" ? "rotate-180" : ""}`}
-            />
+          <div className="p-3.5 text-[#F5F5DC] hover:text-amber-300 cursor-pointer transition-all duration-300 ">
+            <div className=" relative flex items-center gap-x-2">
+              <span>Regionlar</span>
+              <ChevronDownIcon
+                className={`transition-transform duration-300 ${openDropdown === "regionlar" ? "rotate-180" : ""}`}
+              />
+            </div>
+             <svg
+                className={`absolute left-0 bottom-0 transition-all duration-300 
+              ${pathname === "/regionlar"
+                    ? "opacity-100 scale-x-100"
+                    : "opacity-0 scale-x-0"
+                  } origin-left`}
+                width="91"
+                height="13"
+                viewBox="0 0 91 13"
+                fill="none"
+              >
+                <line
+                  x1="1.00013"
+                  y1="11.1056"
+                  x2="162.685"
+                  y2="1.00032"
+                  stroke="#FFDD00"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            
           </div>
           {openDropdown === "regionlar" && (
             <div className="absolute top-full left-1/2 -translate-x-1/2 bg-[#1a1a1ac1] rounded-lg shadow-lg py-6 px-8 z-50 before:content-[''] before:absolute before:bottom-full before:left-0 before:right-0 before:h-2 min-w-max">
@@ -198,10 +275,33 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
 
       <Link
         href={"/about"}
-        className={`p-3.5 text-[#F5F5DC] hover:text-amber-300 transition-all duration-300 ${isMobile ? "block" : ""}`}
+        className={` relative p-3.5 text-[#F5F5DC] hover:text-amber-300 transition-all duration-300 ${isMobile ? "block" : ""}`}
         onClick={onLinkClick}
       >
         Haqqında
+        <svg
+            className={` absolute left-0 bottom-0 transition-all duration-300 
+              ${pathname === "/about"
+                ? "opacity-100 scale-x-100"
+                : "opacity-0 scale-x-0"
+              } origin-left`}
+            width="91"
+            height="13"
+            viewBox="0 0 91 13"
+            fill="none"
+          >
+            <line
+              x1="1.00013"
+              y1="11.1056"
+              x2="162.685"
+              y2="1.00032"
+              stroke="#FFDD00"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        
+
       </Link>
 
       <HeaderActions isMobile={isMobile} />
