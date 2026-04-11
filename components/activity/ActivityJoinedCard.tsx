@@ -11,14 +11,14 @@ const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex">
-      {/* Image */}
-      <div className="relative w-32 shrink-0 sm:w-40">
+      {/* Image: w-28 on mobile, w-40 on sm+ */}
+      <div className="relative w-28 sm:w-40 shrink-0">
         <Image
           src={image}
           alt={activity}
           fill
           className="object-cover"
-          sizes="160px"
+          sizes="(max-width: 640px) 112px, 160px"
         />
         <div className="absolute top-2 right-2 bg-yellow-400 text-black font-semibold px-2 py-0.5 rounded-full text-xs">
           {price} AZN
@@ -49,18 +49,16 @@ const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
         <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
           <ParticipantAvatars participants={participants} count={participantCount} />
 
-          <div className="flex gap-2 items-center">
-            {/* Figma: w-100px h-24px, px-10px py-4px, rounded-4px, border-1px */}
+          <div className="flex gap-1.5 items-center flex-wrap">
             <button
               type="button"
-              className="w-[100px] h-[24px] flex items-center justify-center px-[10px] py-[4px] rounded-[4px] border border-zinc-300 text-[#142A12] font-roboto font-medium text-[14px] leading-none hover:bg-zinc-50 transition whitespace-nowrap"
+              className="h-[24px] flex items-center justify-center px-2.5 rounded-[4px] border border-zinc-300 text-[#142A12] font-roboto font-medium text-[12px] sm:text-[14px] leading-none hover:bg-zinc-50 transition whitespace-nowrap"
             >
               Bonuslarım
             </button>
-            {/* Figma: w-100px h-24px, px-10px py-4px, rounded-4px */}
             <button
               type="button"
-              className="w-[100px] h-[24px] flex items-center justify-center px-[10px] py-[4px] rounded-[4px] bg-[#0B3E35] text-white font-roboto font-medium text-[14px] leading-none hover:bg-[#0d6560] transition whitespace-nowrap"
+              className="h-[24px] flex items-center justify-center px-2.5 rounded-[4px] bg-[#0B3E35] text-white font-roboto font-medium text-[12px] sm:text-[14px] leading-none hover:bg-[#0d6560] transition whitespace-nowrap"
             >
               Rəylərim
             </button>
