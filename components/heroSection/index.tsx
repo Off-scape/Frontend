@@ -20,7 +20,6 @@ function HeroSection() {
           {/* Location Input */}
           <div className="flex items-center gap-3 px-6 py-4 flex-1 w-full">
             <LocationIcon />
-
             <input
               type="text"
               placeholder="Hara?"
@@ -29,10 +28,8 @@ function HeroSection() {
               onChange={(e) => setSelectedLocation(e.target.value)}
             />
           </div>
-
           {/* Divider */}
           <div className="h-px w-full md:h-12 md:w-px bg-[#F5F5DC]/30"></div>
-
           {/* Date Picker */}
           <div className="flex items-center gap-3 px-6 py-4 flex-1 relative w-full">
             <CalendarIcon />
