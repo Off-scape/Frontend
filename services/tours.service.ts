@@ -1,8 +1,8 @@
 import { api } from "./api";
 
 export const ToursService = {
-  getAllTours(data: any) {
-    return api.post("/api/tours", data);
+  getAllTours() {
+    return api.get("/api/tours");
   },
 
   getTour(id: string) {
