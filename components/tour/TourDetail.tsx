@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import DetailImage from '@/public/common/assets/images/tours/nature-hiking.jpg'
 import React, { useMemo, useState } from "react";
 import ReviewsSection from "@/components/tour/ReviewsSection";
 import { Tour } from "@/types/Tour";
@@ -28,16 +29,16 @@ interface TourDetailProps {
 
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [selectedDate, setSelectedDate] = useState<string>(tour.date);
-  const scheduleOptions = useMemo(
-    () => [tour.date, ...scheduleExtraDates],
-    [tour.date],
-  );
+  // const scheduleOptions = useMemo(
+  //   () => [tour.date, ...scheduleExtraDates],
+  //   [tour.date],
+  // );
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
       <header className="border-b border-zinc-300 pb-4">
         <h1 className="text-2xl font-bold text-zinc-900 md:text-4xl">
-          {tour.activity}
+          {tour?.title}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
@@ -49,8 +50,8 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         <div className="xl:col-start-1 xl:row-start-1">
           <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
-              src={tour.image}
-              alt={tour.activity}
+              src={tour?.image ? tour.image : DetailImage}
+              alt={tour?.title}
               fill
               priority
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 860px"
@@ -58,7 +59,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          {/* <div className="mt-4 flex flex-wrap gap-3">
             {scheduleOptions.map((date) => {
               const isSelected = selectedDate === date;
               return (
@@ -76,7 +77,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 </button>
               );
             })}
-          </div>
+          </div> */}
 
           <div className="mt-8 space-y-8">
             <div>
@@ -156,9 +157,9 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
 
             <h3 className="mt-4 text-3xl font-bold leading-tight text-zinc-900">
-              {`"${tour.activity}" - birlikdə qrup oyunu`}
+              {`"${tour?.title}" - birlikdə qrup oyunu`}
             </h3>
-            <p className="mt-2 text-sm text-zinc-600">{tour.location}</p>
+            <p className="mt-2 text-sm text-zinc-600">{tour?.Region?.name}</p>
 
             <button
               type="button"
@@ -178,8 +179,8 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             <div className="mt-4 flex items-start gap-2 text-sm text-zinc-700">
               <FiMapPin className="mt-0.5 size-4 shrink-0 text-zinc-500" />
               <div>
-                <p className="font-semibold text-zinc-900">{tour.location}</p>
-                <p className="text-zinc-500">Bakı - {tour.location}</p>
+                <p className="font-semibold text-zinc-900">{tour?.Region?.name}</p>
+                <p className="text-zinc-500">Bakı - {tour?.Region?.slug}</p>
               </div>
             </div>
 
@@ -199,7 +200,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </p>
 
             <div className="mt-4 space-y-4">
-              {tour.participants.slice(0, 4).map((person, index) => (
+              {/* {tour.participants.slice(0, 4).map((person, index) => (
                 <div key={person.id} className="flex items-center gap-3">
                   <Avatar src={person.avatar} name={person.name} size="md" />
                   <div>
@@ -209,7 +210,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                     <p className="text-xs text-zinc-600">{person.name}</p>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </aside>

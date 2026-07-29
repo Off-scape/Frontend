@@ -3,6 +3,9 @@ import TourDetail from "@/components/tour/TourDetail";
 import { allTours } from "@/data/Mocktours";
 import { useParams } from "next/navigation";
 import { Roboto } from "next/font/google";
+import { ToursService } from "@/services/tours.service";
+import { useEffect, useState } from "react";
+import { Tour } from "@/types/Tour";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -11,9 +14,33 @@ const roboto = Roboto({
 
 const TourDetailPage = () => {
   const { id: tourId } = useParams();
-
+  const [tour, setTour] = useState<Tour | null>(null);
   // Find the tour from mock data
-  const tour = allTours.find((t) => t.id === tourId);
+  // const tour = allTours.find((t) => t.id === tourId);
+
+  const getTour = async (id: number) => {
+    try {
+      const response = await ToursService.getTour(id);
+      console.log("response", response.data)
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+  useEffect(() => {
+    if (tourId) {
+      getTour(Number(tourId))
+        .then((data) => {
+          setTour(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching tour:", error);
+        });
+    }
+  }, [tourId])
+  console.log("tour", tour)
 
   if (!tour) {
     return (

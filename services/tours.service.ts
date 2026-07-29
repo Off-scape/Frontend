@@ -5,7 +5,7 @@ export const ToursService = {
     return api.get("/api/tours");
   },
 
-  getTour(id: string) {
+  getTour(id: number | string) {
     return api.get(`/api/tours/${id}`);
   },
 
