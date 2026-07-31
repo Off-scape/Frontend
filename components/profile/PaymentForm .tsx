@@ -5,7 +5,7 @@ import { FaCheck } from "react-icons/fa6";
 import { useState } from "react";
 
 type FormData = {
-    name: string;
+    cardholder_name: string;
     surname: string;
     cardNumber: string;
     expiryDate: string;
@@ -43,17 +43,17 @@ const PaymentForm = () => {
                 <div className="flex flex-col gap-5 max-w-fit">
                     <div className="flex gap-8">
                         <div className="flex flex-col ">
-                            <label htmlFor="name" className={`text-[#000000] font-medium text-base  ${errors.name ? "text-[#FF0004]" : ""} `}>Ad</label>
+                            <label htmlFor="name" className={`text-[#000000] font-medium text-base  ${errors.cardholder_name ? "text-[#FF0004]" : ""} `}>Ad</label>
                             <input
-                                {...register("name", validations.firstName())}
+                                {...register("cardholder_name", validations.firstName())}
                                 type="text"
                                 id="name"
-                                className={ `border-[#828282] border outline-0 rounded-xl  h-10.5 w-full  px-3  text-base ${errors.name ? "border-[#FF0004]" : ""} ` }
+                                className={ `border-[#828282] border outline-0 rounded-xl  h-10.5 w-full  px-3  text-base ${errors.cardholder_name ? "border-[#FF0004]" : ""} ` }
                             />
                             {
-                                errors.name && (
+                                errors.cardholder_name && (
                                     <p className="text-[#FF0004] text-sm mt-1">
-                                        {errors.name.message}
+                                        {errors.cardholder_name.message}
                                     </p>
                                 )
                             }

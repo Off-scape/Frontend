@@ -10,7 +10,7 @@ export const ToursService = {
   },
 
   updateTour(id: string, data: any) {
-    return api.patch(`/api/tours/${id}`, data);
+    return api.patch(`/api/tours/${id}`, data,);
   },
 
   deleteTour(id: string) {

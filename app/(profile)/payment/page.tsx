@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 
 const PaymentPage = () => {
 const [activeTab, setActiveTab] = useState("");
+ 
+
 
 useEffect(() => {
   const savedTab = localStorage.getItem("activeTab");
   if (savedTab) setActiveTab(savedTab);
+
 }, []);
 
 

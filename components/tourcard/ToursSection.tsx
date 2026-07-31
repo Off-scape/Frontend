@@ -1,8 +1,8 @@
 import ToursGridSection from "@/components/tourcard/Toursgridsection";
 import { mockNatureTours, mockActivityTours } from "@/data/Mocktours";
 
-export default function ToursSection() {
-
+export default  function ToursSection() {
+  
   return (
     <main>
       <ToursGridSection

@@ -19,14 +19,14 @@ export interface FieldErrors {
   gender?: string;
 }
 
-type CardType = "visa" | "mastercard";
-export type Card = {
-  id: number;
-  type: CardType;
-  last4: string;
-  expiry: string;
-  isPrimary: boolean;
-};
+// type CardType = "visa" | "mastercard";
+// export type Card = {
+//   id: number;
+//   type: CardType;
+//   last4: string;
+//   expiry: string;
+//   isPrimary: boolean;
+// };
 
 export type PaymentsType = {
   tur: string;

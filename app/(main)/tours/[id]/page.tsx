@@ -29,6 +29,7 @@ const TourDetailPage = () => {
       return null;
     }
   }
+
   useEffect(() => {
     if (tourId) {
       getTour(Number(tourId))
@@ -38,9 +39,10 @@ const TourDetailPage = () => {
         .catch((error) => {
           console.error("Error fetching tour:", error);
         });
+
     }
   }, [tourId])
-  console.log("tour", tour)
+      
 
   if (!tour) {
     return (

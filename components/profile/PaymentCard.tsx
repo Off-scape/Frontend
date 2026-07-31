@@ -1,7 +1,8 @@
-import { Card } from "@/types/Profile";
+
+import { IPaymentCard } from "@/types/Payment";
 import { HiOutlineTrash } from "react-icons/hi";
 
-const PaymentCard = ({ card }: { card: Card }) => {
+const PaymentCard = ({ card }: { card: IPaymentCard }) => {
     return (
         <div className="flex items-center justify-between h-20 border border-[#828282] rounded-[10px] py-4 px-8  max-md:py-2 max-md:px-4 ">
             <div className="flex items-center gap-3.5 ">
@@ -16,13 +17,13 @@ const PaymentCard = ({ card }: { card: Card }) => {
                         7830 ilə bitən viza
                     </p>
                     <p className="font-normal text-xs text-[#828282] ">
-                        Exp. tarix 06/24
+                        Exp. tarix {card.expiryMonth}/{card.expiryYear.toString().slice(-2)}
                     </p>
                 </div>
             </div>
             <div className="flex items-center gap-5 max-md:gap-3">
 
-                {card.isPrimary ? (
+                {card.isDefault ? (
                     <div className="cursor-pointer px-2.5 py-1.25 bg-black text-white text-xs rounded-lg max-md:text-center ">
                         Seçilmiş kart
                     </div>
