@@ -12,21 +12,19 @@ export const EMAIL_REGEX = REGEXES.email;
 
 export const validations = {
   firstName: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
-    required: "Ad tələb olunur",
+    required: "Ad və soyad tələb olunur",
     minLength: { value: 2, message: "Ad minimum 2 simvol olmalıdır" },
     pattern: {
       value: REGEXES.onlyLetters,
-      message: "Ad yalnız hərflərdən ibarət olmalıdır",
+      message: "Ad və soyad yalnız hərflərdən ibarət olmalıdır",
     },
   }),
 
-  lastName: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
-    required: "Soyad tələb olunur",
-    minLength: { value: 2, message: "Soyad minimum 2 simvol olmalıdır" },
-    pattern: {
-      value: REGEXES.onlyLetters,
-      message: "Soyad yalnız hərflərdən ibarət olmalıdır",
-    },
+  cardType: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Kart tipi tələb olunur",
+    validate: (value: string) =>
+      ["visa", "mastercard", "other"].includes(value.toLowerCase()) ||
+      'Kart tipi yalnız "visa", "mastercard" və ya "other" ola bilər',
   }),
 
   phone: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
@@ -67,17 +65,50 @@ export const validations = {
     minLength: { value: 16, message: "Kart nömrəsi minimum 16 simvol olmalıdır" },
     maxLength: { value: 16, message: "Kart nömrəsi maksimum 16 simvol olmalıdır" },
   }),
-  expiryDate: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
-    required: "Vaxt bitmə vaxtı tələb olunur",
-    pattern: {
-      value: /^(0[1-9]|1[0-2])\/?([0-9]{2})$/,
-      message: "Düzgün tarix formatı daxil edin (AA/İİ)",
-    },
-  }),
+expiryMonth: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+  required: "Bitmə ayı tələb olunur",
+  valueAsNumber: true,
+  min: {
+    value: 1,
+    message: "Ay 1-12 arasında olmalıdır",
+  },
+  max: {
+    value: 12,
+    message: "Ay 1-12 arasında olmalıdır",
+  },
+}),
+
+expiryYear: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+  required: "Bitmə ili tələb olunur",
+  valueAsNumber: true,
+  min: {
+    value: new Date().getFullYear(),
+    message: "Keçmiş il daxil edilə bilməz",
+  },
+  max: {
+    value: new Date().getFullYear() + 20,
+    message: "Düzgün il daxil edin",
+  },
+}),
   cvc: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
     required: "CVC tələb olunur",
     minLength: { value: 3, message: "CVC minimum 3 simvol olmalıdır" },
     maxLength: { value: 3, message: "CVC maksimum 3 simvol olmalıdır" },
+  }),
+  lastFourDigits: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Kartın son 4 rəqəmi tələb olunur",
+    minLength: {
+      value: 4,
+      message: "Kartın son 4 rəqəmini daxil edin",
+    },
+    maxLength: {
+      value: 4,
+      message: "Yalnız 4 rəqəm daxil edə bilərsiniz",
+    },
+    pattern: {
+      value: /^\d{4}$/,
+      message: "Yalnız 4 rəqəm daxil edin",
+    },
   }),
 
 };

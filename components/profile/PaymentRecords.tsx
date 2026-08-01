@@ -9,11 +9,11 @@ import { IPaymentCard } from "@/types/Payment";
 const PaymentRecords = () => {
     const [isCardFormOpen, setIsCardFormOpen] = useState(false);
     const formRef = useRef<HTMLDivElement | null>(null);
-     const [cards, setCards] = useState<IPaymentCard[]>([]);
-    const handleAllCarts =  async ()=>{
-    const response = await CreditCardsService.getCards()
-       
-    return response.data
+    const [cards, setCards] = useState<IPaymentCard[]>([]);
+    const handleAllCarts = async () => {
+        const response = await CreditCardsService.getCards()
+
+        return response.data
     }
     const handleOpenForm = () => {
         setIsCardFormOpen(true);
@@ -60,11 +60,11 @@ const PaymentRecords = () => {
                 </button>
             </div>
 
-            {isCardFormOpen && (
-                <div ref={formRef}>
-                    <PaymentForm />
-                </div>
-            )}
+
+            <div ref={formRef}>
+                <PaymentForm />
+            </div>
+
 
         </div>
     )
