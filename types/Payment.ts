@@ -13,7 +13,7 @@ export interface IPaymentCard {
 export interface PaymentCard {
   cardholder_name: string;
   last_four_digits: string;
-  card_type: string; // or "visa" | "mastercard" | "amex"
-  expiry_month: number;
-  expiry_year: number;
+  card_type: string; 
+  expiry_month: string;
+  expiry_year: string;
 }

@@ -1,10 +1,22 @@
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "@/components/tourcard/Participantavatars";
+import ParticipantAvatars, { Participant } from "@/components/tourcard/Participantavatars";
 
-interface ActivityJoinedCardProps {
+type Tour = {
+  id: number;
+  image: string;
+  price: number;
+  date: string;
+  time: string;
+  activity: string;
+  organizer: string;
+  participantCount: number;
+  participants:Participant[];
+};
+
+type ActivityJoinedCardProps = {
   tour: Tour;
-}
+};
+
 
 const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
   const { image, price, date, time, activity, organizer, participantCount, participants } = tour;

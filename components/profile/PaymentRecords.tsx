@@ -9,6 +9,7 @@ import { IPaymentCard } from "@/types/Payment";
 const PaymentRecords = () => {
     const [isCardFormOpen, setIsCardFormOpen] = useState(false);
     const formRef = useRef<HTMLDivElement | null>(null);
+    const [changed, setChanged] = useState(false);
     const [cards, setCards] = useState<IPaymentCard[]>([]);
     const handleAllCarts = async () => {
         const response = await CreditCardsService.getCards()
@@ -30,8 +31,28 @@ const PaymentRecords = () => {
             .then((data) => {
                 setCards(data.data);
             });
-    }, [])
-    console.log("cards", cards)
+    }, [changed])
+
+    const handleDeleteCard = async (id: number) => {
+        try {
+            await CreditCardsService.deleteCard(id.toString());
+            setChanged(!changed);
+            alert("Kart uğurla silindi.");
+        } catch (error) {
+            console.error("Kart silinərkən xəta baş verdi:", error);
+        }
+    };
+
+    const handleSetDefaultCard = async (id: number) => {
+        try {
+            await CreditCardsService.setDefaultCard(id.toString());
+            setChanged(!changed);
+            alert("Kart uğurla əsas kart kimi təyin edildi.");
+        } catch (error) {
+            console.error("Kartı əsas kart kimi təyin edərkən xəta baş verdi:", error);
+        }
+    };
+    
     return (
         <div>
             <div className="grid gap-8 grid-cols-1 xl:grid-cols-[380px_480px]">
@@ -47,10 +68,10 @@ const PaymentRecords = () => {
                     </button>
 
                 </div>
-                <div className="flex flex-col gap-5 lg:pr-5 xl:pr-0">
+                <div className="flex flex-col gap-5 lg:pr-5 xl:pr-0 max-h-[280px] overflow-y-auto hide-scrollbar ">
                     {
                         cards.map((card) => (
-                            <PaymentCard key={card.id} card={card} />
+                            <PaymentCard key={card.id} card={card} handleDeleteCard={handleDeleteCard} handleSetDefaultCard={handleSetDefaultCard} />
                         ))
                     }
 
@@ -62,7 +83,7 @@ const PaymentRecords = () => {
 
 
             <div ref={formRef}>
-                <PaymentForm />
+                <PaymentForm setChanged={setChanged} />
             </div>
 
 

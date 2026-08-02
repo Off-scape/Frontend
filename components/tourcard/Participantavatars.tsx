@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-interface Participant {
+export interface Participant {
   id: string;
   avatar: string;
   name: string;

@@ -2,10 +2,24 @@
 
 import React from "react";
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 
+type Tour = {
+  id: number;
+  image: string;
+  price: number;
+  date: string;
+  time: string;
+  activity: string;
+  organizer: string;
+  participantCount: number;
+  participants: {
+    id: string;
+    avatar: string;
+    name: string;
+  }[];
+};
 interface CardProps {
   data: Tour;
 }

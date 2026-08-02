@@ -65,7 +65,10 @@ export const validations = {
     minLength: { value: 16, message: "Kart nömrəsi minimum 16 simvol olmalıdır" },
     maxLength: { value: 16, message: "Kart nömrəsi maksimum 16 simvol olmalıdır" },
   }),
-expiryMonth: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+expiryMonth: <
+  T extends FieldValues,
+  K extends Path<T>
+>(): RegisterOptions<T, K> => ({
   required: "Bitmə ayı tələb olunur",
   valueAsNumber: true,
   min: {
@@ -78,7 +81,10 @@ expiryMonth: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
   },
 }),
 
-expiryYear: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+expiryYear: <
+  T extends FieldValues,
+  K extends Path<T>
+>(): RegisterOptions<T, K> => ({
   required: "Bitmə ili tələb olunur",
   valueAsNumber: true,
   min: {

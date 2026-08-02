@@ -3,20 +3,12 @@ import { useForm } from "react-hook-form";
 import { validations } from "@/utils/validation";
 import { FaCheck } from "react-icons/fa6";
 import { useState } from "react";
-
-type FormData = {
-    cardholder_name: string;
-    card_type: string;
-    last_four_digits: string;
-    expiryDate: string;
-    cvc: string;
-    expiry_month: string;
-    expiry_year: string;
+import { CreditCardsService } from "@/services/creditcards.services";
+import { PaymentCard } from "@/types/Payment";
 
 
-};
 
-const PaymentForm = () => {
+const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void }) => {
     const [checked, setChecked] = useState(false);
     const [checkedError, setCheckedError] = useState(false);
     const handleCheckboxChange = () => {
@@ -30,14 +22,27 @@ const PaymentForm = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormData>();
+        reset
+    } = useForm<PaymentCard>();
 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
+    const onSubmit = async (data: PaymentCard) => {
         if (!checked) {
             setCheckedError(true);
             return
         }
+        try {
+            await CreditCardsService.createCard(data);
+            alert("Kart uğurla əlavə edildi!");
+            reset();                 // Clear all form inputs
+            setChecked(false);       // Uncheck the checkbox
+            setCheckedError(false);  // Clear checkbox error if any
+            setChanged(true);        // Notify parent component about the change
+
+
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+
     };
 
     return (
@@ -209,7 +214,9 @@ const PaymentForm = () => {
                             Zəhmət olmasa şərtləri qəbul edin
                         </p>
                     )}
-                    <button className="cursor-pointer mt-12.5 w-48  py-4 px-6 bg-[#003CFF] text-white rounded-[14px] text-base font-medium">
+                    <button
+
+                        className="cursor-pointer mt-12.5 w-48  py-4 px-6 bg-[#003CFF] text-white rounded-[14px] text-base font-medium">
                         Təsdiqlə
                     </button>
                 </div>
