@@ -5,23 +5,9 @@ import Image from "next/image";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 
-type Tour = {
-  id: number;
-  image: string;
-  price: number;
-  date: string;
-  time: string;
-  activity: string;
-  organizer: string;
-  participantCount: number;
-  participants: {
-    id: string;
-    avatar: string;
-    name: string;
-  }[];
-};
-interface CardProps {
-  data: Tour;
+
+export interface CardProps {
+  data: any;
 }
 
 const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
@@ -36,7 +22,7 @@ const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
     participants,
   } = data;
   const router = useRouter();
-
+  console.log("ActivityLikedCard data:", data); // Debugging line to check the data being passed
   return (
     <div
       onClick={() => router.push(`tours/${data.id}`)}

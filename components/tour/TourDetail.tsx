@@ -28,7 +28,7 @@ interface TourDetailProps {
 }
 
 const TourDetail = ({ tour }: TourDetailProps) => {
-  const [selectedDate, setSelectedDate] = useState<string>(tour.date);
+  // const [selectedDate, setSelectedDate] = useState<string>(tour.date);
   // const scheduleOptions = useMemo(
   //   () => [tour.date, ...scheduleExtraDates],
   //   [tour.date],

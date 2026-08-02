@@ -14,9 +14,9 @@ const TourBody = () => {
   const searchParams = useSearchParams();
   const tourType = searchParams.get("type");
 
-  const filteredTours = tourType
-    ? allTours.filter((tour) => tour.type === tourType)
-    : allTours;
+  // const filteredTours = tourType
+  //   ? allTours.filter((tour) => tour.type === tourType)
+  //   : allTours;
 
   const getTours = async () => {
     try {
@@ -48,7 +48,7 @@ const TourBody = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20 ">
         {loading ? <>
           {Array.from({ length: 8 }).map((_, i) => <CardLoading key={i} />)}
-        </> : filteredTours.length > 0 ? tours.map((tour) => (
+        </> : tours.length > 0 ? tours.map((tour) => (
           <Card key={tour.id} data={tour} />
         )) : <EmptyTours />}
       </div>

@@ -1,20 +1,9 @@
 import Image from "next/image";
 import ParticipantAvatars, { Participant } from "@/components/tourcard/Participantavatars";
 
-type Tour = {
-  id: number;
-  image: string;
-  price: number;
-  date: string;
-  time: string;
-  activity: string;
-  organizer: string;
-  participantCount: number;
-  participants:Participant[];
-};
 
 type ActivityJoinedCardProps = {
-  tour: Tour;
+  tour: any;
 };
 
 

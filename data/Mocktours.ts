@@ -1,4 +1,4 @@
-import { Tour, TourFilter } from '@/types/Tour';
+import { ITour, Tour, TourFilter } from '@/types/Tour';
 import Allevents from "../icons/allEvents.svg"
 import Aktivlik from "../icons/activiti.svg"
 import hiking from "../icons/hiking.svg"
@@ -7,7 +7,7 @@ import psychology from "../icons/brain.svg"
 import camping from "../icons/camp.svg"
 import social from "../icons/socialty.svg"
 
-export const mockNatureTours: Tour[] = [
+export const mockNatureTours: ITour[] = [
     {
         id: 'n1',
         image: '/common/assets/images/tours/nature-susa.jpg',
@@ -87,7 +87,7 @@ export const mockNatureTours: Tour[] = [
 ];
 
 
-export const mockActivityTours: Tour[] = [
+export const mockActivityTours: ITour[] = [
     {
         id: '1',
         image: '/common/assets/images/tours/activity1.jpg',
@@ -167,7 +167,7 @@ export const mockActivityTours: Tour[] = [
 ];
 
 
-export const allTours: Tour[] = [
+export const allTours: ITour[] = [
     {
         id: 'n1',
         image: '/common/assets/images/tours/nature-susa.jpg',

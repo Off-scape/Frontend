@@ -42,7 +42,14 @@ export const validations = {
       message: "Düzgün e-poçt ünvanı daxil edin",
     },
   }),
-
+  lastName: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
+    required: "Soyad tələb olunur",
+    minLength: { value: 2, message: "Soyad minimum 2 simvol olmalıdır" },
+    pattern: {
+      value: REGEXES.onlyLetters,
+      message: "Soyad yalnız hərflərdən ibarət olmalıdır",
+    },
+  }),
   password: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
     required: "Şifrə tələb olunur",
     minLength: { value: 8, message: "Şifrə minimum 8 simvol olmalıdır" },
@@ -65,37 +72,37 @@ export const validations = {
     minLength: { value: 16, message: "Kart nömrəsi minimum 16 simvol olmalıdır" },
     maxLength: { value: 16, message: "Kart nömrəsi maksimum 16 simvol olmalıdır" },
   }),
-expiryMonth: <
-  T extends FieldValues,
-  K extends Path<T>
->(): RegisterOptions<T, K> => ({
-  required: "Bitmə ayı tələb olunur",
-  valueAsNumber: true,
-  min: {
-    value: 1,
-    message: "Ay 1-12 arasında olmalıdır",
-  },
-  max: {
-    value: 12,
-    message: "Ay 1-12 arasında olmalıdır",
-  },
-}),
+  expiryMonth: <
+    T extends FieldValues,
+    K extends Path<T>
+  >(): RegisterOptions<T, K> => ({
+    required: "Bitmə ayı tələb olunur",
+    valueAsNumber: true,
+    min: {
+      value: 1,
+      message: "Ay 1-12 arasında olmalıdır",
+    },
+    max: {
+      value: 12,
+      message: "Ay 1-12 arasında olmalıdır",
+    },
+  }),
 
-expiryYear: <
-  T extends FieldValues,
-  K extends Path<T>
->(): RegisterOptions<T, K> => ({
-  required: "Bitmə ili tələb olunur",
-  valueAsNumber: true,
-  min: {
-    value: new Date().getFullYear(),
-    message: "Keçmiş il daxil edilə bilməz",
-  },
-  max: {
-    value: new Date().getFullYear() + 20,
-    message: "Düzgün il daxil edin",
-  },
-}),
+  expiryYear: <
+    T extends FieldValues,
+    K extends Path<T>
+  >(): RegisterOptions<T, K> => ({
+    required: "Bitmə ili tələb olunur",
+    valueAsNumber: true,
+    min: {
+      value: new Date().getFullYear(),
+      message: "Keçmiş il daxil edilə bilməz",
+    },
+    max: {
+      value: new Date().getFullYear() + 20,
+      message: "Düzgün il daxil edin",
+    },
+  }),
   cvc: <T extends FieldValues>(): RegisterOptions<T, Path<T>> => ({
     required: "CVC tələb olunur",
     minLength: { value: 3, message: "CVC minimum 3 simvol olmalıdır" },
