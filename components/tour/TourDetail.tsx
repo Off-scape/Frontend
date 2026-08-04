@@ -27,17 +27,21 @@ interface TourDetailProps {
 }
 
 const TourDetail = ({ tour }: TourDetailProps) => {
-  const [selectedDate, setSelectedDate] = useState<string>(tour.date);
+  const defaultDate = tour.date ?? scheduleExtraDates[0] ?? "";
+  const [selectedDate, setSelectedDate] = useState<string>(defaultDate);
   const scheduleOptions = useMemo(
-    () => [tour.date, ...scheduleExtraDates],
+    () => [tour.date ?? "", ...scheduleExtraDates].filter(Boolean),
     [tour.date],
   );
+  const tourImage = tour.image ?? "/default-tour.png";
+  const tourActivity = tour.activity ?? "Tour";
+  const participants = tour.participants ?? [];
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
       <header className="border-b border-zinc-300 pb-4">
         <h1 className="text-2xl font-bold text-zinc-900 md:text-4xl">
-          {tour.activity}
+          {tourActivity}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
@@ -49,8 +53,8 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         <div className="xl:col-start-1 xl:row-start-1">
           <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
-              src={tour.image}
-              alt={tour.activity}
+              src={tourImage}
+              alt={tourActivity}
               fill
               priority
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 860px"
@@ -65,7 +69,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 <button
                   key={date}
                   type="button"
-                  onClick={() => setSelectedDate(date)}
+                  onClick={() => setSelectedDate(date || "")}
                   className={`min-w-28 rounded-xl border px-5 py-2 text-sm font-medium transition ${
                     isSelected
                       ? "border-[#0F766E] bg-[#E7F6F3] text-[#0F766E]"
@@ -156,7 +160,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
 
             <h3 className="mt-4 text-3xl font-bold leading-tight text-zinc-900">
-              {`"${tour.activity}" - birlikdə qrup oyunu`}
+              {`"${tourActivity}" - birlikdə qrup oyunu`}
             </h3>
             <p className="mt-2 text-sm text-zinc-600">{tour.location}</p>
 
@@ -199,9 +203,13 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </p>
 
             <div className="mt-4 space-y-4">
-              {tour.participants.slice(0, 4).map((person, index) => (
+              {participants.slice(0, 4).map((person, index) => (
                 <div key={person.id} className="flex items-center gap-3">
-                  <Avatar src={person.avatar} name={person.name} size="md" />
+                  <Avatar
+                    src={person.avatar ?? ""}
+                    name={person.name ?? "Guide"}
+                    size="md"
+                  />
                   <div>
                     <p className="text-sm font-semibold text-zinc-900">
                       {instructorRoles[index]}
