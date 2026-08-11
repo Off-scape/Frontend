@@ -47,11 +47,15 @@ export default function CategoryDetailPage() {
         const allTours = normalizeCollection(res?.data ?? res);
 
         const filtered = allTours.filter((tour) => {
+          const tourData = tour as Record<string, unknown>;
           const categoryName = String(
-            tour?.categoryName ?? tour?.category ?? tour?.category_title ?? "",
+            tourData.categoryName ??
+              tourData.category ??
+              tourData.category_title ??
+              "",
           ).toLowerCase();
           const categoryId = String(
-            tour?.categoryId ?? tour?.category_id ?? "",
+            tourData.categoryId ?? tourData.category_id ?? "",
           );
 
           if (!currentCategory) return false;
