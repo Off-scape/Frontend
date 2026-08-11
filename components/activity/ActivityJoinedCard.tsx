@@ -7,7 +7,14 @@ interface ActivityJoinedCardProps {
 }
 
 const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
-  const { image, price, date, time, activity, organizer, participantCount, participants } = tour;
+  const image = tour.image ?? "/default-tour.png";
+  const price = tour.price ?? 0;
+  const date = tour.date ?? "-";
+  const time = tour.time ?? "";
+  const activity = tour.activity ?? "Tour";
+  const organizer = tour.organizer ?? "OffSpace";
+  const participantCount = tour.participantCount ?? 0;
+  const participants = tour.participants ?? [];
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex">
@@ -37,8 +44,8 @@ const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
             {activity}
           </p>
           <p className="text-xs text-gray-500">
-            <span className="font-roboto text-[#000000]">Bonus:</span>{" "}
-            Bu turdan coin qazanılır
+            <span className="font-roboto text-[#000000]">Bonus:</span> Bu turdan
+            coin qazanılır
           </p>
           <p className="text-xs text-gray-500">
             <span className="font-roboto text-[#000000]">Təşkilatçı:</span>{" "}
@@ -47,7 +54,10 @@ const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
         </div>
 
         <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
-          <ParticipantAvatars participants={participants} count={participantCount} />
+          <ParticipantAvatars
+            participants={participants}
+            count={participantCount}
+          />
 
           <div className="flex gap-1.5 items-center flex-wrap">
             <button
