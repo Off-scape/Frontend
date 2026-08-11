@@ -126,9 +126,9 @@ export default function RegionDetailPage() {
           <h2 className="text-2xl font-bold text-zinc-900">Region turları</h2>
           <div className="mt-5 space-y-4">
             {tours.length ? (
-              tours.map((tour) => (
+              tours.map((tour, index) => (
                 <div
-                  key={tour.id ?? tour._id ?? Math.random()}
+                  key={tour.id ?? tour._id ?? `tour-${index}`}
                   className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4"
                 >
                   <div className="flex items-start justify-between gap-3">

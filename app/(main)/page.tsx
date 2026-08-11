@@ -12,17 +12,20 @@ import WhyChooseUs from "@/components/landingpage/WhyChooseUs";
 import ToursSection from "@/components/tourcard/ToursSection";
 import { categories as defaultCategories } from "@/data/Categories";
 import { HomeService } from "@/services/home.service";
+import type { Tour } from "@/types/Tour";
 
-const normalizeList = (value: unknown): any[] => {
+const normalizeList = (value: unknown): unknown[] => {
   if (Array.isArray(value)) return value;
   if (Array.isArray((value as { data?: unknown })?.data)) {
-    return (value as { data: any[] }).data;
+    return (value as { data: unknown[] }).data;
   }
   return [];
 };
 
 export default function Home() {
-  const [homeData, setHomeData] = useState<any>(null);
+  const [homeData, setHomeData] = useState<Record<string, unknown> | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,8 +43,11 @@ export default function Home() {
     load();
   }, []);
 
-  const upcomingTours = normalizeList(homeData?.upcomingTours ?? []);
-  const guides = normalizeList(homeData?.guides ?? []);
+  const upcomingTours = normalizeList(homeData?.upcomingTours ?? []) as Tour[];
+  const guides = normalizeList(homeData?.guides ?? []) as Record<
+    string,
+    unknown
+  >[];
 
   const mappedCategories = defaultCategories.map((category) => ({
     id: category.id,
@@ -54,18 +60,32 @@ export default function Home() {
   }));
 
   const mappedGuides = guides.length
-    ? guides.map((guide: any) => ({
-        id: guide.id,
-        name: guide.name,
-        role: guide.role,
-        description: guide.description || `Guide məlumatı: ${guide.name}`,
-        image: guide.image || "/Ellipse 8 (1).png",
-        rating: guide.rating ?? 5,
-        toursIcon: "⭐",
-        tours: guide.tours ?? "Live",
-        jobIcon: "🧭",
-        job: guide.role || "Guide",
-      }))
+    ? guides.map((guide) => {
+        const guideItem = guide as Record<string, unknown>;
+        const safeId =
+          typeof guideItem.id === "string" || typeof guideItem.id === "number"
+            ? guideItem.id
+            : undefined;
+
+        return {
+          id: safeId,
+          name: typeof guideItem.name === "string" ? guideItem.name : undefined,
+          role: typeof guideItem.role === "string" ? guideItem.role : undefined,
+          description:
+            typeof guideItem.description === "string"
+              ? guideItem.description
+              : `Guide məlumatı: ${typeof guideItem.name === "string" ? guideItem.name : "Guide"}`,
+          image:
+            typeof guideItem.image === "string"
+              ? guideItem.image
+              : "/Ellipse 8 (1).png",
+          rating: typeof guideItem.rating === "number" ? guideItem.rating : 5,
+          toursIcon: "⭐",
+          tours: typeof guideItem.tours === "string" ? guideItem.tours : "Live",
+          jobIcon: "🧭",
+          job: typeof guideItem.role === "string" ? guideItem.role : "Guide",
+        };
+      })
     : undefined;
 
   return (

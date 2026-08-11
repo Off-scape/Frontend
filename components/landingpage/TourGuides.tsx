@@ -34,9 +34,9 @@ const TourGuides = ({ guidesData = defaultGuides }: TourGuidesProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[1312w] mx-auto">
-          {guidesData.map((guide) => (
+          {guidesData.map((guide, index) => (
             <div
-              key={guide.id ?? guide.name ?? Math.random()}
+              key={guide.id ?? guide.name ?? `guide-${index}`}
               className="bg-linear-to-br from-[#1a2921] to-[#2d3d33] rounded-[20px] p-8 text-center shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
             >
               <div className="w-48 h-48 mx-auto mb-5 relative">

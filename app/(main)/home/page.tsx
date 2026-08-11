@@ -4,17 +4,20 @@ import { useEffect, useState } from "react";
 import { HomeService } from "@/services/home.service";
 import ToursGridSection from "@/components/tourcard/Toursgridsection";
 import TourGuides from "@/components/landingpage/TourGuides";
+import type { Tour } from "@/types/Tour";
 
-const normalizeList = (value: unknown): any[] => {
+const normalizeList = (value: unknown): unknown[] => {
   if (Array.isArray(value)) return value;
   if (Array.isArray((value as { data?: unknown })?.data)) {
-    return (value as { data: any[] }).data;
+    return (value as { data: unknown[] }).data;
   }
   return [];
 };
 
 export default function HomePage() {
-  const [homeData, setHomeData] = useState<any>(null);
+  const [homeData, setHomeData] = useState<Record<string, unknown> | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,9 +35,12 @@ export default function HomePage() {
     load();
   }, []);
 
-  const upcomingTours = normalizeList(homeData?.upcomingTours ?? []);
-  const guides = normalizeList(homeData?.guides ?? []);
-  const summary = homeData?.summary ?? {};
+  const upcomingTours = normalizeList(homeData?.upcomingTours ?? []) as Tour[];
+  const guides = normalizeList(homeData?.guides ?? []) as Record<
+    string,
+    unknown
+  >[];
+  const summary = (homeData?.summary as Record<string, unknown>) ?? {};
 
   if (loading) {
     return (
@@ -74,25 +80,33 @@ export default function HomePage() {
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-zinc-500">Tours</p>
             <h3 className="mt-2 text-3xl font-bold text-zinc-900">
-              {summary?.toursCount ?? upcomingTours.length}
+              {typeof summary.toursCount === "number"
+                ? summary.toursCount
+                : upcomingTours.length}
             </h3>
           </div>
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-zinc-500">Regions</p>
             <h3 className="mt-2 text-3xl font-bold text-zinc-900">
-              {summary?.regionsCount ?? 0}
+              {typeof summary.regionsCount === "number"
+                ? summary.regionsCount
+                : 0}
             </h3>
           </div>
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-zinc-500">Activities</p>
             <h3 className="mt-2 text-3xl font-bold text-zinc-900">
-              {summary?.activitiesCount ?? 0}
+              {typeof summary.activitiesCount === "number"
+                ? summary.activitiesCount
+                : 0}
             </h3>
           </div>
           <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-zinc-500">Subscribers</p>
             <h3 className="mt-2 text-3xl font-bold text-zinc-900">
-              {summary?.subscribersCount ?? 0}
+              {typeof summary.subscribersCount === "number"
+                ? summary.subscribersCount
+                : 0}
             </h3>
           </div>
         </div>
@@ -106,18 +120,31 @@ export default function HomePage() {
       />
 
       <TourGuides
-        guidesData={guides.map((guide: any) => ({
-          id: guide.id,
-          name: guide.name,
-          role: guide.role,
-          description: `Guide məlumatı: ${guide.name}`,
-          image: guide.image || "/Ellipse 8 (1).png",
-          rating: 5,
-          toursIcon: "⭐",
-          tours: "Live",
-          jobIcon: "🧭",
-          job: guide.role || "Guide",
-        }))}
+        guidesData={guides.map((guide) => {
+          const guideItem = guide as Record<string, unknown>;
+          const safeId =
+            typeof guideItem.id === "string" || typeof guideItem.id === "number"
+              ? guideItem.id
+              : undefined;
+
+          return {
+            id: safeId,
+            name:
+              typeof guideItem.name === "string" ? guideItem.name : undefined,
+            role:
+              typeof guideItem.role === "string" ? guideItem.role : undefined,
+            description: `Guide məlumatı: ${typeof guideItem.name === "string" ? guideItem.name : "Guide"}`,
+            image:
+              typeof guideItem.image === "string"
+                ? guideItem.image
+                : "/Ellipse 8 (1).png",
+            rating: 5,
+            toursIcon: "⭐",
+            tours: "Live",
+            jobIcon: "🧭",
+            job: typeof guideItem.role === "string" ? guideItem.role : "Guide",
+          };
+        })}
       />
     </main>
   );

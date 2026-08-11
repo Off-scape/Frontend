@@ -15,21 +15,21 @@ const slugify = (value: string) =>
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 
-const normalizeCollection = (value: unknown): any[] => {
+const normalizeCollection = (value: unknown): unknown[] => {
   if (Array.isArray(value)) return value;
   if (Array.isArray((value as { data?: unknown })?.data))
-    return (value as { data: any[] }).data;
+    return (value as { data: unknown[] }).data;
   if (Array.isArray((value as { results?: unknown })?.results))
-    return (value as { results: any[] }).results;
+    return (value as { results: unknown[] }).results;
   if (Array.isArray((value as { tours?: unknown })?.tours))
-    return (value as { tours: any[] }).tours;
+    return (value as { tours: unknown[] }).tours;
   return [];
 };
 
 export default function CategoryDetailPage() {
   const params = useParams<{ slug: string }>();
   const slug = params?.slug ? String(params.slug) : "";
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<(typeof categories)[number] | null>(
     null,
@@ -119,32 +119,49 @@ export default function CategoryDetailPage() {
         </div>
       ) : items.length ? (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {items.map((item) => (
-            <div
-              key={item.id ?? item._id ?? Math.random()}
-              className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-xl font-bold text-zinc-900">
-                  {item.title || item.name || "Tour"}
-                </h3>
-                <span className="rounded-full bg-[#0F766E]/10 px-2.5 py-1 text-xs font-semibold text-[#0F766E]">
-                  {category.title}
-                </span>
+          {items.map((item, index) => {
+            const itemData = item as Record<string, unknown>;
+            return (
+              <div
+                key={String(itemData.id ?? itemData._id ?? `item-${index}`)}
+                className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-xl font-bold text-zinc-900">
+                    {typeof itemData.title === "string"
+                      ? itemData.title
+                      : typeof itemData.name === "string"
+                        ? itemData.name
+                        : "Tour"}
+                  </h3>
+                  <span className="rounded-full bg-[#0F766E]/10 px-2.5 py-1 text-xs font-semibold text-[#0F766E]">
+                    {category.title}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-zinc-600">
+                  {typeof itemData.description === "string"
+                    ? itemData.description
+                    : typeof itemData.shortDescription === "string"
+                      ? itemData.shortDescription
+                      : "Bu kateqoriya üçün uyğun tur."}
+                </p>
+                <div className="mt-4 flex items-center justify-between text-sm text-zinc-600">
+                  <span>
+                    {typeof itemData.location === "string"
+                      ? itemData.location
+                      : typeof itemData.region === "string"
+                        ? itemData.region
+                        : "Region"}
+                  </span>
+                  <span className="font-semibold text-zinc-900">
+                    {typeof itemData.price === "number"
+                      ? `${itemData.price} AZN`
+                      : "Qiymət"}
+                  </span>
+                </div>
               </div>
-              <p className="mt-3 text-sm leading-6 text-zinc-600">
-                {item.description ||
-                  item.shortDescription ||
-                  "Bu kateqoriya üçün uyğun tur."}
-              </p>
-              <div className="mt-4 flex items-center justify-between text-sm text-zinc-600">
-                <span>{item.location || item.region || "Region"}</span>
-                <span className="font-semibold text-zinc-900">
-                  {item.price ? `${item.price} AZN` : "Qiymət"}
-                </span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-zinc-600">
