@@ -12,6 +12,7 @@ interface ToursGridSectionProps {
   maxDisplay?: number;
 }
 
+
 const ToursGridSection: React.FC<ToursGridSectionProps> = ({
   title,
   tours,
