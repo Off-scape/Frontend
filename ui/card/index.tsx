@@ -1,29 +1,49 @@
-"use client"
+"use client";
 
 import React from "react";
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "@/components/tourcard/Participantavatars";
+import { ITour, Tour } from "@/types/Tour";
+// import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
 import notFoundImage from "@/public/common/assets/images/tours/activity1.jpg";
 interface CardProps {
-  data: Tour;
+  data: ITour | Tour;
 }
 
 const Card: React.FC<CardProps> = ({ data }) => {
-  const { activities, createdAt, title, description,id
+  const { activities, createdAt, description, id } = data;
 
-  } = data;
+  const normalized = data as any;
+
+  const image = normalized.image || "/default-tour.png";
+  const title = normalized.title || normalized.activity || "Tour";
+  const price = normalized.price ?? normalized.TourDates?.[0]?.price ?? 0;
+  const date = normalized.date || normalized.TourDates?.[0]?.startDate || "-";
+  const time = normalized.time || "";
+  const organizer =
+    normalized.organizer ||
+    normalized.operator ||
+    normalized.region?.name ||
+    "OffSpace";
+  const participantCount =
+    normalized.participantCount ?? normalized.availableSeats ?? 0;
+  const participants = normalized.participants ?? [];
   const router = useRouter();
+
   return (
-    <div onClick={() => router.push(`tours/${data.id}`)} className="group tour-card bg-white rounded-[20px] overflow-hidden cursor-pointer">
+    <div
+      onClick={() =>
+        router.push(`/tours/${normalized.id ?? normalized.slug ?? ""}`)
+      }
+      className="group tour-card bg-white rounded-[20px] overflow-hidden cursor-pointer"
+    >
       <div className="relative w-full h-48 md:h-52 rounded-[20px] overflow-hidden group-hover:h-52.5 transition-all duration-500">
         <Image
           src={data?.image ? data.image : notFoundImage}
           alt={description || "Tour Image"}
           fill
-          className="object-cover transition-transform duration-500  group-hover:scale-105"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
 
@@ -33,7 +53,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
       </div>
 
       <div className="p-4 space-y-1 transition-transform duration-500 group-hover:translate-y-1">
-        <p className="text-xs text-gray-500 mb-2 ">
+        <p className="text-xs text-gray-500 mb-2">
           <span className="font-roboto text-[#000000] text-base font-bold">
             Tarix və saat:
           </span>{" "}
@@ -50,7 +70,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
         </h3>
 
         <p className="text-sm text-gray-600 mb-2">
-          <span className="font-roboto text-[#000000] font-bold text-base">Təşkilatçı:</span>{" "}
+          <span className="font-roboto text-[#000000] font-bold text-base">
+            Təşkilatçı:
+          </span>{" "}
           <span className="font-medium text-[#6A6A6D] text-sm">
             {title}
           </span>

@@ -52,11 +52,6 @@ export interface ITour {
   time: string;
   activity: string;
   organizer: string;
-  location?: string;
-  participantCount: number;
-  participants: Participant[];
-  isVisible?: boolean; // Admin panel can control visibility
-  type: 'nature' | 'activity' | 'hiking' | 'health' | 'social' | 'camping' | 'psychology'; // To differentiate between various tour types
 }
 
 export type TourFilter = {

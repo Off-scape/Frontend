@@ -11,16 +11,14 @@ export interface CardProps {
 }
 
 const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
-  const {
-    image,
-    price,
-    date,
-    time,
-    activity,
-    organizer,
-    participantCount,
-    participants,
-  } = data;
+  const image = data.image ?? "/default-tour.png";
+  const price = data.price ?? 0;
+  const date = data.date ?? "-";
+  const time = data.time ?? "";
+  const activity = data.activity ?? "Tour";
+  const organizer = data.organizer ?? "OffSpace";
+  const participantCount = data.participantCount ?? 0;
+  const participants = data.participants ?? [];
   const router = useRouter();
   console.log("ActivityLikedCard data:", data); // Debugging line to check the data being passed
   return (
@@ -44,7 +42,9 @@ const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
 
       <div className="p-4">
         <p className="text-xs text-gray-500 mb-2">
-          <span className="font-roboto text-[#000000] text-sm">Tarix və saat:</span>{" "}
+          <span className="font-roboto text-[#000000] text-sm">
+            Tarix və saat:
+          </span>{" "}
           {date} {time}
         </p>
 

@@ -9,8 +9,12 @@ export const RegionsService = {
     return api.get(`/api/regions/${id}`);
   },
 
+  getRegionBySlug(slug: string) {
+    return api.get(`/api/regions/slug/${slug}`);
+  },
+
   updateRegion(id: string, data: any) {
-    return api.put(`/api/regions/${id}`, data);
+    return api.patch(`/api/regions/${id}`, data);
   },
 
   deleteRegion(id: string) {
@@ -19,5 +23,5 @@ export const RegionsService = {
 
   createRegion(data: any) {
     return api.post("/api/regions", data);
-  }
+  },
 };
