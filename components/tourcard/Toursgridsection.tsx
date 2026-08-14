@@ -1,11 +1,11 @@
 import React from "react";
 import SectionHeader from "./Sectionheader";
-import { Tour } from "@/types/Tour";
+import { ITour, Tour } from "@/types/Tour";
 import Card from "@/ui/card";
 
 interface ToursGridSectionProps {
   title: string;
-  tours: Tour[];
+  tours: ITour[];
   onViewAll?: () => void;
   viewAllHref?: string;
   isViewAllDisabled?: boolean;
