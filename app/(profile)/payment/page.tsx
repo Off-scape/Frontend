@@ -6,10 +6,6 @@ import { useEffect, useState } from "react";
 
 const PaymentPage = () => {
  
-
-
-
-
   const [activeTab, setActiveTab] = useState<string>(() => {
     if (typeof window === "undefined") return "";
     return localStorage.getItem("activeTab") ?? "";

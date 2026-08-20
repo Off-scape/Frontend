@@ -3,11 +3,11 @@
 
 
 
-export interface Region {
-  id: number;
-  name: string;
-  slug: string;
-}
+// export interface Region {
+//   id: number;
+//   name: string;
+//   slug: string;
+// }
 
 export interface Activity {
   id: number;
@@ -54,9 +54,52 @@ export interface ITour {
   organizer: string;
 }
 
-export type TourFilter = {
+// export type TourFilter = {
+//   id: number;
+//   name: string;
+//   value: string;
+//   icon: string;
+// };
+
+
+
+interface IRegion {
   id: number;
   name: string;
-  value: string;
-  icon: string;
-};
+  slug: string;
+}
+
+interface IActivity {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+ export interface ITours {
+  id: number;
+  userId: number;
+  regionId: number;
+  categoryId: number | null;
+  title: string;
+  slug: string;
+  description: string;
+  duration: number;
+  maxSeats: number;
+  isFeatured: boolean;
+  youtubeUrl: string | null;
+  operator: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  address: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  category_id: number | null;
+  region_id: number;
+  user_id: number;
+  Region: IRegion;
+  Category: null;
+  activities: IActivity[];
+}
