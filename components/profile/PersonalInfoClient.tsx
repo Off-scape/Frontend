@@ -1,13 +1,16 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AvatarUpload } from "./AvatarUpload";
 import { BasicInfoCard } from "./Basicinfocard";
 import { AccountInfoCard } from "./Accountinfocard";
 import { Toast } from "./Toast";
 import { UserProfile } from "@/types/Profile";
+import { AuthService } from "@/services/auth.service";
 
-export default function PersonalInfoClient({ user }: { user: UserProfile }) {
+export default function PersonalInfoClient() {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{
     msg: string;
     type: "success" | "error";
@@ -20,6 +23,27 @@ export default function PersonalInfoClient({ user }: { user: UserProfile }) {
     },
     [],
   );
+
+  useEffect(() => {
+    AuthService.profile()
+      .then((res) => setUser(res.data))
+      .catch(() => showToast("Profil məlumatları yüklənmədi", "error"))
+      .finally(() => setLoading(false));
+  }, [showToast]);
+
+  if (loading) {
+    return (
+      <div className="w-full py-20 text-center text-[#828282]">Yüklənir...</div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="w-full py-20 text-center text-[#828282]">
+        Profil məlumatları tapılmadı
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-6 relative sm:mx-3">

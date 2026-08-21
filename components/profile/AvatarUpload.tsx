@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { CameraIcon, CopyIcon } from "@/icons/ProfileIcons";
+import { ProfileService } from "@/services/profile.servises";
 
 interface AvatarUploadProps {
   avatarUrl: string | null;
@@ -15,6 +16,22 @@ export function AvatarUpload({
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(avatarUrl);
   const [dragOver, setDragOver] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await ProfileService.createProfileAvatar(formData);
+      setPreview(res.data.avatarUrl);
+      onToast("Profil şəkli yeniləndi");
+    } catch {
+      onToast("Şəkil yüklənmədi", "error");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const applyFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -25,9 +42,7 @@ export function AvatarUpload({
       onToast("Fayl 5MB-dan böyük ola bilməz", "error");
       return;
     }
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result as string);
-    reader.readAsDataURL(file);
+    uploadFile(file);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +56,19 @@ export function AvatarUpload({
     setDragOver(false);
     const file = e.dataTransfer.files?.[0];
     if (file) applyFile(file);
+  };
+
+  const handleDelete = async () => {
+    setIsUploading(true);
+    try {
+      await ProfileService.deleteProfileAvatar();
+      setPreview(null);
+      onToast("Profil şəkli silindi");
+    } catch {
+      onToast("Şəkil silinmədi", "error");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -98,13 +126,14 @@ export function AvatarUpload({
           <div className="flex items-center gap-3 mb-3 sm:mb-5">
             <button
               onClick={() => fileRef.current?.click()}
-              className="px-4 py-3 sm:px-15 sm:py-3 bg-[#0B3E35] text-white text-sm rounded-2xl font-semibold hover:bg-[#142A12] active:scale-[.98] transition-all"
+              disabled={isUploading}
+              className="px-4 py-3 sm:px-15 sm:py-3 bg-[#0B3E35] text-white text-sm rounded-2xl font-semibold hover:bg-[#142A12] active:scale-[.98] transition-all disabled:opacity-50"
             >
               Şəkil yüklə
             </button>
             <button
-              onClick={() => setPreview(null)}
-              disabled={!preview}
+              onClick={handleDelete}
+              disabled={!preview || isUploading}
               className="px-4 py-3 sm:px-15 sm:py-3 border border-[#0B3E35] text-[#0B3E35] text-sm font-medium rounded-lg hover:border-gray-400 hover:bg-gray-50 active:scale-[.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Profil şəklini sil

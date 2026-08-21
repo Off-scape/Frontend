@@ -4,6 +4,7 @@ import { ActionRow } from "./Actionrow";
 import { EyeIcon, EyeOffIcon } from "@/icons/ProfileIcons";
 import { FieldErrors, Gender, UserProfile } from "@/types/Profile";
 import { validations } from "@/utils/validation";
+import { ProfileService } from "@/services/profile.servises";
 
 const PLACEHOLDER_PASSWORD = "**********";
 
@@ -67,7 +68,11 @@ export function AccountInfoCard({ user, onToast }: AccountInfoCardProps) {
     setErrors({});
     setIsSaving(true);
     try {
-      await new Promise((r) => setTimeout(r, 800));
+      await ProfileService.updateProfile({
+        email,
+        gender,
+        ...(password !== PLACEHOLDER_PASSWORD ? { password } : {}),
+      });
       setIsEditing(false);
       onToast("Hesab məlumatları saxlanıldı");
     } catch {

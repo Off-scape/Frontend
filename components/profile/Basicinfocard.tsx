@@ -3,6 +3,7 @@ import { Field } from "./Field";
 import { ActionRow } from "./Actionrow";
 import { FieldErrors, UserProfile } from "@/types/Profile";
 import { validations } from "@/utils/validation";
+import { ProfileService } from "@/services/profile.servises";
 
 type BasicFields = Pick<UserProfile, "firstName" | "lastName" | "phone">;
 
@@ -80,7 +81,7 @@ export function BasicInfoCard({ user, onToast }: BasicInfoCardProps) {
     setErrors({});
     setIsSaving(true);
     try {
-      await new Promise((r) => setTimeout(r, 800));
+      await ProfileService.updateProfile({ firstName, lastName, phone });
       setIsEditing(false);
       onToast("Əsas məlumatlar saxlanıldı");
     } catch {
