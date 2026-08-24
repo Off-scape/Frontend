@@ -1,18 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
+import { ITours, Tour } from "@/types/Tour";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
+import { TourImagesService } from "@/services/tourImages.service";
 
 interface CardProps {
-  data: Tour;
+  data: ITours | Tour;
 }
 
 const Card: React.FC<CardProps> = ({ data }) => {
   const normalized = data as any;
-
+  const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   const image = normalized.image || "/default-tour.png";
   const title = normalized.title || normalized.activity || "Tour";
   const price = normalized.price ?? normalized.TourDates?.[0]?.price ?? 0;
@@ -29,6 +30,20 @@ const Card: React.FC<CardProps> = ({ data }) => {
 
   const router = useRouter();
 
+  useEffect(()=>{
+       const handleTourImage= async()=>{
+        try{
+            if(data?.id){
+                const response = await TourImagesService.getImages(Number(data.id));
+                setImageUrl(response.data.data[0]?.url || null);
+            }
+        }catch(e){
+          console.error("Error fetching tour image:", e);
+        }
+
+       }
+       handleTourImage()
+  },[])
   return (
     <div
       onClick={() =>
@@ -38,7 +53,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
     >
       <div className="relative w-full h-48 md:h-52 rounded-[20px] overflow-hidden group-hover:h-52.5 transition-all duration-500">
         <Image
-          src={image}
+          src={imageUrl || image}
           alt={title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"

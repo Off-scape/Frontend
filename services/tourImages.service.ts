@@ -1,7 +1,7 @@
 import { api } from "./api";
 
 export const TourImagesService = {
-  getImages(tourId: string) {
+  getImages(tourId: number) {
     return api.get(`/api/tours/${tourId}/images`);
   },
 

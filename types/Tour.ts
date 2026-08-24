@@ -42,3 +42,42 @@ export type TourFilter = {
   value: string;
   icon: string;
 };
+
+
+
+
+
+type Region = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+type Category = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+export type ITours = {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  duration: number;
+  maxSeats: number;
+  isFeatured: boolean;
+  youtubeUrl: string;
+  operator: string;
+  ogTitle: string;
+  ogDescription: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  regionId: number;
+  region: Region;
+  categoryId: number;
+  category: Category;
+};
+
+export type ToursResponse = ITours[];

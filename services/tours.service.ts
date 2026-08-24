@@ -1,10 +1,14 @@
 import { api } from "./api";
-
+export interface GetToursQueryParams {
+  regionId?: number;
+  categoryId?: number;
+  startDate?: string;
+  endDate?: string;
+}
 export const ToursService = {
-  getAllTours(data: any) {
-    return api.post("/api/tours", data);
+  getAllTours(params?: GetToursQueryParams) {
+    return api.get("/api/tours", { params });
   },
-
   getTour(id: string) {
     return api.get(`/api/tours/${id}`);
   },
