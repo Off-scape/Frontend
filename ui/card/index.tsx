@@ -6,6 +6,7 @@ import { ITours, Tour } from "@/types/Tour";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 import { TourImagesService } from "@/services/tourImages.service";
+import { TourDatesService } from "@/services/tourDates.service";
 
 interface CardProps {
   data: ITours | Tour;
@@ -14,6 +15,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ data }) => {
   const normalized = data as any;
   const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+  const [tourDates, setTourDates] = React.useState<any[]>([]);
   const image = normalized.image || "/default-tour.png";
   const title = normalized.title || normalized.activity || "Tour";
   const price = normalized.price ?? normalized.TourDates?.[0]?.price ?? 0;
@@ -33,8 +35,8 @@ const Card: React.FC<CardProps> = ({ data }) => {
   useEffect(()=>{
        const handleTourImage= async()=>{
         try{
-            if(data?.id){
-                const response = await TourImagesService.getImages(Number(data.id));
+            if(data?.id && typeof data?.id === "number"){
+                const response = await TourImagesService.getImages(Number(data?.id));
                 setImageUrl(response.data.data[0]?.url || null);
             }
         }catch(e){
@@ -42,8 +44,19 @@ const Card: React.FC<CardProps> = ({ data }) => {
         }
 
        }
+       const handleTourDate = async ()=>{
+        try{
+           const response = await TourDatesService.getDates(Number(data?.id));
+            setTourDates(response.data.data || []);
+        }catch(e){
+          console.error("Error fetching tour date:", e);
+        }
+       }
        handleTourImage()
+       handleTourDate()
   },[])
+ 
+
   return (
     <div
       onClick={() =>
@@ -92,7 +105,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         <div className="flex items-center">
           <ParticipantAvatars
             participants={participants}
-            count={participantCount}
+            count={tourDates.length}
           />
         </div>
       </div>
