@@ -1,14 +1,14 @@
-export interface Review {
-  id: string;
-  userId: string;
-  userName: string;
-  userAvatar: string;
-  userInitial: string;
-  avatarColor: string;
-  rating: number;
-  date: string;
+export type Review = {
+  id: number;
   comment: string;
-}
+  rating: number;
+  tourId: number;
+  tour_id: number;
+  userId: number;
+  user_id: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface RatingSummary {
   averageRating: number;
@@ -19,3 +19,10 @@ export interface RatingSummary {
     percentage: number;
   }[];
 }
+
+export type ReviewsData =
+  {
+    tourId: number,
+    rating: number,
+    comment: string
+  }

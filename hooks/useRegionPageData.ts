@@ -134,7 +134,7 @@ export function useRegionPageData(slug: string) {
             if (!tourId) return [];
 
             try {
-              const res = await ReviewsService.getReview(String(tourId));
+              const res = await ReviewsService.getReview(tourId);
               return toArray(res?.data ?? res);
             } catch {
               return [];

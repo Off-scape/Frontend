@@ -12,7 +12,8 @@ const TourBody = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [tours, setTours] = useState<ITours[]>([]);
   const searchParams = useSearchParams();
-  const tourType = searchParams.get("type");
+  const tourType = searchParams.get("categoryId");
+  const startDate = searchParams.get("startDate");
 
   const filteredTours = tourType
     ? allTours.filter((tour) => tour.type === tourType)
@@ -26,8 +27,11 @@ const TourBody = () => {
 
     const handleAllTours = async () => {
       try {
-        const respponse = await ToursService.getAllTours()
-        setTours(respponse.data);
+        const response = await ToursService.getAllTours({
+          categoryId: tourType ? parseInt(tourType) : undefined,
+          startDate: startDate ?? undefined,
+        });
+        setTours(response.data);
       } catch (e) {
         console.error("Error fetching tours:", e);
       }

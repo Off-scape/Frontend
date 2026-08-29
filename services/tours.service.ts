@@ -9,7 +9,7 @@ export const ToursService = {
   getAllTours(params?: GetToursQueryParams) {
     return api.get("/api/tours", { params });
   },
-  getTour(id: string) {
+  getTour(id: number) {
     return api.get(`/api/tours/${id}`);
   },
 

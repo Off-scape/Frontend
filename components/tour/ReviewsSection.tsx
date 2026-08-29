@@ -1,63 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { mockReviews, ratingSummary } from "@/data/Reviews";
+import { useEffect, useState } from "react";
+import {  ratingSummary } from "@/data/Reviews";
 import { Review, RatingSummary } from "@/types/Review";
 import RatingsOverview from "./RatingsOverview";
 import ReviewCard from "./ReviewCard";
 import RatingStars from "@/ui/shared/RatingStars";
+import { ReviewsService } from "@/services/reviews.services";
+import { useParams } from "next/navigation";
 
 const ReviewsSection = () => {
-  const [reviews, setReviews] = useState<Review[]>(mockReviews);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [summary, setSummary] = useState<RatingSummary>(ratingSummary);
+  const { id: tourId } = useParams();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [riviewsData, setReviewsData] = useState({
+    tourId: Number(tourId),
+    rating: rating,
+    comment: comment
+  });
   const [error, setError] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!comment.trim() || rating === 0) {
       setError("Zəhmət olmasa şərh yazın və ulduz seçin.");
       return;
+    } else {
+      try {
+        await ReviewsService.createReview(riviewsData);
+        setError("");
+      } catch (e) {
+        console.error("Error creating review:", e);
+        setError("Şərh yaratma xətası baş verdi. Zəhmət olmasa qeydiyyatdan keçin və ya yenidən cəhd edin.");
+      }
     }
-    setError("");
 
-    const newReview: Review = {
-      id: String(Date.now()),
-      userId: String(Date.now()),
-      userName: "İstifadəçi",
-      userAvatar: "",
-      userInitial: "İ",
-      avatarColor: "bg-blue-500",
-      rating,
-      date: new Date().toLocaleDateString("az-AZ", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      comment: comment.trim(),
-    };
-
-    const newReviews = [newReview, ...reviews];
-    const total = newReviews.length;
-    const avg = newReviews.reduce((sum, r) => sum + r.rating, 0) / total;
-    const distribution = [5, 4, 3, 2, 1].map((star) => {
-      const count = newReviews.filter((r) => r.rating === star).length;
-      return {
-        rating: star,
-        count,
-        percentage: Math.round((count / total) * 100),
-      };
-    });
-
-    setReviews(newReviews);
-    setSummary({
-      averageRating: avg,
-      totalReviews: total,
-      ratingDistribution: distribution,
-    });
     setRating(0);
     setComment("");
   };
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+
+        const response = await ReviewsService.getReview(Number(tourId));
+        setReviews(response.data.data);
+      } catch (e) {
+        console.error("Error fetching reviews:", e);
+      }
+    }
+    getReviews()
+  }, [tourId])
 
   return (
     <section className="my-12">
