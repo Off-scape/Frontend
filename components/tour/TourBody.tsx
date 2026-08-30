@@ -39,7 +39,7 @@ const TourBody = () => {
 
     handleAllTours()
     return () => clearTimeout(timer);
-  }, [tourType]);
+  }, [tourType,startDate]);
 
   console.log("Tours data:", tours);
   return (

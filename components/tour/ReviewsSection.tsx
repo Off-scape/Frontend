@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {  ratingSummary } from "@/data/Reviews";
+import { ratingSummary } from "@/data/Reviews";
 import { Review, RatingSummary } from "@/types/Review";
 import RatingsOverview from "./RatingsOverview";
 import ReviewCard from "./ReviewCard";
@@ -15,42 +15,57 @@ const ReviewsSection = () => {
   const { id: tourId } = useParams();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [riviewsData, setReviewsData] = useState({
-    tourId: Number(tourId),
-    rating: rating,
-    comment: comment
-  });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSubmit = async () => {
     if (!comment.trim() || rating === 0) {
       setError("Zəhmət olmasa şərh yazın və ulduz seçin.");
       return;
-    } else {
-      try {
-        await ReviewsService.createReview(riviewsData);
-        setError("");
-      } catch (e) {
-        console.error("Error creating review:", e);
-        setError("Şərh yaratma xətası baş verdi. Zəhmət olmasa qeydiyyatdan keçin və ya yenidən cəhd edin.");
-      }
     }
 
-    setRating(0);
-    setComment("");
-  };
-  useEffect(() => {
-    const getReviews = async () => {
-      try {
+    setIsSubmitting(true);
+    setError("");
 
+    try {
+      await ReviewsService.createReview({
+        tourId: Number(tourId),
+        rating: rating,
+        comment: comment.trim()
+      });
+
+      // Refresh reviews after successful submission
+      const response = await ReviewsService.getReview(Number(tourId));
+      setReviews(response.data.data);
+      
+      // Reset form
+      setRating(0);
+      setComment("");
+    } catch (e) {
+      console.error("Error creating review:", e);
+      setError("Şərh yaratma xətası baş verdi. Zəhmət olmasa qeydiyyatdan keçin və ya yenidən cəhd edin.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!tourId) return;
+
+    const getReviews = async () => {
+      setIsLoading(true);
+      try {
         const response = await ReviewsService.getReview(Number(tourId));
         setReviews(response.data.data);
       } catch (e) {
         console.error("Error fetching reviews:", e);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    getReviews()
-  }, [tourId])
+    };
+    getReviews();
+  }, [tourId]);
 
   return (
     <section className="my-12">
@@ -89,18 +104,27 @@ const ReviewsSection = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-xl bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800"
+            disabled={isSubmitting}
+            className="rounded-xl bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Göndər
+            {isSubmitting ? 'Göndərilir...' : 'Göndər'}
           </button>
         </div>
       </div>
 
-      <div className="space-y-8">
-        {reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center py-8">Yüklənir...</div>
+      ) : (
+        <div className="space-y-8">
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))
+          ) : (
+            <p className="text-center text-zinc-500 py-8">Hələ heç bir şərh yoxdur</p>
+          )}
+        </div>
+      )}
     </section>
   );
 };
