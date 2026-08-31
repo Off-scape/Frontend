@@ -9,11 +9,13 @@ const PaymentPage = () => {
     if (typeof window === "undefined") return "";
     return localStorage.getItem("activeTab") ?? "";
   });
-  const [changed, setChanged] = useState(false);
+  
+
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     localStorage.setItem("activeTab", tab);
   };
+
   return (
     <div className="w-full ">
       <div className="border-b border-black pb-3 mb-8 w-full">
@@ -89,7 +91,7 @@ const PaymentPage = () => {
       </div>
       <div className="mt-8">
         {activeTab === "records" ? (
-          <PaymentRecords setChanged={setChanged} />
+          <PaymentRecords />
         ) : activeTab === "invoices" ? (
           <Invoices />
         ) : null}
