@@ -30,10 +30,12 @@ const PaymentForm = () => {
     } = useForm<FormData>();
 
     const onSubmit = (data: FormData) => {
-        console.log(data);
+      
         if (!checked) {
             setCheckedError(true);
             return
+        }  else {
+            
         }
     };
 
