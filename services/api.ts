@@ -11,7 +11,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token =
+  const token =   
   typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   if (token) {
