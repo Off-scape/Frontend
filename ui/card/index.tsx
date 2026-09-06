@@ -56,8 +56,6 @@ const Card: React.FC<CardProps> = ({ data }) => {
     handleTourImage()
     handleTourDate()
   }, [])
-
-
   return (
     <div
       onClick={() =>
@@ -75,7 +73,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         />
 
         <div className="absolute top-3 right-3 bg-yellow-400 text-black font-semibold px-3 py-1.5 rounded-full transition-all duration-300 group-hover:bg-yellow-200 group-hover:text-black text-sm">
-          {price} AZN
+          {tourDates[0]?.price || price} AZN
         </div>
       </div>
 

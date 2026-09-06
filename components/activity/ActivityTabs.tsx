@@ -34,7 +34,6 @@ const ActivityTabs = () => {
       console.log(err)
     }
   }, [])
-  console.log(likedTours, joinedTours)
   return (
     <div>
       {/* Tab buttons */}
