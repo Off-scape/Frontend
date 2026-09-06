@@ -20,39 +20,43 @@ import {
 } from "@/data/TourDetailData";
 import { useEffect, useState } from "react";
 import { TourImagesService } from "@/services/tourImages.service";
+import BookingModal from "@/components/modal/BookingModal";
 
 interface TourDetailProps {
-  tour: TourDetail ;
+  tour: TourDetail;
 }
 
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
-  // const defaultDate = tour.createdAt  == null ? scheduleExtraDates[0] : tour.createdAt;
-  // const [selectedDate, setSelectedDate] = useState<string>(tour?.createdAt);
-  // const scheduleOptions = useMemo(
-  //   () => [tour.createdAt ?? "", ...scheduleExtraDates].filter(Boolean),
-  //   [tour.createdAt, scheduleExtraDates],
-  // );
-  // const tourImage = tour.image ?? "/default-tour.png";
-  // const tourActivity = tour.activity ?? "Tour";
-  // const participants = tour.participants ?? [];
-  useEffect(()=>{
-    const getTourImage = async ()=>{
-      try{
+
+  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  useEffect(() => {
+    const getTourImage = async () => {
+      try {
         const response = await TourImagesService.getImages(Number(tour.id));
         setTourImage(response.data.data[0]?.url);
-      }catch(e){
+      } catch (e) {
         console.error("Error fetching tour image:", e);
       }
     }
     getTourImage()
-  },[])
-  console.log("Tour image:", tourImage);
+  }, [])
+  const handleBookNow = () => {
+    if (!token) {
+      // Redirect to login page if not logged in
+      setIsTokenAvailable(true);
+    } else {
+      // Redirect to booking page if logged in
+      setIsTokenAvailable(false);
+
+    }
+  };
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
         <h1 className="text-2xl font-bold text-zinc-900 md:text-4xl">
-          {tour?.title }
+          {tour?.title}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
@@ -65,7 +69,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
               src={tourImage ?? "/default-tour.png"}
-              alt={tour.title }
+              alt={tour.title}
               fill
               priority
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 860px"
@@ -177,7 +181,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
 
             <button
               type="button"
-              className="mt-5 w-full rounded-xl bg-blue-700 py-3 text-sm font-semibold text-white transition hover:bg-blue-800"
+              className="mt-5 w-full rounded-xl bg-blue-700 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer  "
             >
               Bilet al
             </button>
@@ -232,6 +236,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
           </div>
         </aside>
+      <BookingModal />
       </div>
     </section>
   );
