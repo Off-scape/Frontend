@@ -1,5 +1,6 @@
 'use client'
 import { useForm } from "react-hook-form";
+import type { RegisterOptions } from "react-hook-form";
 import { validations } from "@/utils/validation";
 import { FaCheck } from "react-icons/fa6";
 import { useState } from "react";
@@ -53,7 +54,7 @@ const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void })
                         <div className="flex flex-col ">
                             <label htmlFor="name" className={`text-[#000000] font-medium text-base  ${errors.cardholder_name ? "text-[#FF0004]" : ""} `}>Ad Soyad</label>
                             <input
-                                {...register("cardholder_name", validations.firstName())}
+                                {...register("cardholder_name", validations.firstName() as RegisterOptions<PaymentCard, "cardholder_name">)}
                                 type="text"
                                 id="name"
                                 className={`border-[#828282] border outline-0 rounded-xl  h-10.5 w-full  px-3  text-base ${errors.cardholder_name ? "border-[#FF0004]" : ""} `}
@@ -76,7 +77,7 @@ const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void })
 
                             <div className="relative">
                                 <select
-                                    {...register("card_type", validations.cardType())}
+                                    {...register("card_type", validations.cardType() as RegisterOptions<PaymentCard, "card_type">)}
                                     defaultValue=""
                                     className={`h-10.5 w-full appearance-none rounded-xl border bg-white px-4 pr-10 text-base outline-none transition ${errors.card_type
                                         ? "border-[#FF0004]"
@@ -125,7 +126,7 @@ const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void })
                         </label>
 
                         <input
-                            {...register("last_four_digits", validations.lastFourDigits())}
+                            {...register("last_four_digits", validations.lastFourDigits() as RegisterOptions<PaymentCard, "last_four_digits">)}
                             id="last_four_digits"
                             type="text"
                             inputMode="numeric"
@@ -161,7 +162,7 @@ const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void })
                                 min={1}
                                 max={12}
                                 placeholder="12"
-                                {...register("expiry_month", validations.expiryMonth())}
+                                {...register("expiry_month", validations.expiryMonth() as RegisterOptions<PaymentCard, "expiry_month">)}
                                 className={`border rounded-xl h-10.5 px-3 ${errors.expiry_month ? "border-[#FF0004]" : "border-[#828282]"
                                     }`}
                             />
@@ -185,7 +186,7 @@ const PaymentForm = ({ setChanged }: { setChanged: (changed: boolean) => void })
                                 type="number"
                                 min={new Date().getFullYear()}
                                 placeholder="2027"
-                                {...register("expiry_year", validations.expiryYear())}
+                                {...register("expiry_year", validations.expiryYear() as RegisterOptions<PaymentCard, "expiry_year">)}
                                 className={`border rounded-xl h-10.5 px-3 ${errors.expiry_year ? "border-[#FF0004]" : "border-[#828282]"
                                     }`}
                             />
