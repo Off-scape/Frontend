@@ -1,15 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, PassField, PrimaryBtn } from "./formFields";
 import { validations } from "../../utils/validation";
 import { LoginInputs } from "@/types/auth";
+import { AuthService, extractToken } from "@/services/auth.service";
+import { getErrorMessage } from "@/services/api";
+import { setToken } from "@/utils/authstorage";
+
+const REDIRECT_AFTER_LOGIN = "/dashboard";
 
 export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
+  const router = useRouter();
   const [rem, setRem] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -18,10 +26,25 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
   } = useForm<LoginInputs>({ mode: "onTouched" });
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    setServerError(null);
     setIsLoading(true);
+
     try {
-      console.log("Login data:", data);
-      // await loginUser(data);
+      const { data: res } = await AuthService.login({
+        email: data.email.trim(),
+        password: data.password,
+      });
+
+      const token = extractToken(res);
+      if (!token) {
+        setServerError("Giriş alınmadı: serverdən token gəlmədi.");
+        return;
+      }
+
+      setToken(token, rem);
+      router.push(REDIRECT_AFTER_LOGIN);
+    } catch (error) {
+      setServerError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -113,6 +136,15 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
             Şifrəni unutdu?
           </button>
         </div>
+
+        {serverError && (
+          <p
+            role="alert"
+            className="max-w-[416px] mb-3 text-[13px] text-red-300"
+          >
+            {serverError}
+          </p>
+        )}
 
         <div className="max-w-[416px]">
           <PrimaryBtn isLoading={isLoading}>Daxil ol</PrimaryBtn>
