@@ -14,6 +14,6 @@ export interface PaymentCard {
   cardholder_name: string;
   last_four_digits: string;
   card_type: string; 
-  expiry_month: string;
-  expiry_year: string;
-}
+  expiry_month: number;
+  expiry_year: number;
+} 
