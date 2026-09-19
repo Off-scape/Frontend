@@ -1,20 +1,56 @@
 import { api } from "./api";
+import { clearToken } from "../utils/authstorage";
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}
+
+export interface AuthUser {
+  id?: string | number;
+  name?: string;
+  surname?: string;
+  email: string;
+}
+
+// Backend-in cavabına görə dəqiqləşdirilə bilər
+export interface AuthResponse {
+  token?: string;
+  accessToken?: string;
+  user?: AuthUser;
+}
+
+/** Cavabdan token-i çıxarır (token və ya accessToken). */
+export function extractToken(res: AuthResponse): string | null {
+  return res.token ?? res.accessToken ?? null;
+}
 
 export const AuthService = {
-  register(data: any) {
-    return api.post("/auth/register", data);
+  register(data: RegisterPayload) {
+    return api.post<AuthResponse>("/auth/register", data);
   },
 
-  login(data: any) {
-    return api.post("/auth/login", data);
+  login(data: LoginPayload) {
+    return api.post<AuthResponse>("/auth/login", data);
   },
 
   profile() {
-    return api.get("/auth/profile");
+    return api.get<AuthUser>("/auth/profile");
   },
 
-  logout() {
-    return api.post("/auth/logout");
+  async logout() {
+    try {
+      return await api.post("/auth/logout");
+    } finally {
+      // Server xəta versə belə, lokal token silinməlidir
+      clearToken();
+    }
   },
-
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
@@ -10,12 +11,18 @@ import {
   GoogleBtn,
   OrDivider,
 } from "./formFields";
-
+import { AuthService, extractToken } from "@/services/auth.service";
+import { getErrorMessage } from "@/services/api";
+import { setToken } from "@/utils/authstorage";
 import { RegisterInputs } from "@/types/auth";
 import { validations } from "../../utils/validation";
 
+const REDIRECT_AFTER_REGISTER = "/dashboard";
+
 export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -27,10 +34,29 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
   const password = watch("password");
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
+    setServerError(null);
     setIsLoading(true);
 
     try {
-      console.log(data);
+      const { data: res } = await AuthService.register({
+        name: data.firstName.trim(),
+        surname: data.lastName.trim(),
+        email: data.email.trim(),
+        password: data.password,
+      });
+
+      const token = extractToken(res);
+
+      if (token) {
+        // Backend qeydiyyatdan sonra token qaytarırsa, birbaşa daxil edirik
+        setToken(token, true);
+        router.push(REDIRECT_AFTER_REGISTER);
+      } else {
+        // Token yoxdursa, istifadəçini giriş formasına yönləndiririk
+        onSwitch();
+      }
+    } catch (error) {
+      setServerError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +94,7 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-2 items-center w-full"
+          noValidate
         >
           <Field
             placeholder="Ad"
@@ -107,12 +134,22 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
 
           <GoogleBtn />
 
+          {serverError && (
+            <p
+              role="alert"
+              className="w-full max-w-[416px] pl-4 text-[13px] text-red-300"
+            >
+              {serverError}
+            </p>
+          )}
+
           <PrimaryBtn isLoading={isLoading}>Qeydiyyatdan keç</PrimaryBtn>
         </form>
 
         <p className="text-white/70 mt-5 text-sm">
           Artıq hesabınız var?{" "}
           <button
+            type="button"
             onClick={onSwitch}
             className="text-white font-extrabold underline underline-offset-2 bg-transparent border-0 cursor-pointer p-0 text-[13px]"
           >
