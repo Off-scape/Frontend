@@ -34,20 +34,20 @@ export function extractToken(res: AuthResponse): string | null {
 
 export const AuthService = {
   register(data: RegisterPayload) {
-    return api.post<AuthResponse>("/auth/register", data);
+    return api.post<AuthResponse>("/api/auth/register", data);
   },
 
   login(data: LoginPayload) {
-    return api.post<AuthResponse>("/auth/login", data);
+    return api.post<AuthResponse>("/api/auth/login", data);
   },
 
   profile() {
-    return api.get<AuthUser>("/auth/profile");
+    return api.get<AuthUser>("/api/auth/profile");
   },
 
   async logout() {
     try {
-      return await api.post("/auth/logout");
+      return await api.post("/api/auth/logout");
     } finally {
       // Server xəta versə belə, lokal token silinməlidir
       clearToken();
