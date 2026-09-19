@@ -52,6 +52,9 @@ const TourDetail = ({ tour }: TourDetailProps) => {
 
     }
   };
+   const handleCloseModal = () => {
+    setIsTokenAvailable(false);
+  }
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
@@ -181,6 +184,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
 
             <button
               type="button"
+              onClick={handleBookNow}
               className="mt-5 w-full rounded-xl bg-blue-700 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer  "
             >
               Bilet al
@@ -236,7 +240,9 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
           </div>
         </aside>
-      <BookingModal />
+        {
+          isTokenAvailable && <BookingModal  handleCloseModal={handleCloseModal} />
+        }
       </div>
     </section>
   );
