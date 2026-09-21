@@ -3,7 +3,6 @@ import { IPaymentCard } from "@/types/Payment";
 import { HiOutlineTrash } from "react-icons/hi";
 
 const PaymentCard = ({ card, handleDeleteCard, handleSetDefaultCard }: { card: IPaymentCard; handleDeleteCard: (id: number) => void; handleSetDefaultCard: (id: number) => void }) => {
-    console.log("card", card)
     return (
         <div className="flex items-center justify-between h-20 border border-[#828282] rounded-[10px] py-4 px-4  max-md:py-2 max-md:px-4  mr-2.5">
             <div className="flex items-center gap-3.5 ">
