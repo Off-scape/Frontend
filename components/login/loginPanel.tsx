@@ -7,9 +7,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, PassField, PrimaryBtn } from "./formFields";
 import { validations } from "../../utils/validation";
 import { LoginInputs } from "@/types/auth";
-import { AuthService, extractToken } from "@/services/auth.service";
+import { AuthService } from "@/services/auth.service";
 import { getErrorMessage } from "@/services/api";
-import { setToken } from "@/utils/authstorage";
 
 const REDIRECT_AFTER_LOGIN = "/dashboard";
 
@@ -35,13 +34,14 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
         password: data.password,
       });
 
-      const token = extractToken(res);
-      if (!token) {
-        setServerError("Giriş alınmadı: serverdən token gəlmədi.");
+      // Token body-də gəlmir, brauzer HttpOnly cookie-ni özü saxlayır
+      if (!res.user) {
+        setServerError(
+          "Giriş alınmadı: server istifadəçi məlumatını qaytarmadı.",
+        );
         return;
       }
 
-      setToken(token, rem);
       router.push(REDIRECT_AFTER_LOGIN);
     } catch (error) {
       setServerError(getErrorMessage(error));

@@ -1,5 +1,4 @@
 import { api } from "./api";
-import { clearToken } from "../utils/authstorage";
 
 export interface LoginPayload {
   email: string;
@@ -20,16 +19,9 @@ export interface AuthUser {
   email: string;
 }
 
-// Backend-in cavabına görə dəqiqləşdirilə bilər
+// Token body-də gəlmir (HttpOnly cookie ilə gedir), yalnız user qayıdır
 export interface AuthResponse {
-  token?: string;
-  accessToken?: string;
-  user?: AuthUser;
-}
-
-/** Cavabdan token-i çıxarır (token və ya accessToken). */
-export function extractToken(res: AuthResponse): string | null {
-  return res.token ?? res.accessToken ?? null;
+  user?: AuthUser;  
 }
 
 export const AuthService = {
@@ -41,16 +33,11 @@ export const AuthService = {
     return api.post<AuthResponse>("/auth/login", data);
   },
 
-  profile() {
-    return api.get<AuthUser>("/auth/profile");
+  getMe() {
+    return api.get<AuthUser>("/auth/me");
   },
 
-  async logout() {
-    try {
-      return await api.post("/auth/logout");
-    } finally {
-      // Server xəta versə belə, lokal token silinməlidir
-      clearToken();
-    }
+  logout() {
+    return api.post("/auth/logout");
   },
 };

@@ -11,9 +11,8 @@ import {
   GoogleBtn,
   OrDivider,
 } from "./formFields";
-import { AuthService, extractToken } from "@/services/auth.service";
+import { AuthService } from "@/services/auth.service";
 import { getErrorMessage } from "@/services/api";
-import { setToken } from "@/utils/authstorage";
 import { RegisterInputs } from "@/types/auth";
 import { validations } from "../../utils/validation";
 
@@ -45,14 +44,11 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
         password: data.password,
       });
 
-      const token = extractToken(res);
-
-      if (token) {
-        // Backend qeydiyyatdan sonra token qaytarırsa, birbaşa daxil edirik
-        setToken(token, true);
+      if (res.user) {
+        // Backend cookie-ni set edib, istifadəçi artıq daxil olub
         router.push(REDIRECT_AFTER_REGISTER);
       } else {
-        // Token yoxdursa, istifadəçini giriş formasına yönləndiririk
+        // User qayıtmayıbsa, giriş formasına keçirik
         onSwitch();
       }
     } catch (error) {
