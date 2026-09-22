@@ -2,8 +2,7 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL:
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://backend-production-4afd.up.railway.app/api",
+    process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
   withCredentials: true, // HttpOnly cookie-ni brauzer avtomatik göndərir/qəbul edir
   headers: {

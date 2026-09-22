@@ -26,18 +26,18 @@ export interface AuthResponse {
 
 export const AuthService = {
   register(data: RegisterPayload) {
-    return api.post<AuthResponse>("/auth/register", data);
+    return api.post<AuthResponse>("api/auth/register", data);
   },
 
   login(data: LoginPayload) {
-    return api.post<AuthResponse>("/auth/login", data);
+    return api.post<AuthResponse>("api/auth/login", data);
   },
 
   getMe() {
-    return api.get<AuthUser>("/auth/me");
+    return api.get<AuthUser>("api/auth/me");
   },
 
   logout() {
-    return api.post("/auth/logout");
+    return api.post("api/auth/logout");
   },
 };

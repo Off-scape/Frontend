@@ -10,7 +10,7 @@ import { LoginInputs } from "@/types/auth";
 import { AuthService } from "@/services/auth.service";
 import { getErrorMessage } from "@/services/api";
 
-const REDIRECT_AFTER_LOGIN = "/dashboard";
+const REDIRECT_AFTER_LOGIN = "/";
 
 export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
