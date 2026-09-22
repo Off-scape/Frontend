@@ -21,6 +21,8 @@ import {
 import { useEffect, useState } from "react";
 import { TourImagesService } from "@/services/tourImages.service";
 import BookingModal from "@/components/modal/BookingModal";
+import { AuthService } from "@/services/auth.service";
+import Booking from "@/components/booking/Booking";
 
 interface TourDetailProps {
   tour: TourDetail;
@@ -30,6 +32,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
 
   const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   useEffect(() => {
     const getTourImage = async () => {
@@ -40,10 +43,22 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         console.error("Error fetching tour image:", e);
       }
     }
+    const getAuthToken = async () => {
+      try {
+        const token = await AuthService.getMe();
+        console.log("Auth token:", token.data);
+        if (!token.data) {
+          setIsTokenAvailable(true);
+        }
+      } catch (error) {
+        console.error("Error fetching auth token:", error);
+      }
+    }
+    getAuthToken()
     getTourImage()
   }, [])
   const handleBookNow = () => {
-    if (!token) {
+    if (isTokenAvailable) {
       // Redirect to login page if not logged in
       setIsTokenAvailable(true);
     } else {
@@ -52,8 +67,10 @@ const TourDetail = ({ tour }: TourDetailProps) => {
 
     }
   };
-   const handleCloseModal = () => {
+  const handleCloseModal = () => {
+
     setIsTokenAvailable(false);
+
   }
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
@@ -241,7 +258,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           </div>
         </aside>
         {
-          isTokenAvailable && <BookingModal  handleCloseModal={handleCloseModal} />
+          isTokenAvailable ? <BookingModal handleCloseModal={handleCloseModal} /> : <Booking />
         }
       </div>
     </section>
