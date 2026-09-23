@@ -1,21 +1,26 @@
 
+'use client'
+import BookingHeader from "@/components/booking/BookingHeader"
+import BookingFirstStep from "@/components/booking/bookingstepper/BookingFirstStep"
+import BookingSecondStep from "@/components/booking/bookingstepper/BookingSecondStep"
+import BookingThreeStep from "@/components/booking/bookingstepper/BookingThreeStep"
+import { useState } from "react"
+
+
 const Booking = () => {
+  const [step, setStep] = useState(1)
+
     return (
-        <div className="fixed flex-col items-center justify-center w-full h-full top-0 left-0 bg-[#00000080] z-999 p-9">
-        
-            <div className="rounded-[10px] bg-[#142A12]  text-white px-6 py-4 flex items-center justify-between">
-                <div >
-                    <div className="text-lg font-medium mb-2">
-                        Şuşa Təbiət Gəzintisi və Kamp Təcrübəsi
-                    </div>
-                    <p className="text-sm font-normal ">
-                        Təbiətin qoynunda gecələmə və paylaşım dolu anlar
-                    </p>
-                </div>
-                <div className='px-6 py-4 bg-white rounded-[5px]  text-[#142A12] font-medium text-[17px] '>
-                    Tarix və Say
-                </div>
+        <div className="fixed flex flex-col items-center  w-full h-full top-0 left-0 bg-[#00000080] z-999 p-9">
+              <div className="bg-white p-9 rounded-[10px] max-w-269.75 "> 
+            <BookingHeader />
+            <div>
+                {step === 1 && <BookingFirstStep />}
+                {step === 2 && <BookingSecondStep />}
+                {step === 3 && <BookingThreeStep />}
             </div>
+
+              </div>
         </div>
     )
 }
