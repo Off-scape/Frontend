@@ -1,21 +1,21 @@
 import ToursGridSection from "@/components/tourcard/Toursgridsection";
-import { mockNatureTours, mockActivityTours } from "@/data/Mocktours";
+import { mockNatureTours } from "@/data/Mocktours";
+import { Tour } from "@/types/Tour";
 
-export default function ToursSection() {
+interface ToursSectionProps {
+  tours?: Tour[];
+}
 
+export default function ToursSection({
+  tours = mockNatureTours,
+}: ToursSectionProps) {
   return (
     <main>
       <ToursGridSection
-        title="Yaxın vaxtda keçiriləcək Təbiət turlar"
-        tours={mockNatureTours}
-         viewAllHref="/tours"
-
-      />
-
-      <ToursGridSection
-        title="Yaxın vaxtda keçiriləcək Aktivitilər turlar"
-        tours={mockActivityTours}
-         viewAllHref="/tours?type=activity"
+        title="Yaxın vaxtda keçiriləcək turlar"
+        tours={tours}
+        viewAllHref="/tours"
+        maxDisplay={4}
       />
     </main>
   );

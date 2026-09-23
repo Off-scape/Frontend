@@ -24,3 +24,20 @@ export interface ActivityContextValue {
   toggleLike: (id: string) => Promise<void>;
   toggleJoin: (id: string) => Promise<void>;
 }
+
+
+interface LikedTour {
+  id: number;
+  title: string;
+  slug: string;
+  is_featured: boolean;
+  region_id: number;
+  liked_at: string; // ISO date string
+  activity_type: "liked"; // literal type since it's always "liked"
+  image_url: string;
+  price: number;
+  participant_count: number;
+}
+
+// For a list of liked tours
+ export type LikedToursList = LikedTour[];

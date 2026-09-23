@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import React, { useMemo, useState } from "react";
 import ReviewsSection from "@/components/tour/ReviewsSection";
-import { Tour } from "@/types/Tour";
+import type { TourDetail } from "@/types/Tour";
 import Avatar from "@/ui/shared/Avatar";
 import RatingStars from "@/ui/shared/RatingStars";
 import { ratingSummary } from "@/data/Reviews";
@@ -12,32 +11,55 @@ import { GoShieldCheck } from "react-icons/go";
 import { LuCircleCheckBig } from "react-icons/lu";
 import {
   includedItems,
-  instructorRoles,
   tourDescription,
   tourRoute,
   tourContact,
   tourCancellationPolicy,
   tourSubtitle,
   instructorsDescription,
-  scheduleExtraDates,
 } from "@/data/TourDetailData";
+import { useEffect, useState } from "react";
+import { TourImagesService } from "@/services/tourImages.service";
+import BookingModal from "@/components/modal/BookingModal";
 
 interface TourDetailProps {
-  tour: Tour;
+  tour: TourDetail;
 }
 
 const TourDetail = ({ tour }: TourDetailProps) => {
-  const [selectedDate, setSelectedDate] = useState<string>(tour.date);
-  const scheduleOptions = useMemo(
-    () => [tour.date, ...scheduleExtraDates],
-    [tour.date],
-  );
+  const [tourImage, setTourImage] = useState<string>();
 
+  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  useEffect(() => {
+    const getTourImage = async () => {
+      try {
+        const response = await TourImagesService.getImages(Number(tour.id));
+        setTourImage(response.data.data[0]?.url);
+      } catch (e) {
+        console.error("Error fetching tour image:", e);
+      }
+    }
+    getTourImage()
+  }, [])
+  const handleBookNow = () => {
+    if (!token) {
+      // Redirect to login page if not logged in
+      setIsTokenAvailable(true);
+    } else {
+      // Redirect to booking page if logged in
+      setIsTokenAvailable(false);
+
+    }
+  };
+   const handleCloseModal = () => {
+    setIsTokenAvailable(false);
+  }
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12">
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
         <h1 className="text-2xl font-bold text-zinc-900 md:text-4xl">
-          {tour.activity}
+          {tour?.title}
         </h1>
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
@@ -49,8 +71,8 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         <div className="xl:col-start-1 xl:row-start-1">
           <div className="relative h-60 w-full overflow-hidden rounded-3xl sm:h-90 md:h-110">
             <Image
-              src={tour.image}
-              alt={tour.activity}
+              src={tourImage ?? "/default-tour.png"}
+              alt={tour.title}
               fill
               priority
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 860px"
@@ -58,14 +80,14 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          {/* <div className="mt-4 flex flex-wrap gap-3">
             {scheduleOptions.map((date) => {
               const isSelected = selectedDate === date;
               return (
                 <button
                   key={date}
                   type="button"
-                  onClick={() => setSelectedDate(date)}
+                  onClick={() => setSelectedDate(date || "")}
                   className={`min-w-28 rounded-xl border px-5 py-2 text-sm font-medium transition ${
                     isSelected
                       ? "border-[#0F766E] bg-[#E7F6F3] text-[#0F766E]"
@@ -76,7 +98,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                 </button>
               );
             })}
-          </div>
+          </div> */}
 
           <div className="mt-8 space-y-8">
             <div>
@@ -156,13 +178,14 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
 
             <h3 className="mt-4 text-3xl font-bold leading-tight text-zinc-900">
-              {`"${tour.activity}" - birlikdə qrup oyunu`}
+              {`"${tour?.title}" - birlikdə qrup oyunu`}
             </h3>
-            <p className="mt-2 text-sm text-zinc-600">{tour.location}</p>
+            <p className="mt-2 text-sm text-zinc-600">{tour?.address || "Location not specified"}</p>
 
             <button
               type="button"
-              className="mt-5 w-full rounded-xl bg-blue-700 py-3 text-sm font-semibold text-white transition hover:bg-blue-800"
+              onClick={handleBookNow}
+              className="mt-5 w-full rounded-xl bg-blue-700 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer  "
             >
               Bilet al
             </button>
@@ -178,8 +201,8 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             <div className="mt-4 flex items-start gap-2 text-sm text-zinc-700">
               <FiMapPin className="mt-0.5 size-4 shrink-0 text-zinc-500" />
               <div>
-                <p className="font-semibold text-zinc-900">{tour.location}</p>
-                <p className="text-zinc-500">Bakı - {tour.location}</p>
+                <p className="font-semibold text-zinc-900">{tour?.address || "Location not specified"}</p>
+                <p className="text-zinc-500">Bakı - {tour?.Region?.name || "Region not specified"}</p>
               </div>
             </div>
 
@@ -199,9 +222,13 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </p>
 
             <div className="mt-4 space-y-4">
-              {tour.participants.slice(0, 4).map((person, index) => (
+              {/* {participants.slice(0, 4).map((person, index) => (
                 <div key={person.id} className="flex items-center gap-3">
-                  <Avatar src={person.avatar} name={person.name} size="md" />
+                  <Avatar
+                    src={person.avatar ?? ""}
+                    name={person.name ?? "Guide"}
+                    size="md"
+                  />
                   <div>
                     <p className="text-sm font-semibold text-zinc-900">
                       {instructorRoles[index]}
@@ -209,10 +236,13 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                     <p className="text-xs text-zinc-600">{person.name}</p>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </aside>
+        {
+          isTokenAvailable && <BookingModal  handleCloseModal={handleCloseModal} />
+        }
       </div>
     </section>
   );

@@ -1,23 +1,23 @@
 import { api } from "./api";
 
 export const TourDatesService = {
-  getDates(tourId: string) {
+  getDates(tourId: number) {
     return api.get(`/api/tours/${tourId}/dates`);
   },
 
-  createDate(tourId: string, data: any) {
+  createDate(tourId: number, data: any) {
     return api.post(`/api/tours/${tourId}/dates`, data);
   },
 
-  getDateById(tourId: string, id: string) {
+  getDateById(tourId: number, id: number) {
     return api.get(`/api/tours/${tourId}/dates/${id}`);
   },
 
-  updateDate(tourId: string, id: string, data: any) {
+  updateDate(tourId: number, id: number, data: any) {
     return api.patch(`/api/tours/${tourId}/dates/${id}`, data);
   },
 
-  deleteDate(tourId: string, id: string) {
+  deleteDate(tourId: number, id: number) {
     return api.delete(`/api/tours/${tourId}/dates/${id}`);
   },
 };

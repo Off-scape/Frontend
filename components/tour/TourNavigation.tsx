@@ -12,13 +12,20 @@ const TourNavigation = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const handleClick = (value: string) => {
-    if (value === "") {
-      router.push("?");
-    } else {
-      router.push(`?type=${value}`);
-    }
-  };
+
+
+  const handleCategoryChange = (value: number) => {
+  if (value === 1) {
+    router.push("/tours");
+    return;
+  }
+
+  const params = new URLSearchParams(searchParams.toString());
+
+  params.set("categoryId", value.toString());
+
+  router.push(`?${params.toString()}`);
+};1
 
 
   return (
@@ -26,15 +33,15 @@ const TourNavigation = () => {
       {tourFilters.map((filter, id) => (
         <li
           key={id}
-          onClick={() => handleClick(filter.value)}
+          onClick={() => handleCategoryChange(filter.id)}
           className={`
         flex flex-col items-center justify-center gap-2 sm:gap-3.5
         pb-4 sm:pb-5 cursor-pointer text-center
         px-2 sm:px-3  max-sm:mb-4
         text-sm sm:text-lg transition-all duration-300
         hover:border-b-2 hover:border-b-[#0B3E35]
-        ${(searchParams.get("type") === null && filter.value === "") ||
-              searchParams.get("type") === filter.value
+        ${(searchParams.get("categoryId") === null && filter.id === 1) ||
+              searchParams.get("categoryId") === filter.id.toString()
               ? "border-[#0B3E35] border-b-2 font-bold text-[#142A12]"
               : "border-transparent border-b-2 text-[#000000] font-normal"
             }
