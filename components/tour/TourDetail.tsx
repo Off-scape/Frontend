@@ -33,7 +33,6 @@ const TourDetail = ({ tour }: TourDetailProps) => {
 
   const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   useEffect(() => {
     const getTourImage = async () => {
       try {
@@ -46,7 +45,6 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     const getAuthToken = async () => {
       try {
         const token = await AuthService.getMe();
-        console.log("Auth token:", token.data);
         if (!token.data) {
           setIsTokenAvailable(true);
         }
@@ -58,11 +56,11 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     getTourImage()
   }, [])
   const handleBookNow = () => {
-    if (isTokenAvailable) {
-      // Redirect to login page if not logged in
-      setIsTokenAvailable(true);
+    if (!isTokenAvailable) {
+     
+      setIsModalOpen(true);
     } else {
-      // Redirect to booking page if logged in
+     
       setIsTokenAvailable(false);
 
     }
@@ -70,6 +68,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
   const handleCloseModal = () => {
 
     setIsTokenAvailable(false);
+       setIsModalOpen(false);
 
   }
   return (
@@ -258,7 +257,10 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           </div>
         </aside>
         {
-          isTokenAvailable ? <BookingModal handleCloseModal={handleCloseModal} /> : <Booking />
+          isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} /> 
+        }
+        {
+          isModalOpen &&  <Booking handleCloseModal={handleCloseModal}  />
         }
       </div>
     </section>
