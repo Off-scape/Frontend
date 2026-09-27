@@ -21,6 +21,7 @@ type PaymentRecord = {
   gateway?: string;
   gatewayRef?: string;
   createdAt?: string;
+  booking?: { id?: string | number; [key: string]: unknown };
 };
 
 const toPaymentList = (payload: unknown): PaymentRecord[] => {
@@ -51,6 +52,8 @@ export default function BookingPaymentPage() {
   const [gateway, setGateway] = useState("");
   const [gatewayRef, setGatewayRef] = useState("");
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
+  const [paymentDetails, setPaymentDetails] = useState<PaymentRecord | null>(null);
+  const [detailLoading, setDetailLoading] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -97,6 +100,27 @@ export default function BookingPaymentPage() {
       setError(getErrorMessage(requestError));
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const showPaymentDetails = async (id: string | number) => {
+    setDetailLoading(String(id));
+    setError("");
+    try {
+      const response = await PaymentsService.getPayment(String(id));
+      const payload = response.data as { data?: PaymentRecord } | PaymentRecord;
+      const paymentData =
+        payload && typeof payload === "object" && "data" in payload
+          ? payload.data
+          : payload;
+      setPaymentDetails(
+        paymentData ? (paymentData as PaymentRecord) : null,
+      );
+    } catch (requestError) {
+      setError(getErrorMessage(requestError));
+      setPaymentDetails(null);
+    } finally {
+      setDetailLoading("");
     }
   };
 
@@ -157,6 +181,15 @@ export default function BookingPaymentPage() {
                 <p className="text-sm text-zinc-500">
                   {payment.gateway || "Ödəniş"}{payment.gatewayRef ? ` · ${payment.gatewayRef}` : ""}
                 </p>
+                {payment.id !== undefined && (
+                  <button
+                    type="button"
+                    onClick={() => void showPaymentDetails(payment.id!)}
+                    className="mt-1 text-sm font-medium text-blue-700 underline"
+                  >
+                    {detailLoading === String(payment.id) ? "Yüklənir..." : "Detalları göstər"}
+                  </button>
+                )}
               </div>
               <p className="font-semibold">
                 {payment.amount ?? "—"} {payment.currency ?? ""}
@@ -165,6 +198,14 @@ export default function BookingPaymentPage() {
           ))
         ) : (
           <p className="rounded-xl border p-4 text-zinc-500">Bu booking üçün ödəniş qeydi yoxdur.</p>
+        )}
+        {paymentDetails && (
+          <article className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm">
+            <p><strong>Ödəniş ID-si:</strong> {paymentDetails.id}</p>
+            <p><strong>Booking ID-si:</strong> {paymentDetails.booking?.id ?? bookingId}</p>
+            <p><strong>Status:</strong> {getStatusLabel(paymentDetails.status)}</p>
+            <p><strong>Məbləğ:</strong> {paymentDetails.amount ?? "—"} {paymentDetails.currency ?? ""}</p>
+          </article>
         )}
       </section>
     </main>
