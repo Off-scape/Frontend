@@ -1,9 +1,30 @@
+import { Dispatch, SetStateAction, useState } from "react"
 import { FaMinus } from "react-icons/fa"
 import { GrClose } from "react-icons/gr"
 import { IoMdAdd } from "react-icons/io"
 import { IoCheckmark } from "react-icons/io5"
+type Props = {
+  setStep: Dispatch<SetStateAction<number>>;
+}
+const BookingFirstStep = ({ setStep }: Props) => {
+  const [children, setChildren] = useState(1)
+  const [adult, setAdult] = useState(1)
+  const handleClaculateChildrentCount = (type: string) => {
+    if (type === "minus" && children > 1) {
+      setChildren(children - 1)
+    } else if (type === "add") {
+      setChildren(children + 1)
+    }
 
-const BookingFirstStep = () => {
+  }
+  const handleClaculateAdulttCount = (type: string) => {
+    if (type === "minus" && adult > 1) {
+      setAdult(adult - 1)
+    } else if (type === "add") {
+      setAdult(adult + 1)
+    }
+
+  }
   return (
     <div className=" overflow-auto grid grid-cols-2 max-[1110px]:grid-cols-1 gap-5 h-[calc(100vh-320px)]">
       <div>
@@ -91,13 +112,17 @@ const BookingFirstStep = () => {
                 <span className="text-[#142A12] text-[17px] font-medium">Böyük Sayı</span> <span className="text-[#142A12] text-sm font-normal">(Ən azı 1 nəfər)</span>
               </h4>
               <div className="mt-1.5  flex items-center justify-center gap-2.5">
-                <button className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
+                <button
+                  onClick={() => handleClaculateAdulttCount("minus")}
+                  className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
                   <FaMinus size={13} />
                 </button>
                 <p>
-                  1
+                  {adult}
                 </p>
-                <button className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
+                <button
+                  onClick={() => handleClaculateAdulttCount("add")}
+                  className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
                   <IoMdAdd size={13} />
                 </button>
               </div>
@@ -107,13 +132,17 @@ const BookingFirstStep = () => {
                 <span className="text-[#142A12] text-[17px] font-medium">Uşaq Sayı</span>
               </h4>
               <div className="mt-1.5  flex items-center justify-center gap-2.5">
-                <button className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
+                <button
+                  onClick={() => handleClaculateChildrentCount("minus")}
+                  className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
                   <FaMinus size={13} />
                 </button>
                 <p>
-                  1
+                  {children}
                 </p>
-                <button className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
+                <button
+                  onClick={() => handleClaculateChildrentCount("add")}
+                  className="cursor-pointer w-6 h-6 border border-[#142A12] rounded-[5px]  flex items-center justify-center">
                   <IoMdAdd size={13} />
                 </button>
               </div>
@@ -142,7 +171,10 @@ const BookingFirstStep = () => {
           <p className="text-[20px] text-[#142A12] font-medium  ">Cəmi Məbləğ:</p>
           <p className="text-[20px] text-[#142A12] font-medium  ">300 AZN</p>
         </div>
-        <button className= " text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
+        <button
+          onClick={() => setStep(2)}
+
+          className=" text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
           Növbəti : Ödəniş Metodu
         </button>
       </div>
