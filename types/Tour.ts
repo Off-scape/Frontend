@@ -92,17 +92,7 @@ export type Activity = {
   slug: string;
 };
 
-// export type Region = {
-//   id: number;
-//   name: string;
-//   slug: string;
-// };
 
-// export type Category = {
-//   id: number;
-//   name: string;
-//   slug: string;
-// };
 
 export type TourDetail = {
   id: number;
@@ -126,9 +116,7 @@ export type TourDetail = {
   updatedAt: string;
   deletedAt: string | null;
 
-  category_id: number | null;
-  region_id: number;
-  user_id: number;
+
 
   Region: Region;
   Category: Category | null;
