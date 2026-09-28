@@ -95,18 +95,29 @@ export function useRegionPageData(slug: string) {
       setLoading(true);
 
       try {
-        const [regionRes, homeRes, subscriberRes, toursRes] =
+        const [regionListRes, homeRes, subscriberRes, toursRes] =
           await Promise.allSettled([
-            RegionsService.getRegionBySlug(slug),
+            RegionsService.getAllRegions(),
             HomeService.getHomeData(),
             SubscriberService.getSubscribers(),
             api.get("/api/tours"),
           ]);
 
-        const regionData =
-          regionRes.status === "fulfilled"
-            ? (regionRes.value?.data ?? regionRes.value ?? null)
-            : null;
+        const regionList = regionListRes.status === "fulfilled"
+          ? toArray(regionListRes.value?.data ?? regionListRes.value)
+          : [];
+        const regionMatch = regionList.find((item) =>
+          slugify(item?.slug ?? item?.name) === slugify(slug),
+        );
+        let regionData: any = null;
+        if (regionMatch?.id != null) {
+          try {
+            const detail = await RegionsService.getRegion(String(regionMatch.id));
+            regionData = detail?.data ?? detail ?? regionMatch;
+          } catch {
+            regionData = regionMatch;
+          }
+        }
 
         const homePayload =
           homeRes.status === "fulfilled"
