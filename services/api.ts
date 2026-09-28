@@ -5,9 +5,6 @@ export const api = axios.create({
     process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
   withCredentials: true, // HttpOnly cookie-ni brauzer avtomatik göndərir/qəbul edir
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 type ErrorBody = { message?: string | string[]; error?: string };
