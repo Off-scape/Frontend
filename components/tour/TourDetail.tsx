@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import ReviewsSection from "@/components/tour/ReviewsSection";
-import type { TourDetail } from "@/types/Tour";
-import Avatar from "@/ui/shared/Avatar";
+import { ITourDate, type TourDetail } from "@/types/Tour";
+// import Avatar from "@/ui/shared/Avatar";
 import RatingStars from "@/ui/shared/RatingStars";
 import { ratingSummary } from "@/data/Reviews";
 import { FiHeart, FiMapPin, FiPhoneCall } from "react-icons/fi";
@@ -23,6 +23,7 @@ import { TourImagesService } from "@/services/tourImages.service";
 import BookingModal from "@/components/modal/BookingModal";
 import { AuthService } from "@/services/auth.service";
 import Booking from "@/components/booking/Booking";
+import { TourDatesService } from "@/services/tourDates.service";
 
 interface TourDetailProps {
   tour: TourDetail;
@@ -30,7 +31,7 @@ interface TourDetailProps {
 
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
-
+   const [tourDate,setTourDate] = useState<ITourDate[]>([])
   const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -52,6 +53,15 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         console.error("Error fetching auth token:", error);
       }
     }
+    const getTourDate = async ()=>{
+      try{
+        const response = await TourDatesService.getDates(tour.id)
+        setTourDate(response.data.data)
+      }catch(error){
+         console.log(error)
+      }
+    }
+    getTourDate()
     getAuthToken()
     getTourImage()
   }, [])
@@ -71,6 +81,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
        setIsModalOpen(false);
 
   }
+  console.log(tourDate)
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
@@ -260,7 +271,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} /> 
         }
         {
-          isModalOpen &&  <Booking handleCloseModal={handleCloseModal}  />
+          isModalOpen && <Booking handleCloseModal={handleCloseModal} tourDate={tourDate}    tourTitle =  {tour?.title} tourSubtitle = {tourSubtitle} />
         }
       </div>
     </section>

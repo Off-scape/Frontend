@@ -1,12 +1,14 @@
 
 'use client'
-import { Dispatch, SetStateAction, useState } from "react";
+import { CreditCardsService } from "@/services/creditcards.services";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
 }
 const BookingSecondStep = ({ setStep }: Props) => {
   const [expiry, setExpiry] = useState("");
+  const [userCards, setUserCards] = useState()
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value.replace(/\D/g, "");
     const limitedVal = inputVal.slice(0, 4);
@@ -18,6 +20,19 @@ const BookingSecondStep = ({ setStep }: Props) => {
     setExpiry(formattedVal);
   };
 
+
+  useEffect(() => {
+    const getUserCards = async () => {
+      try {
+        const response = await CreditCardsService.getCards()
+        setUserCards(response.data.data)
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+    getUserCards()
+  }, [])
   return (
     <div className="grid grid-cols-2 gap-6 max-[1024px]:grid-cols-1">
       <div className="">

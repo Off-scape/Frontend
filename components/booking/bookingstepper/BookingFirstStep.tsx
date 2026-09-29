@@ -1,3 +1,4 @@
+import { ITourDate } from "@/types/Tour"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FaMinus } from "react-icons/fa"
 import { GrClose } from "react-icons/gr"
@@ -5,10 +6,12 @@ import { IoMdAdd } from "react-icons/io"
 import { IoCheckmark } from "react-icons/io5"
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
+  tourDate: ITourDate[]
 }
-const BookingFirstStep = ({ setStep }: Props) => {
+const BookingFirstStep = ({ setStep, tourDate }: Props) => {
   const [children, setChildren] = useState(1)
   const [adult, setAdult] = useState(1)
+  const [choosenItem, setChoosenItem] = useState<ITourDate | null>(null)
   const handleClaculateChildrentCount = (type: string) => {
     if (type === "minus" && children > 1) {
       setChildren(children - 1)
@@ -33,73 +36,49 @@ const BookingFirstStep = ({ setStep }: Props) => {
             Mövcud Tur Tarixləri (TourDate)
           </h4>
           <div className="w-full h-[0.5px] bg-[#C4C4C4]" />
-          <div className="flex items-center justify-between mt-5 border border-[#3866FF] rounded-[10px] p-5 max-[430px]:p-2.5 h-[60px] bg-[#EDF0FE]">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-4 h-4 rounded-full border border-[#3866FF] flex items-center justify-center bg-[#EBF0FF]">
-                  <div className="bg-[#3866FF]  w-2 h-2 rounded-full"></div>
-                </div>
-                <p className="text-[15px]  max-[530px]:text-xs text-[#142A12] font-medium  ">15 Yanvar 2027 – 17 Yanvar 2027</p>
-              </div>
-              <div className="flex items-center gap-2 text-[#19970D] font-normal text-xs ">
-                <IoCheckmark color="#19970D" size={13} />
-                12 boş yer var
-              </div>
-            </div>
-            <div>
-              <p className="text-[#3866FF] text-[15px]  max-[530px]:text-xs  font-semibold ">
-                120 AZN / böyük
-              </p>
-              <p className="text-[#142A12] text-sm font-normal ">
-                60 AZN / uşaq
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-5 border border-[#C4C4C4] rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-4 h-4 rounded-full border border-[#C4C4C4] flex items-center justify-center bg-[#EBF0FF]">
-                  {/* <div className="bg-[#3866FF]  w-2 h-2 rounded-full"></div> */}
-                </div>
-                <p className="text-[15px]  max-[530px]:text-xs text-[#142A12] font-medium  ">15 Yanvar 2027 – 17 Yanvar 2027</p>
-              </div>
-              <div className="flex items-center gap-2 text-[#19970D] font-normal text-xs max-[530px]:text-[10px] ">
-                <IoCheckmark color="#19970D" size={13} />
-                12 boş yer var
-              </div>
-            </div>
-            <div>
-              <p className="text-[#3866FF] text-[15px]  max-[530px]:text-xs  font-semibold  ">
-                120 AZN / böyük
-              </p>
-              <p className="text-[#142A12] text-sm font-normal max-[530px]:text-[10px] ">
-                60 AZN / uşaq
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-5 border border-[#C4C4C4] rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-4 h-4 rounded-full border border-[#C4C4C4] flex items-center justify-center bg-[#EBF0FF]">
-                  {/* <div className="bg-[#3866FF]  w-2 h-2 rounded-full"></div> */}
-                </div>
-                <p className="text-[15px]  max-[530px]:text-xs text-[#142A12] font-medium  ">15 Yanvar 2027 – 17 Yanvar 2027</p>
-              </div>
-              <div className="flex items-center gap-2 text-[#FF0720] font-normal text-xs max-[530px]:text-[10px] ">
-                <GrClose color="#FF0720" size={13} />
-                Yerin sayı dolub (0 yer)
-              </div>
-            </div>
-            <div>
-              <p className="text-[#3866FF] text-[15px]  max-[530px]:text-xs  font-semibold ">
-                120 AZN / böyük
-              </p>
-              <p className="text-[#142A12] text-sm font-normal max-[530px]:text-[10px] ">
-                60 AZN / uşaq
-              </p>
-            </div>
-          </div>
+          {
+            tourDate?.map((item) => (
+              <div
+                onClick={() => setChoosenItem(item)}
+                key={item.id} className={` cursor-pointer flex items-center justify-between mt-5 border  ${choosenItem?.id === item.id ? "border-[#3866FF] bg-[#EDF0FE] " : "border-[#C4C4C4]"} rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className={`w-4 h-4 rounded-full border 
+                      
+                       ${choosenItem?.id === item.id ? "bg-[#3866FF] border-[#3866FF]" : "bg-[#EBF0FF] border-[#C4C4C4]"}
+                       flex items-center justify-center
+                       
+                       bg-[#EBF0FF]`}>
+                      {
+                        choosenItem?.id === item.id && <div className="bg-[#3866FF]  w-2 h-2 rounded-full"></div>
+                      }
 
+                    </div>
+                    <p className="text-[15px]  max-[530px]:text-xs text-[#142A12] font-medium  ">{item?.startDate} – {item?.endDate}</p>
+                  </div>
+                  {
+                    item.availableSeats > 0 ? <div className="flex items-center gap-2 text-[#19970D] font-normal text-xs max-[530px]:text-[10px] ">
+                      <IoCheckmark color="#19970D" size={13} />
+
+                      {item?.availableSeats} boş yer var
+                    </div> : <div className="flex items-center gap-2 text-[#FF0720] font-normal text-xs max-[530px]:text-[10px] ">
+                      <GrClose color="#FF0720" size={13} />
+                      Yerin sayı dolub (0 yer)
+                    </div>
+                  }
+
+                </div>
+                <div>
+                  <p className="text-[#3866FF] text-[15px]  max-[530px]:text-xs  font-semibold  ">
+                    {item?.price} {item.currency} / böyük
+                  </p>
+                  <p className="text-[#142A12] text-sm font-normal max-[530px]:text-[10px] ">
+                    {item?.priceForChild ? item.priceForChild + item.currency : "-"}  / uşaq
+                  </p>
+                </div>
+              </div>
+            ))
+          }
         </div>
         <div className="border border-[#C4C4C4] rounded-[10px] p-5">
           <h4 className="text-[#142A12] text-[18px] font-medium mb-3">
