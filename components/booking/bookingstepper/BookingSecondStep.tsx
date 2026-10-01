@@ -1,6 +1,7 @@
 
 'use client'
 import { CreditCardsService } from "@/services/creditcards.services";
+import { IPaymentCard } from "@/types/Payment";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 }
 const BookingSecondStep = ({ setStep }: Props) => {
   const [expiry, setExpiry] = useState("");
-  const [userCards, setUserCards] = useState()
+  const [userCards, setUserCards] = useState<IPaymentCard[]>([]);
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value.replace(/\D/g, "");
     const limitedVal = inputVal.slice(0, 4);
@@ -21,6 +22,16 @@ const BookingSecondStep = ({ setStep }: Props) => {
   };
 
 
+  const getUserCards = async () => {
+    try {
+      const response = await CreditCardsService.getCards()
+      setUserCards(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   useEffect(() => {
     const getUserCards = async () => {
       try {
@@ -31,8 +42,20 @@ const BookingSecondStep = ({ setStep }: Props) => {
       }
 
     }
+
     getUserCards()
   }, [])
+
+  const handleChooseDefaultCard = async (cardId: number) => {
+    try {
+      await CreditCardsService.setDefaultCard(cardId);
+      // Update the local state to reflect the change
+      getUserCards()
+
+    } catch (error) {
+      console.error("Error setting default card:", error);
+    }
+  };
   return (
     <div className="grid grid-cols-2 gap-6 max-[1024px]:grid-cols-1">
       <div className="">
@@ -103,54 +126,48 @@ const BookingSecondStep = ({ setStep }: Props) => {
           </h4>
           <div className="w-full h-[0.5px] bg-[#C4C4C4] mb-3" />
           <div className="flex flex-col gap-2">
-            <div className="bg-[#EBF0FF] border border-[#3866FF] p-3  rounded-[5px] flex items-center justify-between ">
-              <div className="flex items-center ">
-                <div className="w-4 h-4 rounded-full border border-[#3866FF]  flex items-center justify-center mr-5">
-                  <div className="w-2 h-2 bg-[#3866FF] rounded-full"></div>
-                </div>
-                <div className="flex items-center">
-                  <div className="py-2 px-2.5 bg-[#06174F] rounded-[5px] text-white  font-medium text-xs w-fit mr-5">
-                    VISA
-                  </div>
-                  <div>
-                    <p className="text-[#142A12] text-[15px] font-medium ">Visa Personal **** 4821</p>
-                    <p className="text-[#142A12] text-xs font-normal ">
-                      Bitmə tarixi: 08/28
-                    </p>
-                  </div>
-                </div>
+            {
 
-              </div>
-              <div>
-                <button className="text-[#0327A0] bg-[#C3D1F8] cursor-pointer rounded-[5px] py-2 px-4 text-xs font-normal">
-                  Default Kart
-                </button>
-              </div>
-            </div>
-            <div className="bg-[#EBF0FF] border border-[#C4C4C4] p-3  rounded-[5px] flex items-center justify-between ">
-              <div className="flex items-center ">
-                <div className="w-4 h-4 rounded-full border border-[#C4C4C4]  flex items-center justify-center mr-5">
-                  {/* <div className="w-2 h-2 bg-[#3866FF] rounded-full"></div> */}
-                </div>
-                <div className="flex items-center">
-                  <div className="py-2 px-2.5 bg-[#D9081D] rounded-[5px] text-white  font-medium text-xs w-fit mr-5">
-                    MC
-                  </div>
-                  <div>
-                    <p className="text-[#142A12] text-[15px] font-medium ">Mastercard Business **** 9012</p>
-                    <p className="text-[#142A12] text-xs font-normal ">
-                      Bitmə tarixi: 11/26
-                    </p>
-                  </div>
-                </div>
 
-              </div>
-              {/* <div>
-                <button className="text-[#0327A0] bg-[#C3D1F8] cursor-pointer rounded-[5px] py-2 px-4 text-xs font-normal">
-                  Default Kart
-                </button>
-              </div> */}
-            </div>
+              userCards.length === 0 ? (
+                <p className="text-[#142A12] text-[15px] font-medium ">Saxlanılmış kart yoxdur</p>
+              ) : (
+                userCards.map((card) => (
+                  <div key={card.id} className={` border ${card.isDefault ? 'border-[#3866FF] bg-[#EBF0FF]' : 'border-[#C4C4C4]'} p-3  rounded-[5px] flex items-center justify-between  cursor-pointer`} onClick={() => handleChooseDefaultCard(card.id)}>
+                    <div className="flex items-center ">
+                      <div className={` w-4 h-4 rounded-full border ${card.isDefault ? 'border-[#3866FF]' : 'border-[#C4C4C4]'}  flex items-center justify-center mr-5`}>
+                        {
+                          card.isDefault && (
+                            <div className="w-2 h-2 bg-[#3866FF] rounded-full"></div>
+                          )
+                        }
+                      </div>
+                      <div className="flex items-center">
+                        <div className="py-2 px-2.5 bg-[#06174F] rounded-[5px] text-white  font-medium text-xs w-fit mr-5">
+                          {card.cardType.toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="text-[#142A12] text-[15px] font-medium ">**** {card.lastFourDigits}</p>
+                          <p className="text-[#142A12] text-xs font-normal ">
+                            Bitmə tarixi: {card.expiryMonth.toString().padStart(2, '0')}/{card.expiryYear.toString().slice(-2)}
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div>
+                      {
+                        card.isDefault && (
+                          <button className="text-[#0327A0] bg-[#C3D1F8] cursor-pointer rounded-[5px] py-2 px-4 text-xs font-normal">
+                            Default Kart
+                          </button>
+                        )
+                      }
+                    </div>
+                  </div>
+                ))
+              )
+            }
           </div>
         </div>
         <div className="border border-[#C4C4C4] rounded-[10px]  p-5   max-[430px]:p-2.5 ">

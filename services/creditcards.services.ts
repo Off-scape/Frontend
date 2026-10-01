@@ -13,7 +13,7 @@ export const CreditCardsService = {
     return api.delete(`/api/creditCards/${id}`);
   },
 
-  setDefaultCard(id: string) {
+  setDefaultCard(id: number) {
     return api.patch(`/api/creditCards/${id}/default`);
   },
 
