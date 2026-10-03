@@ -1,33 +1,62 @@
 import { useRef, useState } from "react";
 import { CameraIcon, CopyIcon } from "@/icons/ProfileIcons";
+import { getErrorMessage } from "@/services/api";
 
 interface AvatarUploadProps {
   avatarUrl: string | null;
   userId: string;
   onToast: (msg: string, type?: "success" | "error") => void;
+  onUpload: (file: File) => Promise<void>;
+  onDelete: () => Promise<void>;
 }
+
+const SUPPORTED_IMAGE_TYPES: string[] = ["image/jpeg", "image/png", "image/webp"];
 
 export function AvatarUpload({
   avatarUrl,
   userId,
   onToast,
+  onUpload,
+  onDelete,
 }: AvatarUploadProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(avatarUrl);
   const [dragOver, setDragOver] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const applyFile = (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      onToast("Yalnız şəkil faylları dəstəklənir", "error");
+  const applyFile = async (file: File) => {
+    if (!SUPPORTED_IMAGE_TYPES.includes(file.type)) {
+      onToast("Yalnız JPG, PNG və WebP şəkilləri dəstəklənir", "error");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      onToast("Fayl 5MB-dan böyük ola bilməz", "error");
+    if (file.size > 2 * 1024 * 1024) {
+      onToast("Şəkil 2MB-dan böyük ola bilməz", "error");
       return;
     }
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result as string);
-    reader.readAsDataURL(file);
+    setIsUploading(true);
+    try {
+      await onUpload(file);
+      onToast("Profil şəkli yükləndi");
+    } catch (error) {
+      onToast(getErrorMessage(error), "error");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!preview) return;
+    setIsDeleting(true);
+    try {
+      await onDelete();
+      setPreview(null);
+      onToast("Profil şəkli silindi");
+    } catch (error) {
+      onToast(getErrorMessage(error), "error");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +83,11 @@ export function AvatarUpload({
           }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          onClick={() => fileRef.current?.click()}
+          onClick={() => !isUploading && !isDeleting && fileRef.current?.click()}
           role="button"
           tabIndex={0}
           aria-label="Avatar yüklə"
-          onKeyDown={(e) => e.key === "Enter" && fileRef.current?.click()}
+          onKeyDown={(e) => e.key === "Enter" && !isUploading && fileRef.current?.click()}
         >
           <div className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] rounded-full overflow-hidden bg-[#e8f0ee]">
             {preview ? (
@@ -89,25 +118,29 @@ export function AvatarUpload({
         <input
           ref={fileRef}
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp"
           className="hidden"
           onChange={handleFileChange}
+          disabled={isUploading || isDeleting}
         />
 
         <div className="flex w-full flex-wrap gap-4 sm:gap-10">
           <div className="flex items-center gap-3 mb-3 sm:mb-5">
             <button
+              type="button"
               onClick={() => fileRef.current?.click()}
-              className="px-4 py-3 sm:px-15 sm:py-3 bg-[#0B3E35] text-white text-sm rounded-2xl font-semibold hover:bg-[#142A12] active:scale-[.98] transition-all"
+              disabled={isUploading || isDeleting}
+              className="px-4 py-3 sm:px-15 sm:py-3 bg-[#0B3E35] text-white text-sm rounded-2xl font-semibold hover:bg-[#142A12] active:scale-[.98] transition-all disabled:opacity-60"
             >
-              Şəkil yüklə
+              {isUploading ? "Yüklənir…" : "Şəkil yüklə"}
             </button>
             <button
-              onClick={() => setPreview(null)}
-              disabled={!preview}
+              type="button"
+              onClick={handleDelete}
+              disabled={!preview || isUploading || isDeleting}
               className="px-4 py-3 sm:px-15 sm:py-3 border border-[#0B3E35] text-[#0B3E35] text-sm font-medium rounded-lg hover:border-gray-400 hover:bg-gray-50 active:scale-[.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Profil şəklini sil
+              {isDeleting ? "Silinir…" : "Profil şəklini sil"}
             </button>
           </div>
 
