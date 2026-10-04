@@ -114,9 +114,7 @@ export type TourDetail = {
   updatedAt: string;
   deletedAt: string | null;
 
-  category_id: number | null;
-  region_id: number;
-  user_id: number;
+
 
   Region: Region;
   Category: Category | null;
