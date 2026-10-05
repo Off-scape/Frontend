@@ -23,5 +23,8 @@ export const ToursService = {
 
   createTour(data: any) {
     return api.post("/api/tours", data);
+  },
+  futureTour(id:number){
+    return   api.patch(`/api/tours/${id}/feature`)
   }
 };
