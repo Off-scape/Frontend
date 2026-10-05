@@ -6,11 +6,13 @@ import { IoMdAdd } from "react-icons/io"
 import { IoCheckmark } from "react-icons/io5"
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
-  tourDate: ITourDate[]
+  tourDate: ITourDate[],
+  setBookData: (data: { tourDateId: number | null; seats: number | null; childSeats: number | null; }) => void
 }
-const BookingFirstStep = ({ setStep, tourDate }: Props) => {
+const BookingFirstStep = ({ setStep, tourDate, setBookData }: Props) => {
   const [children, setChildren] = useState(1)
   const [adult, setAdult] = useState(1)
+  const [error, setError] = useState(false)
   const [choosenItem, setChoosenItem] = useState<ITourDate | null>(null)
   const handleClaculateChildrentCount = (type: string) => {
     if (type === "minus" && children > 1) {
@@ -28,19 +30,33 @@ const BookingFirstStep = ({ setStep, tourDate }: Props) => {
     }
 
   }
+
+  const handleNextStep = () => {
+    if (choosenItem) {
+      setBookData({
+        tourDateId: choosenItem.id,
+        seats: adult,
+        childSeats: children,
+      })
+      setStep(2)
+    } else {
+      setError(true)
+      alert("Zəhmət olmasa tur tarixini seçin.")
+    }
+  }
   return (
     <div className=" overflow-auto grid grid-cols-2 max-[1110px]:grid-cols-1 gap-5 h-[calc(100vh-320px)]">
       <div>
-        <div className="border border-[#C4C4C4] rounded-[10px]  p-5 mb-5  max-[430px]:p-2.5 ">
+        <div className={`border border-[#C4C4C4] rounded-[10px]  p-5 mb-5  max-[430px]:p-2.5  ${error  ? "border-[#FF0720]" : "border-[#C4C4C4]"}`}>
           <h4 className="text-[#142A12] text-[18px] font-medium mb-3">
             Mövcud Tur Tarixləri (TourDate)
           </h4>
-          <div className="w-full h-[0.5px] bg-[#C4C4C4]" />
+          <div className={"w-full h-[0.5px] bg-[#C4C4C4]" }/>
           {
             tourDate?.map((item) => (
               <div
                 onClick={() => setChoosenItem(item)}
-                key={item.id} className={` cursor-pointer flex items-center justify-between mt-5 border  ${choosenItem?.id === item.id ? "border-[#3866FF] bg-[#EDF0FE] " : "border-[#C4C4C4]"} rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5`}>
+                key={item.id} className={` cursor-pointer flex items-center justify-between mt-5 border  ${choosenItem?.id === item.id ? "border-[#3866FF] bg-[#EDF0FE] " : "border-[#C4C4C4]"} ${error && !choosenItem ? "border-[#FF0720]" : "#C4C4C4"} rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5`}>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <div className={`w-4 h-4 rounded-full border 
@@ -151,7 +167,7 @@ const BookingFirstStep = ({ setStep, tourDate }: Props) => {
           <p className="text-[20px] text-[#142A12] font-medium  ">300 AZN</p>
         </div>
         <button
-          onClick={() => setStep(2)}
+          onClick={handleNextStep}
 
           className=" text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
           Növbəti : Ödəniş Metodu
