@@ -16,7 +16,7 @@ import { getErrorMessage } from "@/services/api";
 import { RegisterInputs } from "@/types/auth";
 import { validations } from "../../utils/validation";
 
-const REDIRECT_AFTER_REGISTER = "/dashboard";
+const REDIRECT_AFTER_REGISTER = "/personal";
 
 export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
@@ -37,20 +37,13 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
     setIsLoading(true);
 
     try {
-      const { data: res } = await AuthService.register({
+      await AuthService.register({
         name: data.firstName.trim(),
         surname: data.lastName.trim(),
         email: data.email.trim(),
         password: data.password,
       });
-
-      if (res.user) {
-        // Backend cookie-ni set edib, istifadəçi artıq daxil olub
-        router.push(REDIRECT_AFTER_REGISTER);
-      } else {
-        // User qayıtmayıbsa, giriş formasına keçirik
-        onSwitch();
-      }
+      router.push(REDIRECT_AFTER_REGISTER);
     } catch (error) {
       setServerError(getErrorMessage(error));
     } finally {
