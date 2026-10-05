@@ -2,12 +2,16 @@
 'use client'
 import { CreditCardsService } from "@/services/creditcards.services";
 import { IPaymentCard } from "@/types/Payment";
+import { ITourDate } from "@/types/Tour";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
+  chosenTourDate: ITourDate | null;
+  bookData: { tourDateId: number | null; seats: number | null; childSeats: number | null; cardId: number | null }
+  setBookData: Dispatch<SetStateAction<{ tourDateId: number | null; seats: number | null; childSeats: number | null; cardId: number | null }>>
 }
-const BookingSecondStep = ({ setStep }: Props) => {
+const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: Props) => {
   const [expiry, setExpiry] = useState("");
   const [userCards, setUserCards] = useState<IPaymentCard[]>([]);
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +30,11 @@ const BookingSecondStep = ({ setStep }: Props) => {
     try {
       const response = await CreditCardsService.getCards()
       setUserCards(response.data.data)
+      response.data.data.forEach((card: IPaymentCard) => {
+        if (card.isDefault) {
+          setBookData((prevData) => ({ ...prevData, cardId: card.id }));
+        }
+      })
     } catch (error) {
       console.log(error)
     }
@@ -37,6 +46,12 @@ const BookingSecondStep = ({ setStep }: Props) => {
       try {
         const response = await CreditCardsService.getCards()
         setUserCards(response.data.data)
+        response.data.data.forEach((card: IPaymentCard) => {
+          if (card.isDefault) {
+            setBookData((prevData) => ({ ...prevData, cardId: card.id }));
+            console.log("Default Card ID set in bookData:", card.id);
+          }
+        })
       } catch (error) {
         console.log(error)
       }
@@ -49,13 +64,21 @@ const BookingSecondStep = ({ setStep }: Props) => {
   const handleChooseDefaultCard = async (cardId: number) => {
     try {
       await CreditCardsService.setDefaultCard(cardId);
-      // Update the local state to reflect the change
+
       getUserCards()
 
     } catch (error) {
       console.error("Error setting default card:", error);
     }
   };
+  const handLeNextStep = () => {
+    if (bookData.cardId) {
+      setStep(3)
+    } else {
+      alert("Zəhmət olmasa ödəniş kartını seçin.")
+    }
+
+  }
   return (
     <div className="grid grid-cols-2 gap-6 max-[1024px]:grid-cols-1">
       <div className="">
@@ -176,10 +199,10 @@ const BookingSecondStep = ({ setStep }: Props) => {
           </h4>
           <div>
             <h4 className="text-[#142A12] text-[15px] font-medium">
-              15 Yanvar – 17 Yanvar 2027
+              {chosenTourDate?.startDate || "Seçim edin"} – {chosenTourDate?.endDate || "Seçim edin"}
             </h4>
             <p className="text-[#7D7D7D] text-xs font-normal">
-              2 Böyük, 1 Uşaq
+              {bookData.seats} Böyük, {bookData.childSeats} Uşaq
             </p>
           </div>
           <div className="mt-3">
@@ -188,7 +211,7 @@ const BookingSecondStep = ({ setStep }: Props) => {
                 Tur qiyməti
               </p>
               <p className="tetx-[#142A12] font-medium text-[15px]">
-                300 AZN
+                {chosenTourDate?.price || "0"} {chosenTourDate?.currency || "AZN"}
               </p>
             </div>
             <div className="w-full h-[1px] bg-[#C4C4C4]" />
@@ -197,12 +220,12 @@ const BookingSecondStep = ({ setStep }: Props) => {
                 Ödəniləcək:
               </p>
               <p className="tetx-[#142A12] font-medium text-[20px]">
-                300 AZN
+                {((bookData.seats ?? 0) + (bookData.childSeats ?? 0)) * Number(chosenTourDate?.price ?? 0)} {chosenTourDate?.currency || "AZN"}
               </p>
             </div>
           </div>
           <button
-            onClick={() => setStep(3)}
+            onClick={handLeNextStep}
 
             className=" text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
             Növbəti: Təsdiqləmə

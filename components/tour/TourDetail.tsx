@@ -29,11 +29,24 @@ interface TourDetailProps {
   tour: TourDetail;
 }
 
+interface BookData {
+  tourDateId: number | null;
+  seats: number | null;
+  childSeats: number | null;
+  cardId: number | null;
+}
+
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
-   const [tourDate,setTourDate] = useState<ITourDate[]>([])
+  const [tourDate, setTourDate] = useState<ITourDate[]>([])
   const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [bookData, setBookData] = useState<BookData>({
+    tourDateId: null,
+    seats: null,
+    childSeats: null,
+    cardId: null,
+  });
   useEffect(() => {
     const getTourImage = async () => {
       try {
@@ -53,12 +66,12 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         console.error("Error fetching auth token:", error);
       }
     }
-    const getTourDate = async ()=>{
-      try{
+    const getTourDate = async () => {
+      try {
         const response = await TourDatesService.getDates(tour.id)
         setTourDate(response.data.data)
-      }catch(error){
-         console.log(error)
+      } catch (error) {
+        console.log(error)
       }
     }
     getTourDate()
@@ -67,10 +80,10 @@ const TourDetail = ({ tour }: TourDetailProps) => {
   }, [])
   const handleBookNow = () => {
     if (!isTokenAvailable) {
-     
+
       setIsModalOpen(true);
     } else {
-     
+
       setIsTokenAvailable(false);
 
     }
@@ -78,7 +91,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
   const handleCloseModal = () => {
 
     setIsTokenAvailable(false);
-       setIsModalOpen(false);
+    setIsModalOpen(false);
 
   }
   console.log(tourDate)
@@ -268,10 +281,17 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           </div>
         </aside>
         {
-          isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} /> 
+          isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} />
         }
         {
-          isModalOpen && <Booking handleCloseModal={handleCloseModal} tourDate={tourDate}    tourTitle =  {tour?.title} tourSubtitle = {tourSubtitle} />
+          isModalOpen && <Booking
+            handleCloseModal={handleCloseModal}
+            tourDate={tourDate}
+            tourTitle={tour?.title}
+            tourSubtitle={tourSubtitle}
+            setBookData={setBookData}
+              bookData={bookData}
+          />
         }
       </div>
     </section>
