@@ -6,7 +6,6 @@ import { HomeService } from "@/services/home.service";
 import { PaymentsService } from "@/services/payments.service";
 import { RegionsService } from "@/services/regions.service";
 import { ReviewsService } from "@/services/reviews.services";
-import { SubscriberService } from "@/services/subscriber.service";
 
 const toArray = (value: unknown): any[] => {
   if (Array.isArray(value)) return value;
@@ -72,7 +71,6 @@ export function useRegionPageData(slug: string) {
   const [region, setRegion] = useState<any>(null);
   const [tours, setTours] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [subscribers, setSubscribers] = useState<any[]>([]);
   const [homeData, setHomeData] = useState<any>(null);
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +83,6 @@ export function useRegionPageData(slug: string) {
         setRegion(null);
         setTours([]);
         setReviews([]);
-        setSubscribers([]);
         setHomeData(null);
         setPayments([]);
         setLoading(false);
@@ -95,11 +92,10 @@ export function useRegionPageData(slug: string) {
       setLoading(true);
 
       try {
-        const [regionRes, homeRes, subscriberRes, toursRes] =
+        const [regionRes, homeRes, toursRes] =
           await Promise.allSettled([
             RegionsService.getRegionBySlug(slug),
             HomeService.getHomeData(),
-            SubscriberService.getSubscribers(),
             api.get("/api/tours"),
           ]);
 
@@ -112,11 +108,6 @@ export function useRegionPageData(slug: string) {
           homeRes.status === "fulfilled"
             ? (homeRes.value?.data ?? homeRes.value ?? null)
             : null;
-
-        const subscriberPayload =
-          subscriberRes.status === "fulfilled"
-            ? (subscriberRes.value?.data ?? subscriberRes.value ?? [])
-            : [];
 
         const toursPayload =
           toursRes.status === "fulfilled"
@@ -172,7 +163,6 @@ export function useRegionPageData(slug: string) {
         setRegion(regionData ?? null);
         setTours(relevantTours);
         setReviews(reviewItems);
-        setSubscribers(toArray(subscriberPayload));
         setHomeData(homePayload ?? null);
         setPayments(paymentItems);
       } catch {
@@ -180,7 +170,6 @@ export function useRegionPageData(slug: string) {
           setRegion(null);
           setTours([]);
           setReviews([]);
-          setSubscribers([]);
           setHomeData(null);
           setPayments([]);
         }
@@ -200,7 +189,6 @@ export function useRegionPageData(slug: string) {
     region,
     tours,
     reviews,
-    subscribers,
     homeData,
     payments,
     loading,
