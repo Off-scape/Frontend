@@ -8,6 +8,7 @@ export type Review = {
   user_id: number;
   createdAt: string;
   updatedAt: string;
+  user?: { id?: number | string; name?: string; surname?: string };
 };
 
 export interface RatingSummary {
@@ -20,9 +21,10 @@ export interface RatingSummary {
   }[];
 }
 
-export type ReviewsData =
-  {
-    tourId: number,
-    rating: number,
-    comment: string
-  }
+export type CreateReviewInput = {
+  tourId: number;
+  rating: number;
+  comment: string;
+};
+
+export type UpdateReviewInput = Partial<Pick<CreateReviewInput, "rating" | "comment">>;
