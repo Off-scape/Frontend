@@ -3,6 +3,7 @@ import { Field } from "./Field";
 import { EyeIcon, EyeOffIcon, SpinnerIcon } from "@/icons/ProfileIcons";
 import { UserProfile } from "@/types/Profile";
 import { getErrorMessage } from "@/services/api";
+import { validations } from "@/utils/validation";
 
 interface AccountInfoCardProps {
   user: UserProfile;
@@ -23,8 +24,16 @@ export function AccountInfoCard({ user, onToast, onChangePassword }: AccountInfo
       setError("Cari və yeni şifrəni daxil edin.");
       return;
     }
-    if (newPassword.length < 8) {
-      setError("Yeni şifrə ən azı 8 simvol olmalıdır.");
+
+    const rules = validations.password();
+    const minimumLength = rules.minLength as { value: number; message: string };
+    const pattern = rules.pattern as { value: RegExp; message: string };
+    if (newPassword.length < minimumLength.value) {
+      setError(minimumLength.message);
+      return;
+    }
+    if (!pattern.value.test(newPassword)) {
+      setError(pattern.message);
       return;
     }
 
@@ -52,6 +61,9 @@ export function AccountInfoCard({ user, onToast, onChangePassword }: AccountInfo
 
       <div className="mt-6 border-t border-gray-100 pt-5">
         <h2 className="text-sm font-semibold text-[#142A12] mb-4">Şifrəni dəyiş</h2>
+        <p className="text-xs text-[#828282] mb-4">
+          Yeni şifrə ən azı 8 simvol olmalı, böyük və kiçik hərf, rəqəm və xüsusi simvol içərməlidir.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-5">
           <PasswordField label="Cari şifrə" value={currentPassword} show={showCurrentPassword} onToggle={() => setShowCurrentPassword((value) => !value)} onChange={(value) => { setCurrentPassword(value); setError(""); }} />
           <PasswordField label="Yeni şifrə" value={newPassword} show={showNewPassword} onToggle={() => setShowNewPassword((value) => !value)} onChange={(value) => { setNewPassword(value); setError(""); }} />
