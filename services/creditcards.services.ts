@@ -1,3 +1,4 @@
+import { PaymentCard } from "@/types/Payment";
 import { api } from "./api";
 
 export const CreditCardsService = {
@@ -5,7 +6,7 @@ export const CreditCardsService = {
     return api.get("/api/creditCards");
   },
 
-  createCard(data: any) {
+  createCard(data: PaymentCard) {
     return api.post("/api/creditCards", data);
   },
 
@@ -13,7 +14,7 @@ export const CreditCardsService = {
     return api.delete(`/api/creditCards/${id}`);
   },
 
-  setDefaultCard(id: string) {
+  setDefaultCard(id: number) {
     return api.patch(`/api/creditCards/${id}/default`);
   },
 

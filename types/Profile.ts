@@ -10,12 +10,18 @@ export interface UserProfile {
   avatarUrl: string | null;
 }
 
+export type ProfileUpdatePayload = Partial<
+  Pick<UserProfile, "firstName" | "lastName" | "phone" | "gender">
+>;
+
 export interface FieldErrors {
   firstName?: string;
   lastName?: string;
   phone?: string;
   email?: string;
   password?: string;
+  currentPassword?: string;
+  newPassword?: string;
   gender?: string;
 }
 

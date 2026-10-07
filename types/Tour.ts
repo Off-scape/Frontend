@@ -92,8 +92,6 @@ export type Activity = {
   slug: string;
 };
 
-
-
 export type TourDetail = {
   id: number;
   userId: number;
@@ -122,3 +120,22 @@ export type TourDetail = {
   Category: Category | null;
   activities: Activity[];
 };
+
+
+
+export interface ITourDate {
+  id: number;
+  tourId: number;
+  tour_id: number;
+  startDate: string;
+  endDate: string;
+  availableSeats: number;
+  maxParticipants: number | null;
+  minParticipants: number | null;
+  price: string;
+  priceForChild: string | null;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
