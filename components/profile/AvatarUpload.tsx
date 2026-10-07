@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { CameraIcon, CopyIcon } from "@/icons/ProfileIcons";
 import { getErrorMessage } from "@/services/api";
+import { getAvatarImageSrc } from "@/utils/avatar";
 
 interface AvatarUploadProps {
   avatarUrl: string | null;
@@ -24,6 +25,7 @@ export function AvatarUpload({
   const [dragOver, setDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const previewSrc = getAvatarImageSrc(preview);
 
   const applyFile = async (file: File) => {
     if (!SUPPORTED_IMAGE_TYPES.includes(file.type)) {
@@ -90,10 +92,10 @@ export function AvatarUpload({
           onKeyDown={(e) => e.key === "Enter" && !isUploading && fileRef.current?.click()}
         >
           <div className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] rounded-full overflow-hidden bg-[#e8f0ee]">
-            {preview ? (
+            {previewSrc ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={preview}
+                src={previewSrc}
                 alt="Profil şəkli"
                 className="w-full h-full object-cover"
               />

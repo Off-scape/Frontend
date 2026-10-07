@@ -111,7 +111,7 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
         </label>
         <PassField
           placeholder=""
-          register={register("password", validations.password())}
+          register={register("password", { required: "Şifrə tələb olunur" })}
           error={errors.password}
         />
 

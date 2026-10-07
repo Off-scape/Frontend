@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 import { AvatarUpload } from "./AvatarUpload";
 import { BasicInfoCard } from "./Basicinfocard";
 import { AccountInfoCard } from "./Accountinfocard";
@@ -8,6 +9,13 @@ import { Toast } from "./Toast";
 import { Gender, ProfileUpdatePayload, UserProfile } from "@/types/Profile";
 import { ProfileService } from "@/services/profile.servises";
 import { api, getErrorMessage } from "@/services/api";
+import { useProfileAvatar } from "./ProfileAvatarContext";
+
+const avatarUploadApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 10000,
+  withCredentials: true,
+});
 
 type ProfileRecord = Record<string, unknown>;
 
@@ -41,6 +49,7 @@ function toUserProfile(value: unknown, fallback?: UserProfile): UserProfile {
 }
 
 export default function PersonalInfoClient() {
+  const { setAvatarUrl } = useProfileAvatar();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -62,13 +71,15 @@ export default function PersonalInfoClient() {
     setLoadError(null);
     try {
       const response = await api.get("/api/profile");
-      setUser(toUserProfile(response.data));
+      const profile = toUserProfile(response.data);
+      setUser(profile);
+      setAvatarUrl(profile.avatarUrl);
     } catch (error) {
       setLoadError(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setAvatarUrl]);
 
   useEffect(() => {
     void loadProfile();
@@ -76,7 +87,18 @@ export default function PersonalInfoClient() {
 
   const saveProfile = async (patch: ProfileUpdatePayload) => {
     if (!user) throw new Error("Profil məlumatları yüklənməyib.");
-    const response = await ProfileService.updateProfile(patch);
+    const requestData: {
+      name?: string;
+      surname?: string;
+      phone?: string;
+      gender?: Gender;
+    } = {};
+    if (patch.firstName !== undefined) requestData.name = patch.firstName;
+    if (patch.lastName !== undefined) requestData.surname = patch.lastName;
+    if (patch.phone !== undefined) requestData.phone = patch.phone;
+    if (patch.gender !== undefined) requestData.gender = patch.gender;
+
+    const response = await ProfileService.updateProfile(requestData);
     const record = unwrapProfile(response.data);
     const hasProfileFields = ["id", "firstName", "name", "lastName", "surname", "phone", "gender", "avatarUrl"].some(
       (field) => field in record,
@@ -91,21 +113,30 @@ export default function PersonalInfoClient() {
   const uploadAvatar = async (file: File) => {
     const formData = new FormData();
     formData.append("avatar", file);
-    const response = await api.post("/api/profile/avatar", formData, {
-      headers: { "Content-Type": undefined },
-    });
+    const response = await avatarUploadApi.post("/api/profile/avatar", formData);
     const uploaded = unwrapProfile(response.data);
     if (typeof uploaded.avatarUrl === "string" || typeof uploaded.avatar === "string") {
-      setUser((current) => current && toUserProfile(response.data, current));
+      const profile = toUserProfile(response.data, user ?? undefined);
+      setUser(profile);
+      setAvatarUrl(profile.avatarUrl);
     } else {
       const profileResponse = await api.get("/api/profile");
-      setUser(toUserProfile(profileResponse.data));
+      const profile = toUserProfile(profileResponse.data);
+      setUser(profile);
+      setAvatarUrl(profile.avatarUrl);
     }
   };
 
   const deleteAvatar = async () => {
-    await ProfileService.deleteProfileAvatar();
-    setUser((current) => current && { ...current, avatarUrl: null });
+    const response = await ProfileService.deleteProfileAvatar();
+    const deletedProfile = unwrapProfile(response.data);
+    const avatarUrl = typeof deletedProfile.avatar === "string"
+      ? deletedProfile.avatar
+      : typeof deletedProfile.avatarUrl === "string"
+        ? deletedProfile.avatarUrl
+        : null;
+    setUser((current) => current && { ...current, avatarUrl });
+    setAvatarUrl(avatarUrl);
   };
 
   if (loading) {
