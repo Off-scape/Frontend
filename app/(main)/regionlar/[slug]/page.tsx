@@ -30,7 +30,7 @@ const formatRegionLabel = (value: unknown, fallback: string) => {
 export default function RegionDetailPage() {
   const params = useParams<{ slug: string }>();
   const slug = params?.slug ? String(params.slug) : "";
-  const { region, tours, reviews, subscribers, homeData, payments, loading } =
+  const { region, tours, reviews, homeData, payments, loading } =
     useRegionPageData(slug);
 
   if (loading) {
@@ -122,12 +122,6 @@ export default function RegionDetailPage() {
           </h3>
         </div>
         <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-zinc-500">Subscribers</p>
-          <h3 className="mt-2 text-3xl font-bold text-zinc-900">
-            {subscribers.length}
-          </h3>
-        </div>
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
           <p className="text-sm text-zinc-500">Payments</p>
           <h3 className="mt-2 text-3xl font-bold text-zinc-900">
             {payments.length}
@@ -206,36 +200,7 @@ export default function RegionDetailPage() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-zinc-900">Subscribers</h2>
-          <div className="mt-5 space-y-3">
-            {subscribers.length ? (
-              subscribers.slice(0, 6).map((subscriber, index) => (
-                <div
-                  key={
-                    subscriber.id ??
-                    subscriber._id ??
-                    `${subscriber.email ?? "subscriber"}-${index}`
-                  }
-                  className="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2"
-                >
-                  <span className="text-sm text-zinc-700">
-                    {subscriber.email ||
-                      subscriber.name ||
-                      `Subscriber ${index + 1}`}
-                  </span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-zinc-500">
-                    {subscriber.status || "active"}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className="text-zinc-500">Subscriber məlumatı yoxdur.</p>
-            )}
-          </div>
-        </div>
-
+      <div className="mt-10">
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-zinc-900">Home</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
