@@ -13,6 +13,20 @@ const formatValue = (value: unknown) => {
   return "-";
 };
 
+const formatRegionLabel = (value: unknown, fallback: string) => {
+  if (typeof value === "string" || typeof value === "number") {
+    return String(value);
+  }
+
+  if (value && typeof value === "object") {
+    const region = value as { name?: unknown; slug?: unknown };
+    if (typeof region.name === "string") return region.name;
+    if (typeof region.slug === "string") return region.slug;
+  }
+
+  return fallback;
+};
+
 export default function RegionDetailPage() {
   const params = useParams<{ slug: string }>();
   const slug = params?.slug ? String(params.slug) : "";
@@ -131,7 +145,7 @@ export default function RegionDetailPage() {
                         {tour.title || tour.name || "Tour"}
                       </h3>
                       <p className="mt-1 text-sm text-zinc-600">
-                        {tour.region || region.name}
+                        {formatRegionLabel(tour.region, region.name || "Region")}
                       </p>
                     </div>
                     <span className="rounded-full bg-[#0F766E]/10 px-2.5 py-1 text-xs font-semibold text-[#0F766E]">
