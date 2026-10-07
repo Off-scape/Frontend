@@ -21,7 +21,8 @@ export interface AuthUser {
 
 // Token body-də gəlmir (HttpOnly cookie ilə gedir), yalnız user qayıdır
 export interface AuthResponse {
-  user?: AuthUser;  
+  success?: boolean;
+  user?: AuthUser;
 }
 
 export const AuthService = {
@@ -34,7 +35,7 @@ export const AuthService = {
   },
 
   getMe() {
-    return api.get<AuthUser>("api/auth/me");
+    return api.get<AuthResponse>("api/auth/me");
   },
 
   logout() {
