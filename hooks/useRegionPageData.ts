@@ -92,7 +92,7 @@ export function useRegionPageData(slug: string) {
       setLoading(true);
 
       try {
-        const [regionRes, homeRes, toursRes] =
+        const [regionListRes, homeRes, toursRes] =
           await Promise.allSettled([
             RegionsService.getAllRegions(),
             HomeService.getHomeData(),
