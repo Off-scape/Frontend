@@ -1,14 +1,12 @@
-import { ReviewsData } from "@/types/Review";
+import type { CreateReviewInput, UpdateReviewInput, Review } from "@/types/Review";
 import { api } from "./api";
 
 export const ReviewsService = {
-
-
-  getReview (id: number) {
-    return api.get(`/api/reviews/${id}`);
+  getReview(tourId: number) {
+    return api.get<{ success?: boolean; data: Review[] }>(`/api/reviews/${tourId}`);
   },
 
-  updateReview(id: number, data: ReviewsData) {
+  updateReview(id: number, data: UpdateReviewInput) {
     return api.patch(`/api/reviews/${id}`, data);
   },
 
@@ -16,7 +14,7 @@ export const ReviewsService = {
     return api.delete(`/api/reviews/${id}`);
   },
 
-  createReview(data: ReviewsData) {
+  createReview(data: CreateReviewInput) {
     return api.post("/api/reviews", data);
   }
 };
