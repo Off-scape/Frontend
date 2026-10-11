@@ -39,8 +39,13 @@ interface BookData {
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
   const [tourDate, setTourDate] = useState<ITourDate[]>([])
-  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookData, setBookData] = useState<BookData>({
     tourDateId: null,
     seats: null,
@@ -59,11 +64,10 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     const getAuthToken = async () => {
       try {
         const token = await AuthService.getMe();
-        if (!token.data) {
-          setIsTokenAvailable(true);
-        }
+        setIsAuthenticated(Boolean(token.data));
       } catch (error) {
         console.error("Error fetching auth token:", error);
+        setIsAuthenticated(false);
       }
     }
     const getTourDate = async () => {
@@ -73,28 +77,38 @@ const TourDetail = ({ tour }: TourDetailProps) => {
       } catch (error) {
         console.log(error)
       }
+      finally {
+        setIsAuthLoading(false);
+      }
     }
     getTourDate()
     getAuthToken()
     getTourImage()
   }, [])
   const handleBookNow = () => {
-    if (!isTokenAvailable) {
+    if (isAuthLoading) return;
 
-      setIsModalOpen(true);
+    if (isAuthenticated) {
+      setIsBookingOpen(true);
     } else {
-
-      setIsTokenAvailable(false);
-
+      setIsAuthModalOpen(true);
     }
   };
   const handleCloseModal = () => {
+    setIsAuthModalOpen(false);
+    setIsBookingOpen(false);
+  };
 
-    setIsTokenAvailable(false);
-    setIsModalOpen(false);
 
+  const logOut = async () => {
+    try {
+      const response = await AuthService.logout()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
-  console.log(tourDate)
+  console.log("isAuthenticated", isAuthenticated)
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
@@ -104,6 +118,9 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
         </p>
+        <button onClick={logOut} className="bg-red-500 text-white px-4 py-2 rounded-md">
+          Logout
+        </button>
       </header>
 
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
@@ -280,19 +297,22 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
           </div>
         </aside>
-        {
-          isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} />
-        }
-        {
-          isModalOpen && <Booking
+        {isAuthModalOpen && (
+          <BookingModal
+            handleCloseModal={handleCloseModal}
+          />
+        )}
+
+        {isBookingOpen && (
+          <Booking
             handleCloseModal={handleCloseModal}
             tourDate={tourDate}
             tourTitle={tour?.title}
             tourSubtitle={tourSubtitle}
             setBookData={setBookData}
-              bookData={bookData}
+            bookData={bookData}
           />
-        }
+        )}
       </div>
     </section>
   );
