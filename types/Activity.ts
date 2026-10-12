@@ -26,7 +26,9 @@ export interface ActivityContextValue {
 }
 
 
-interface LikedTour {
+
+
+export interface LikedTour {
   id: number;
   title: string;
   slug: string;
