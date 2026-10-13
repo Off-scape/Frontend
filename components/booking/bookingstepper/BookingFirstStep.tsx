@@ -44,6 +44,7 @@ const BookingFirstStep = ({ setStep, tourDate, setBookData }: Props) => {
       alert("Zəhmət olmasa tur tarixini seçin.")
     }
   }
+  console.log("tourDate", tourDate)
   return (
     <div className=" overflow-auto grid grid-cols-2 max-[1110px]:grid-cols-1 gap-5 h-[calc(100vh-320px)]">
       <div>
