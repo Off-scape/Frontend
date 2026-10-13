@@ -7,7 +7,7 @@ import ActivityJoinedCard from "./ActivityJoinedCard";
 import ActivityEmptyState from "./Activityemptystate";
 import ActivityFeedback from "./Activityfeedback";
 import { UserActivitiesService } from "@/services/userActivities.service";
-import { LikedToursList } from "@/types/Activity";
+import { JoinedTour, LikedToursList } from "@/types/Activity";
 
 type TabType = "liked" | "joined";
 
@@ -18,7 +18,7 @@ const joinedTours2 = mockActivityTours;
 const ActivityTabs = () => {
   const [activeTab, setActiveTab] = useState<TabType>("liked");
   const [likedTours, setLikedTours] = useState <LikedToursList>([]);
-  const [joinedTours, setJoinedTours] = useState([]);
+  const [joinedTours, setJoinedTours] = useState<JoinedTour[]>([]);
   useEffect(() => {
     try {
       const getLikedTours = async () => {
@@ -35,7 +35,7 @@ const ActivityTabs = () => {
       console.log(err)
     }
   }, [])
-  console.log("likedTours", likedTours)
+  console.log("joinedTours", joinedTours)
   return (
     <div>
       {/* Tab buttons */}
@@ -82,12 +82,12 @@ const ActivityTabs = () => {
       {/* Qatıldığım — mobile: 1 col → md: 2 col */}
       {activeTab === "joined" && (
         <div className="mt-6">
-          {joinedTours2?.length === 0 ? (
+          {joinedTours?.length === 0 ? (
             <ActivityEmptyState />
           ) : (
             <>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {joinedTours2.map((tour) => (
+                {joinedTours.map((tour) => (
                   <ActivityJoinedCard key={tour.id} tour={tour} />
                 ))}
               </div>

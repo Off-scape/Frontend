@@ -1,9 +1,6 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 import { LikedTour } from "@/types/Activity";
 import { formatDate } from "@/utils/formatDate";
@@ -18,9 +15,10 @@ const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
   const time = data.liked_at ?? "";
   const activity = data.title ?? "Tour";
   const participantCount = data.participant_count ?? 0;
-  const participants =  [];
+  // const participants =  [];
   const router = useRouter();
 
+ 
   return (
     <div
       onClick={() => router.push(`tours/${data.id}`)}
@@ -58,10 +56,10 @@ const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
         </p> */}
 
         <div className="flex items-center">
-          <ParticipantAvatars
+          {/* <ParticipantAvatars
             participants={participants}
             count={participantCount}
-          />
+          /> */}
         </div>
       </div>
     </div>
