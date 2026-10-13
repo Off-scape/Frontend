@@ -3,15 +3,43 @@
 import ProfileHeader from "@/components/profile/ProfileHeader"
 import ProfileSideBar from "@/components/profile/ProfileSideBar"
 import { ProfileAvatarProvider } from "@/components/profile/ProfileAvatarContext"
-import { useState } from "react"
-
+import { useEffect, useState } from "react"
+import { AuthService } from "@/services/auth.service"
+import { useRouter } from "next/navigation"
 
 export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-    const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getAuthToken = async () => {
+      try {
+        const token = await AuthService.getMe();
+
+        if (token.data) {
+          setIsTokenAvailable(true);
+          return;
+        }
+
+        router.push("/login");
+      } catch (error) {
+        console.error("Error fetching auth token:", error);
+        router.push("/login");
+      }
+    };
+
+    getAuthToken();
+  }, [router]);
+
+  if (!isTokenAvailable) {
+    return null;
+  }
+
   return (
     <ProfileAvatarProvider>
       <main className=" min-h-screen  ">

@@ -26,7 +26,9 @@ export interface ActivityContextValue {
 }
 
 
-interface LikedTour {
+
+
+export interface LikedTour {
   id: number;
   title: string;
   slug: string;
@@ -39,5 +41,20 @@ interface LikedTour {
   participant_count: number;
 }
 
+export interface JoinedTour {
+  id: number;
+  title: string;
+  slug: string;
+  is_featured: boolean;
+  region_id: number;
+  booking_id: number;
+  booking_status: number;
+  seats: number;
+  total_price: number;
+  joined_at: string;
+  activity_type: "joined"; // literal type since it's always "joined"
+  image_url: string;
+  participant_count: number;
+}
 // For a list of liked tours
- export type LikedToursList = LikedTour[];
+export type LikedToursList = LikedTour[];
