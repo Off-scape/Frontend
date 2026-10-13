@@ -100,15 +100,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
   };
 
 
-  const logOut = async () => {
-    try {
-      const response = await AuthService.logout()
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  console.log("isAuthenticated", isAuthenticated)
+
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
@@ -118,9 +110,6 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         <p className="mt-2 text-sm text-zinc-600 md:text-base">
           {tourSubtitle}
         </p>
-        <button onClick={logOut} className="bg-red-500 text-white px-4 py-2 rounded-md">
-          Logout
-        </button>
       </header>
 
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">

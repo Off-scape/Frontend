@@ -16,13 +16,13 @@ import { getErrorMessage } from "@/services/api";
 import { RegisterInputs } from "@/types/auth";
 import { validations } from "../../utils/validation";
 
-const REDIRECT_AFTER_REGISTER = "/personal";
+const REDIRECT_AFTER_REGISTER = "/login";
 
 export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-
+ 
   const {
     register,
     handleSubmit,
