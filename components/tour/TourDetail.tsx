@@ -94,7 +94,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     setIsModalOpen(false);
 
   }
-  console.log(tourDate)
+
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
