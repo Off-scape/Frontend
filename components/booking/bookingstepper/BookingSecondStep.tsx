@@ -82,7 +82,7 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
   return (
     <div className="grid grid-cols-2 gap-6 max-[1024px]:grid-cols-1">
       <div className="">
-        <div className="border h-full border-[#C4C4C4] rounded-[10px]  p-5 mb-5  max-[430px]:p-2.5 ">
+        <div className="border h-full border-[#C4C4C4] rounded-[10px]  p-5 mb-5  max-[430px]:p-2.5  flex flex-col">
           <h4 className="text-[#142A12] text-[18px] font-medium mb-3">
             Yeni Kart Əlavə Et
           </h4>
@@ -99,39 +99,48 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
           </h4>
           <div className="flex items-center justify-between mt-5 border  border-[#C4C4C4] rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5">
 
-            <input type="number" className="text-ms text-[#142A12] font-normal focus:outline-none focus:border-none " placeholder="0000 0000 0000 0000" />
+            <input
+              className="text-ms text-[#142A12] font-normal focus:outline-none focus:border-none "
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={4}
+              placeholder="1234"
+            />
           </div>
           <div className="flex flex-col sm:flex-row gap-4 mt-7 mb-7">
-            {/* Expiration Date Field */}
             <div className="flex-1">
-              <label htmlFor="expiry" className="block text-sm font-bold text-gray-900 mb-1">
-                Bitma Ayı / İli (MM/YY)
+              <label
+                className="block text-sm font-bold text-gray-900 mb-1"
+              >
+                Ay
               </label>
+
               <input
-                type="text"
-                id="expiry"
-                name="expiry"
-                value={expiry}
-                onChange={handleExpiryChange}
-                placeholder="MM / YY"
-                maxLength={5} // MM/YY is 5 characters long
-                inputMode="numeric" // Brings up the number pad on mobile
+                type="number"
+                min={1}
+                max={12}
+                placeholder="MM"
+
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder-gray-800 focus:outline-none "
               />
+
             </div>
 
-            {/* CVV Field */}
             <div className="flex-1">
-              <label htmlFor="cvv" className="block text-sm font-bold text-gray-900 mb-1">
-                CVV / CVC
+              <label
+                className="block text-sm font-bold text-gray-900 mb-1"
+              >
+                İl
               </label>
+
               <input
-                type="text"
-                id="cvv"
-                placeholder="***"
-                maxLength={4}
+                type="number"
+                min={new Date().getFullYear()}
+                placeholder="YYYY"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder-gray-800 focus:outline-none "
               />
+
             </div>
           </div>
           <div>
@@ -140,6 +149,9 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
               &quot;Default kart et&quot; - Növbəti ödənişlər üçün saxlanılsın
             </label>
           </div>
+          <button className=" mt-auto   text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
+            Kartı Əlavə Et
+          </button>
         </div>
       </div>
       <div>
@@ -193,7 +205,7 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
             }
           </div>
         </div>
-        <div className="border border-[#C4C4C4] rounded-[10px]  p-5   max-[430px]:p-2.5 ">
+        <div className="border border-[#C4C4C4] rounded-[10px]  p-5   max-[430px]:p-2.5  flex flex-col">
           <h4 className="text-[#142A12] text-[18px] font-medium mb-2.5">
             Seçim Xülasəsi
           </h4>

@@ -39,8 +39,13 @@ interface BookData {
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
   const [tourDate, setTourDate] = useState<ITourDate[]>([])
-  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookData, setBookData] = useState<BookData>({
     tourDateId: null,
     seats: null,
@@ -59,11 +64,10 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     const getAuthToken = async () => {
       try {
         const token = await AuthService.getMe();
-        if (!token.data) {
-          setIsTokenAvailable(true);
-        }
+        setIsAuthenticated(Boolean(token.data));
       } catch (error) {
         console.error("Error fetching auth token:", error);
+        setIsAuthenticated(false);
       }
     }
     const getTourDate = async () => {
@@ -73,25 +77,36 @@ const TourDetail = ({ tour }: TourDetailProps) => {
       } catch (error) {
         console.log(error)
       }
+      finally {
+        setIsAuthLoading(false);
+      }
     }
     getTourDate()
     getAuthToken()
     getTourImage()
   }, [])
   const handleBookNow = () => {
-    if (!isTokenAvailable) {
+    if (isAuthLoading) return;
 
-      setIsModalOpen(true);
+    if (isAuthenticated) {
+      setIsBookingOpen(true);
     } else {
-
-      setIsTokenAvailable(false);
-
+      setIsAuthModalOpen(true);
     }
   };
   const handleCloseModal = () => {
+    setIsAuthModalOpen(false);
+    setIsBookingOpen(false);
+  };
+  const logOut = async () => {
+    try {
+      await AuthService.logout()
+      setIsAuthenticated(false)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
-    setIsTokenAvailable(false);
-    setIsModalOpen(false);
 
   }
 
@@ -105,7 +120,25 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           {tourSubtitle}
         </p>
       </header>
-
+      <button>
+        {isAuthenticated ? (
+          <button
+            type="button"
+            onClick={logOut}
+            className="mt-4 rounded-xl bg-red-600 py-2 px-4 text-sm font-semibold text-white transition hover:bg-red-700"
+          >
+            Log Out
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsAuthModalOpen(true)}
+            className="mt-4 rounded-xl bg-blue-600 py-2 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+          >
+            Log In
+          </button>
+        )}
+      </button>
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
         {/* MAIN CONTENT */}
         <div className="xl:col-start-1 xl:row-start-1">
@@ -280,19 +313,22 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
           </div>
         </aside>
-        {
-          isTokenAvailable ?? <BookingModal handleCloseModal={handleCloseModal} />
-        }
-        {
-          isModalOpen && <Booking
+        {isAuthModalOpen && (
+          <BookingModal
+            handleCloseModal={handleCloseModal}
+          />
+        )}
+
+        {isBookingOpen && (
+          <Booking
             handleCloseModal={handleCloseModal}
             tourDate={tourDate}
             tourTitle={tour?.title}
             tourSubtitle={tourSubtitle}
             setBookData={setBookData}
-              bookData={bookData}
+            bookData={bookData}
           />
-        }
+        )}
       </div>
     </section>
   );

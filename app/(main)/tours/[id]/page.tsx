@@ -27,7 +27,6 @@ const TourDetailPage = () => {
     handleTourDetail();
   }, [tourId]);
 
-
   if (!tourDetail) {
     return (
       <section
