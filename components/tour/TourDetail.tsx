@@ -290,7 +290,6 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             <p className="mt-2 text-sm text-zinc-600">
               {instructorsDescription}
             </p>
-
             <div className="mt-4 space-y-4">
               {/* {participants.slice(0, 4).map((person, index) => (
                 <div key={person.id} className="flex items-center gap-3">
