@@ -117,7 +117,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           {tourSubtitle}
         </p>
       </header>
-      <button>
+      {/* <button>
         {isAuthenticated ? (
           <button
             type="button"
@@ -135,7 +135,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             Log In
           </button>
         )}
-      </button>
+      </button> */}
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
         {/* MAIN CONTENT */}
         <div className="xl:col-start-1 xl:row-start-1">
@@ -290,7 +290,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             <p className="mt-2 text-sm text-zinc-600">
               {instructorsDescription}
             </p>
-            
+
             <div className="mt-4 space-y-4">
               {/* {participants.slice(0, 4).map((person, index) => (
                 <div key={person.id} className="flex items-center gap-3">
