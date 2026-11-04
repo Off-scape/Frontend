@@ -98,14 +98,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     setIsAuthModalOpen(false);
     setIsBookingOpen(false);
   };
-  const logOut = async () => {
-    try {
-      await AuthService.logout()
-      setIsAuthenticated(false)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+ 
 
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
@@ -117,25 +110,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           {tourSubtitle}
         </p>
       </header>
-      <button>
-        {isAuthenticated ? (
-          <button
-            type="button"
-            onClick={logOut}
-            className="mt-4 rounded-xl bg-red-600 py-2 px-4 text-sm font-semibold text-white transition hover:bg-red-700"
-          >
-            Log Out
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsAuthModalOpen(true)}
-            className="mt-4 rounded-xl bg-blue-600 py-2 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
-          >
-            Log In
-          </button>
-        )}
-      </button>
+     
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
         {/* MAIN CONTENT */}
         <div className="xl:col-start-1 xl:row-start-1">
