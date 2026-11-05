@@ -1,7 +1,7 @@
 
 'use client'
 import { CreditCardsService } from "@/services/creditcards.services";
-import { IPaymentCard } from "@/types/Payment";
+import { IPaymentCard, PaymentCard } from "@/types/Payment";
 import { ITourDate } from "@/types/Tour";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -14,6 +14,13 @@ type Props = {
 const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: Props) => {
   const [expiry, setExpiry] = useState("");
   const [userCards, setUserCards] = useState<IPaymentCard[]>([]);
+  const [cardForm, setCardForm] = useState<PaymentCard>({
+    cardholder_name: "",
+    last_four_digits: "",
+    card_type: "",
+    expiry_month: 0,
+    expiry_year: 0,
+  });
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value.replace(/\D/g, "");
     const limitedVal = inputVal.slice(0, 4);
@@ -25,7 +32,13 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
     setExpiry(formattedVal);
   };
 
-
+  const handleCardFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, } = e.target;
+    setCardForm((prev) => ({
+      ...prev,
+      [name]: name === "last_four_digits" || name === "expiry_month" || name === "expiry_year" ? Number(value) : value,
+    }));
+  };
   const getUserCards = async () => {
     try {
       const response = await CreditCardsService.getCards()
@@ -79,6 +92,35 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
     }
 
   }
+  const handleAddCard = async () => {
+
+    const payload = {
+      cardholder_name: cardForm.cardholder_name,
+      last_four_digits: String(cardForm.last_four_digits),
+      card_type: cardForm.card_type,
+      expiry_month: Number(cardForm.expiry_month),
+      expiry_year: Number(cardForm.expiry_year),
+    };
+    try {
+      const response = await CreditCardsService.createCard(payload);
+      if (response.status === 201) {
+        alert("Kart uğurla əlavə edildi.");
+        setCardForm({
+          cardholder_name: "",
+          last_four_digits: "",
+          card_type: "",
+          expiry_month: 0,
+          expiry_year: 0,
+        });
+        getUserCards();
+      } else {
+        alert("Kart əlavə edilərkən xəta baş verdi.");
+      }
+    } catch (error) {
+      console.error("Error adding card:", error);
+      alert("Kart əlavə edilərkən xəta baş verdi.");
+    }
+  };
   return (
     <div className="grid grid-cols-2 gap-6 max-[1024px]:grid-cols-1">
       <div className="">
@@ -92,21 +134,61 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
           </h4>
           <div className="flex items-center justify-between mt-5 border border-[#C4C4C4] rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5">
 
-            <input type="text" placeholder="Məs: ELVIN ALIYEV" className="text-ms text-[#142A12] font-normal focus:outline-none focus:border-none" />
-          </div>
-          <h4 className="text-[#142A12] text-[15px] font-medium mb-3 mt-6">
-            Kart Nömrəsi
-          </h4>
-          <div className="flex items-center justify-between mt-5 border  border-[#C4C4C4] rounded-[10px] p-5 h-[60px] max-[430px]:p-2.5">
-
             <input
-              className="text-ms text-[#142A12] font-normal focus:outline-none focus:border-none "
               type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={4}
-              placeholder="1234"
+              placeholder="Məs: ELVIN ALIYEV"
+              name="cardholder_name"
+              value={cardForm.cardholder_name}
+              onChange={handleCardFormChange}
+              className="text-ms text-[#142A12] w-full font-normal focus:outline-none focus:border-none"
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4 mt-6 max-[430px]:grid-cols-1">
+            <div className="flex flex-col">
+              <h4 className="text-[#142A12] text-[15px] font-medium mb-3">
+                Kart Nömrəsi
+              </h4>
+              <div className="flex items-center border border-[#C4C4C4] rounded-[10px] px-5 h-[60px] max-[430px]:px-2.5">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="1234 5678 9012 3456"
+                  name="last_four_digits"
+                  value={cardForm.last_four_digits}
+                  onChange={handleCardFormChange}
+                  className="text-[#142A12] font-normal focus:outline-none w-full"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <h4 className="text-[#142A12] text-[15px] font-medium mb-3">
+                Kart tipi
+              </h4>
+              <div className="relative h-[60px]">
+                <select
+                  name="card_type"
+                  value={cardForm.card_type}
+                  onChange={handleCardFormChange}
+                  className="h-full w-full appearance-none rounded-[10px] border border-[#C4C4C4] bg-white px-5 pr-10 text-[#142A12] font-normal outline-none focus:border-[#142A12]"
+                >
+                  <option value="" disabled>
+                    Seçin
+                  </option>
+                  <option value="visa">Visa</option>
+                  <option value="mastercard">Mastercard</option>
+                  <option value="other">Digər</option>
+                </select>
+                <svg
+                  className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#142A12]"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" />
+                </svg>
+              </div>
+            </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 mt-7 mb-7">
             <div className="flex-1">
@@ -121,7 +203,9 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
                 min={1}
                 max={12}
                 placeholder="MM"
-
+                name="expiry_month"
+                value={cardForm.expiry_month}
+                onChange={handleCardFormChange}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder-gray-800 focus:outline-none "
               />
 
@@ -138,18 +222,21 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
                 type="number"
                 min={new Date().getFullYear()}
                 placeholder="YYYY"
+                name="expiry_year"
+                value={cardForm.expiry_year}
+                onChange={handleCardFormChange}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder-gray-800 focus:outline-none "
               />
 
             </div>
           </div>
           <div>
-            <input type="checkbox" id="defaultcard" />
+            <input type="checkbox" id="defaultcard" name="isDefault" onChange={handleCardFormChange} />
             <label htmlFor="defaultcard" className="font-normal text-[#888888] text-[15px] inline-block ml-2.5">
               &quot;Default kart et&quot; - Növbəti ödənişlər üçün saxlanılsın
             </label>
           </div>
-          <button className=" mt-auto   text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer ">
+          <button className=" mt-auto   text-white bg-[#142A12] w-full py-2.5 rounded-[5px] cursor-pointer " onClick={handleAddCard}>
             Kartı Əlavə Et
           </button>
         </div>

@@ -10,12 +10,12 @@ type Props = {
   setBookData: (data: { tourDateId: number | null; seats: number | null; childSeats: number | null; }) => void
 }
 const BookingFirstStep = ({ setStep, tourDate, setBookData }: Props) => {
-  const [children, setChildren] = useState(1)
+  const [children, setChildren] = useState(0)
   const [adult, setAdult] = useState(1)
   const [error, setError] = useState(false)
   const [choosenItem, setChoosenItem] = useState<ITourDate | null>(null)
   const handleClaculateChildrentCount = (type: string) => {
-    if (type === "minus" && children > 1) {
+    if (type === "minus" && children > 0) {
       setChildren(children - 1)
     } else if (type === "add") {
       setChildren(children + 1)
