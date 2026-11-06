@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
@@ -17,12 +17,14 @@ import { RegisterInputs } from "@/types/auth";
 import { validations } from "../../utils/validation";
 
 const REDIRECT_AFTER_REGISTER = "/login";
-
 export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+   const redirectUrl = searchParams.get("next")
  
+  
   const {
     register,
     handleSubmit,
@@ -43,7 +45,7 @@ export default function RegisterPanel({ onSwitch }: { onSwitch: () => void }) {
         email: data.email.trim(),
         password: data.password,
       });
-      router.push(REDIRECT_AFTER_REGISTER);
+      router.push( redirectUrl ? REDIRECT_AFTER_REGISTER+`?next=${redirectUrl}` : REDIRECT_AFTER_REGISTER);
     } catch (error) {
       setServerError(getErrorMessage(error));
     } finally {

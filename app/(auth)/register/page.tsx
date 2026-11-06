@@ -1,10 +1,12 @@
 import AuthClient from '@/components/login/authClient'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const Register = () => {
   return (
     <div>
-      <AuthClient initialMode="register" />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AuthClient initialMode="register" />
+      </Suspense>
     </div>
   )
 }
