@@ -12,7 +12,6 @@ type Props = {
   setBookData: Dispatch<SetStateAction<{ tourDateId: number | null; seats: number | null; childSeats: number | null; cardId: number | null }>>
 }
 const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: Props) => {
-  const [expiry, setExpiry] = useState("");
   const [userCards, setUserCards] = useState<IPaymentCard[]>([]);
   const [cardForm, setCardForm] = useState<PaymentCard>({
     cardholder_name: "",
@@ -21,22 +20,16 @@ const BookingSecondStep = ({ setStep, chosenTourDate, bookData, setBookData }: P
     expiry_month: 0,
     expiry_year: 0,
   });
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputVal = e.target.value.replace(/\D/g, "");
-    const limitedVal = inputVal.slice(0, 4);
-    let formattedVal = limitedVal;
-    if (limitedVal.length > 2) {
-      formattedVal = `${limitedVal.slice(0, 2)}/${limitedVal.slice(2)}`;
-    }
 
-    setExpiry(formattedVal);
-  };
 
   const handleCardFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, } = e.target;
+    const { name, value,   } = e.target;
     setCardForm((prev) => ({
       ...prev,
-      [name]: name === "last_four_digits" || name === "expiry_month" || name === "expiry_year" ? Number(value) : value,
+      [name]:
+        name === "expiry_month" || name === "expiry_year"
+          ? Number(value)
+          : value,
     }));
   };
   const getUserCards = async () => {
