@@ -20,12 +20,12 @@ const BookingModal = ({ handleCloseModal }: { handleCloseModal: () => void }) =>
                 </p>
                 <div className="flex flex-col">
                     <button
-                     onClick={() => navigate.push("/register")}
+                     onClick={() => navigate.push(`/register?next=${window.location.pathname} `)}
                     className="bg-[#142A12] rounded-xl  text-white  px-[104.5px] py-2.5 cursor-pointer mb-6">
                         Qeydiyyatdan keç
                     </button>
                     <button 
-                      onClick={() => navigate.push("/login")}
+                      onClick={() => navigate.push(`/login?next=${window.location.pathname} `)}
                       className="border border-[#142A12] rounded-xl font-medium text-[#333333]  px-[104.5px] py-2.5 cursor-pointer">
                         Giriş et
                     </button>

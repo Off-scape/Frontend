@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import ReviewsSection from "@/components/tour/ReviewsSection";
-import type { TourDetail } from "@/types/Tour";
+
 import RatingStars from "@/ui/shared/RatingStars";
 import { ratingSummary } from "@/data/Reviews";
 import { FiHeart, FiMapPin, FiPhoneCall } from "react-icons/fi";
@@ -20,19 +20,33 @@ import {
 import { useEffect, useState } from "react";
 import { TourImagesService } from "@/services/tourImages.service";
 import BookingModal from "@/components/modal/BookingModal";
+
 import { TourDatesService } from "@/services/tourDates.service";
 
 interface TourDetailProps {
   tour: TourDetail;
 }
 
+interface BookData {
+  tourDateId: number | null;
+  seats: number | null;
+  childSeats: number | null;
+  cardId: number | null;
+}
+
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
-  const [tourDates, setTourDates] = useState<NonNullable<TourDetail["TourDates"]>>([]);
-  const [datesLoading, setDatesLoading] = useState(true);
 
-  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookData, setBookData] = useState<BookData>({
+    tourDateId: null,
+    seats: null,
+    childSeats: null,
+    cardId: null,
+  });
   useEffect(() => {
     const getTourImage = async () => {
       try {
@@ -42,6 +56,28 @@ const TourDetail = ({ tour }: TourDetailProps) => {
         console.error("Error fetching tour image:", e);
       }
     }
+    const getAuthToken = async () => {
+      try {
+        const token = await AuthService.getMe();
+        setIsAuthenticated(Boolean(token.data));
+      } catch (error) {
+        console.error("Error fetching auth token:", error);
+        setIsAuthenticated(false);
+      }
+    }
+    const getTourDate = async () => {
+      try {
+        const response = await TourDatesService.getDates(tour.id)
+        setTourDate(response.data.data)
+      } catch (error) {
+        console.log(error)
+      }
+      finally {
+        setIsAuthLoading(false);
+      }
+    }
+    getTourDate()
+    getAuthToken()
     getTourImage()
   }, [tour.id])
   useEffect(() => {
@@ -67,18 +103,20 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     return () => { active = false; };
   }, [tour.id]);
   const handleBookNow = () => {
-    if (!token) {
-      // Redirect to login page if not logged in
-      setIsTokenAvailable(true);
-    } else {
-      // Redirect to booking page if logged in
-      setIsTokenAvailable(false);
+    if (isAuthLoading) return;
 
+    if (isAuthenticated) {
+      setIsBookingOpen(true);
+    } else {
+      setIsAuthModalOpen(true);
     }
   };
-   const handleCloseModal = () => {
-    setIsTokenAvailable(false);
-  }
+  const handleCloseModal = () => {
+    setIsAuthModalOpen(false);
+    setIsBookingOpen(false);
+  };
+ 
+
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-8 md:px-12 relative">
       <header className="border-b border-zinc-300 pb-4">
@@ -89,7 +127,7 @@ const TourDetail = ({ tour }: TourDetailProps) => {
           {tourSubtitle}
         </p>
       </header>
-
+     
       <div className="mt-6 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
         {/* MAIN CONTENT */}
         <div className="xl:col-start-1 xl:row-start-1">
@@ -290,9 +328,22 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             </div>
           </div>
         </aside>
-        {
-          isTokenAvailable && <BookingModal  handleCloseModal={handleCloseModal} />
-        }
+        {isAuthModalOpen && (
+          <BookingModal
+            handleCloseModal={handleCloseModal}
+          />
+        )}
+
+        {isBookingOpen && (
+          <Booking
+            handleCloseModal={handleCloseModal}
+            tourDate={tourDate}
+            tourTitle={tour?.title}
+            tourSubtitle={tourSubtitle}
+            setBookData={setBookData}
+            bookData={bookData}
+          />
+        )}
       </div>
     </section>
   );

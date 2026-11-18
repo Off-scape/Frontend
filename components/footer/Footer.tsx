@@ -11,7 +11,8 @@ import WhatsappIcon from "@/icons/Whatsapp-icon";
 import TikTokIcon from "@/icons/Tik-tok-icon";
 import YoutubeIcon from "@/icons/Youtube-icon";
 import FooterBottom from "@/components/footer/footerBottom";
-import { EMAIL_REGEX } from "@/utils/validation";
+import { SubscriberService } from "@/services/subscriber.service";
+import { getErrorMessage } from "@/services/api";
 
 
 const playfair = Playfair_Display({
@@ -24,18 +25,34 @@ const roboto = Roboto({
 });
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [pendingAction, setPendingAction] = useState<"subscribe" | "unsubscribe" | null>(null);
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [newsletterError, setNewsletterError] = useState("");
 
-    if (!EMAIL_REGEX.test(email)) {
-      setError("Düzgün email daxil edin");
-      return;
+  const handleNewsletterAction = async (action: "subscribe" | "unsubscribe") => {
+    setPendingAction(action);
+    setNewsletterMessage("");
+    setNewsletterError("");
+    try {
+      if (action === "subscribe") {
+        await SubscriberService.subscribe();
+        setNewsletterMessage("Newsletter abunəliyiniz aktiv edildi.");
+      } else {
+        await SubscriberService.unsubscribe();
+        setNewsletterMessage("Newsletter abunəliyiniz dayandırıldı.");
+      }
+    } catch (requestError) {
+      const status = (requestError as { response?: { status?: number } })?.response?.status;
+      if (action === "subscribe" && status === 409) {
+        setNewsletterError("Bu email artıq newsletter-ə abunədir. Abunəlikdən çıxa bilərsiniz.");
+      } else if (status === 401) {
+        setNewsletterError("Newsletter-ə abunə olmaq üçün hesabınıza daxil olun.");
+      } else {
+        setNewsletterError(getErrorMessage(requestError));
+      }
+    } finally {
+      setPendingAction(null);
     }
-
-    setError("");
-    console.log("Email doğrudur:", email);
   };
   return (
     <div className={`${roboto.className} bg-white`}>
@@ -124,7 +141,7 @@ export default function Footer() {
 
               </div>
             </div>
-            {/* <div>
+            <div id="newsletter" className="xl:col-span-3">
               <div className="text-white text-sm leading-[100%] ">
                 <span className={`${playfair.className} font-bold`}>
                   OFFSCAPE{" "}
@@ -133,53 +150,30 @@ export default function Footer() {
                   dən son xəbərləri qaçırmayın
                 </span>
               </div>
-              <form onSubmit={handleSubmit}>
-                <div
-                  className="border-2 relative border-[#6A6A6D] rounded-[20px]
-                    w-75 sm:w-75 lg:w-100 max-[1285px]:w-75!
-                    h-11 sm:h-12 px-5 py-3.5 flex items-center mt-4"
+              <p className="mt-3 max-w-xl text-sm leading-6 text-white/80">
+                Yeniliklərdən xəbərdar olmaq üçün hesabınızla newsletter-ə abunə olun.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => void handleNewsletterAction("subscribe")}
+                  disabled={pendingAction !== null}
+                  className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-[#0B3E35] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <input
-                    type="text"
-                    placeholder="E-poçtunuz burada"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="text-white text-base outline-0 w-[75%] max-[1285px]:w-[63%] max-sm:w-[75%] h-full bg-transparent"
-                  />
-
-                  <div className="absolute right-28 bottom-0 w-px h-full bg-[#6A6A6D]" />
-
-                  <button
-                    type="submit"
-                    className="font-semibold text-base text-white leading-[100%] lg:pl-3 cursor-pointer max-[860px]:ml-3 max-sm:ml-0"
-                  >
-                    Abunə ol
-                  </button>
-                </div>
-
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              </form>
-              <div
-                className="flex mt-4 w-full 
-                lg:w-75 
-                min-[1388px]:w-75 
-                items-start"
-              >
-                <input
-                  type="checkbox"
-                  id="newsletter-checkbox"
-                  className="accent-[#6A6A6D] w-5 h-5 sm:w-6 sm:h-6 border-2 mt-1 shrink-0"
-                />
-
-                <label
-                  htmlFor="newsletter-checkbox"
-                  className="text-white text-sm ml-2 w-full block font-normal leading-6"
+                  {pendingAction === "subscribe" ? "Abunə olunur..." : "Abunə ol"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleNewsletterAction("unsubscribe")}
+                  disabled={pendingAction !== null}
+                  className="rounded-lg border border-white/60 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Qutunu işarələməklə, ən azı 18 yaşınızın olduğunu qəbul
-                  edirsiniz.
-                </label>
+                  {pendingAction === "unsubscribe" ? "Çıxılır..." : "Abunəlikdən çıx"}
+                </button>
               </div>
-            </div> */}
+              {newsletterMessage && <p role="status" className="mt-3 text-sm text-emerald-200">{newsletterMessage}</p>}
+              {newsletterError && <p role="alert" className="mt-3 text-sm text-red-200">{newsletterError}</p>}
+            </div>
           </div>
         </div>
         <FooterBottom />

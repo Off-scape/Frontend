@@ -19,7 +19,7 @@ const FooterBottom = () => {
               Geri bildiriş
             </li>
             <li className="hover:underline cursor-pointer font-normal">
-              Abunə ol
+              <a href="#newsletter">Abunə ol</a>
             </li>
             <li className="hover:underline cursor-pointer font-normal">Bloq</li>
           </ul>

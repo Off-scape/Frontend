@@ -1,20 +1,18 @@
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "@/components/tourcard/Participantavatars";
+import { JoinedTour } from "@/types/Activity";
 
 interface ActivityJoinedCardProps {
-  tour: Tour;
+  tour: JoinedTour;
 }
 
 const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
-  const image = tour.image ?? "/default-tour.png";
-  const price = tour.price ?? 0;
-  const date = tour.date ?? "-";
-  const time = tour.time ?? "";
-  const activity = tour.activity ?? "Tour";
-  const organizer = tour.organizer ?? "OffSpace";
-  const participantCount = tour.participantCount ?? 0;
-  const participants = tour.participants ?? [];
+  const image = tour.image_url ?? "/default-tour.png";
+  const price = tour.total_price ?? 0;
+  const date = tour.joined_at ?? "-";
+  const time = "";
+  const activity = tour.title ?? "Tour";
+  const organizer =  "OffSpace";
+  // const participantCount = tour.participant_count ?? 0;
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex">
@@ -54,10 +52,10 @@ const ActivityJoinedCard = ({ tour }: ActivityJoinedCardProps) => {
         </div>
 
         <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
-          <ParticipantAvatars
+          {/* <ParticipantAvatars
             participants={participants}
             count={participantCount}
-          />
+          /> */}
 
           <div className="flex gap-1.5 items-center flex-wrap">
             <button

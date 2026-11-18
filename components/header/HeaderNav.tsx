@@ -22,44 +22,6 @@ const fealiyyetItems = [
   { label: "Psixoloji sessiyalar", href: "/fealiyyet/psikho" },
 ];
 
-const fallbackRegionlarItems = [
-  { label: "Bakı", href: "/regionlar/baki" },
-  { label: "Ağdara", href: "/regionlar/agdara" },
-  { label: "Xocali", href: "/regionlar/xocali" },
-  { label: "Qusar", href: "/regionlar/qusar" },
-  { label: "Tərtar", href: "/regionlar/tertar" },
-  { label: "Gəncə", href: "/regionlar/gence" },
-  { label: "Astara", href: "/regionlar/astara" },
-  { label: "Xocavand", href: "/regionlar/xocavand" },
-  { label: "Laçin", href: "/regionlar/lacin" },
-  { label: "Yardımlı", href: "/regionlar/yardimli" },
-  { label: "Sumqayıt", href: "/regionlar/sumqayit" },
-  { label: "Balakan", href: "/regionlar/balakan" },
-  { label: "İsmayıllı", href: "/regionlar/ismayilli" },
-  { label: "Lerik", href: "/regionlar/lerik" },
-  { label: "Zaqatala", href: "/regionlar/zaqatala" },
-  { label: "Lənkəran", href: "/regionlar/lankaran" },
-  { label: "Cəbrayıl", href: "/regionlar/cabrayil" },
-  { label: "Kəlbəcər", href: "/regionlar/kalbcar" },
-  { label: "Masallı", href: "/regionlar/masalli" },
-  { label: "Şuşa", href: "/regionlar/susa" },
-  { label: "Xankəndi", href: "/regionlar/xankandi" },
-  { label: "Füzuli", href: "/regionlar/fuzuli" },
-  { label: "Qax", href: "/regionlar/qax" },
-  { label: "Oğuz", href: "/regionlar/oguz" },
-  { label: "Qubadlı", href: "/regionlar/qubadli" },
-  { label: "Şəki", href: "/regionlar/saki" },
-  { label: "Gədəbəy", href: "/regionlar/gadabay" },
-  { label: "Qəbələ", href: "/regionlar/qabala" },
-  { label: "Siyəzən", href: "/regionlar/siyazan" },
-  { label: "Xızı", href: "/regionlar/xizi" },
-  { label: "Abşeron", href: "/regionlar/abseron" },
-  { label: "Göygöl", href: "/regionlar/goygol" },
-  { label: "Quba", href: "/regionlar/quba" },
-  { label: "Şamaxı", href: "/regionlar/samahi" },
-  { label: "Ağdam", href: "/regionlar/agdam" },
-];
-
 const normalizeRegionItems = (data: unknown) => {
   const payload = Array.isArray(data)
     ? data
@@ -100,7 +62,7 @@ const normalizeRegionItems = (data: unknown) => {
 const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [regionlarItems, setRegionlarItems] = useState(fallbackRegionlarItems);
+  const [regionlarItems, setRegionlarItems] = useState<{ label: string; href: string }[]>([]);
   const [isRegionLoading, setIsRegionLoading] = useState(true);
   const pathname = usePathname();
 
@@ -115,15 +77,12 @@ const HeaderNav = ({ isMobile = false, onLinkClick }: HeaderNavProps) => {
         const normalized = normalizeRegionItems(response?.data ?? response);
 
         if (isMounted) {
-          if (normalized.length) {
-            setRegionlarItems(normalized);
-          } else {
-            setRegionlarItems(fallbackRegionlarItems);
-          }
+          setRegionlarItems(normalized);
         }
-      } catch {
+      } catch (error) {
+        console.error("Region siyahısını yükləmək mümkün olmadı:", error);
         if (isMounted) {
-          setRegionlarItems(fallbackRegionlarItems);
+          setRegionlarItems([]);
         }
       } finally {
         if (isMounted) {

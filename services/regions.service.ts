@@ -9,10 +9,6 @@ export const RegionsService = {
     return api.get(`/api/regions/${id}`);
   },
 
-  getRegionBySlug(slug: string) {
-    return api.get(`/api/regions/slug/${slug}`);
-  },
-
   updateRegion(id: string, data: any) {
     return api.patch(`/api/regions/${id}`, data);
   },

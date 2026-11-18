@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, PassField, PrimaryBtn } from "./formFields";
@@ -10,14 +10,15 @@ import { LoginInputs } from "@/types/auth";
 import { AuthService } from "@/services/auth.service";
 import { getErrorMessage } from "@/services/api";
 
-const REDIRECT_AFTER_LOGIN = "/personal";
+const REDIRECT_AFTER_LOGIN = "/";
 
 export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
   const [rem, setRem] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("next") || REDIRECT_AFTER_LOGIN;
   const {
     register,
     handleSubmit,
@@ -42,7 +43,7 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
         return;
       }
 
-      router.push(REDIRECT_AFTER_LOGIN);
+      router.push(redirectUrl);
     } catch (error) {
       setServerError(getErrorMessage(error));
     } finally {

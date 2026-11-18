@@ -1,26 +1,24 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import { Tour } from "@/types/Tour";
-import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
+import { LikedTour } from "@/types/Activity";
+import { formatDate } from "@/utils/formatDate";
 
 interface CardProps {
-  data: Tour;
+  data: LikedTour;
 }
 
 const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
-  const image = data.image ?? "/default-tour.png";
+  const image = data.image_url ?? "/default-tour.png";
   const price = data.price ?? 0;
-  const date = data.date ?? "-";
-  const time = data.time ?? "";
-  const activity = data.activity ?? "Tour";
-  const organizer = data.organizer ?? "OffSpace";
-  const participantCount = data.participantCount ?? 0;
-  const participants = data.participants ?? [];
+  const time = data.liked_at ?? "";
+  const activity = data.title ?? "Tour";
+  const participantCount = data.participant_count ?? 0;
+  // const participants =  [];
   const router = useRouter();
 
+ 
   return (
     <div
       onClick={() => router.push(`tours/${data.id}`)}
@@ -45,23 +43,23 @@ const ActivityLikedCard: React.FC<CardProps> = ({ data }) => {
           <span className="font-roboto text-[#000000] text-sm">
             Tarix və saat:
           </span>{" "}
-          {date} {time}
+             {formatDate(time)}
         </p>
 
         <h3 className="font-roboto text-[#000000] text-sm mb-2 line-clamp-2">
           Fəaliyyət: {activity}
         </h3>
 
-        <p className="text-sm text-gray-600 mb-2">
+        {/* <p className="text-sm text-gray-600 mb-2">
           <span className="font-roboto text-[#000000]">Təşkilatçı:</span>{" "}
           {organizer}
-        </p>
+        </p> */}
 
         <div className="flex items-center">
-          <ParticipantAvatars
+          {/* <ParticipantAvatars
             participants={participants}
             count={participantCount}
-          />
+          /> */}
         </div>
       </div>
     </div>

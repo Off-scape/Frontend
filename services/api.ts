@@ -1,13 +1,13 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL?.trim() ||
+  "https://backend-production-4afd.up.railway.app";
+
 export const api = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // HttpOnly cookie-ni brauzer avtomatik göndərir/qəbul edir
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 type ErrorBody = { message?: string | string[]; error?: string };

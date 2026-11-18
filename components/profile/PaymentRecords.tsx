@@ -45,7 +45,7 @@ const PaymentRecords = () => {
 
     const handleSetDefaultCard = async (id: number) => {
         try {
-            await CreditCardsService.setDefaultCard(id.toString());
+            await CreditCardsService.setDefaultCard(id);
             setChanged(!changed);
             alert("Kart uğurla əsas kart kimi təyin edildi.");
         } catch (error) {

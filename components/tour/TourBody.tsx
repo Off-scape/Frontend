@@ -41,7 +41,6 @@ const TourBody = () => {
     return () => clearTimeout(timer);
   }, [tourType,startDate]);
 
-  console.log("Tours data:", tours);
   return (
     <div className="sm:px-8 md:px-12">
       <TourNavigation />

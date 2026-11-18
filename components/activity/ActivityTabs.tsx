@@ -7,6 +7,7 @@ import ActivityJoinedCard from "./ActivityJoinedCard";
 import ActivityEmptyState from "./Activityemptystate";
 import ActivityFeedback from "./Activityfeedback";
 import { UserActivitiesService } from "@/services/userActivities.service";
+import { JoinedTour, LikedToursList } from "@/types/Activity";
 
 type TabType = "liked" | "joined";
 
@@ -16,8 +17,8 @@ const joinedTours2 = mockActivityTours;
 
 const ActivityTabs = () => {
   const [activeTab, setActiveTab] = useState<TabType>("liked");
-  const [likedTours, setLikedTours] = useState([]);
-  const [joinedTours, setJoinedTours] = useState([]);
+  const [likedTours, setLikedTours] = useState <LikedToursList>([]);
+  const [joinedTours, setJoinedTours] = useState<JoinedTour[]>([]);
   useEffect(() => {
     try {
       const getLikedTours = async () => {
@@ -34,6 +35,7 @@ const ActivityTabs = () => {
       console.log(err)
     }
   }, [])
+  console.log("joinedTours", joinedTours)
   return (
     <div>
       {/* Tab buttons */}
@@ -65,11 +67,11 @@ const ActivityTabs = () => {
       {/* Bəyəndiyim — mobile: 1 col → sm: 2 col → md: 3 col */}
       {activeTab === "liked" && (
         <div className="mt-6">
-          {likedTours1?.length === 0 ? (
+          {likedTours?.length === 0 ? (
             <ActivityEmptyState />
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              {likedTours1.map((tour) => (
+              {likedTours.map((tour) => (
                 <ActivityLikedCard key={tour?.id} data={tour} />
               ))}
             </div>
@@ -80,12 +82,12 @@ const ActivityTabs = () => {
       {/* Qatıldığım — mobile: 1 col → md: 2 col */}
       {activeTab === "joined" && (
         <div className="mt-6">
-          {joinedTours2?.length === 0 ? (
+          {joinedTours?.length === 0 ? (
             <ActivityEmptyState />
           ) : (
             <>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {joinedTours2.map((tour) => (
+                {joinedTours.map((tour) => (
                   <ActivityJoinedCard key={tour.id} tour={tour} />
                 ))}
               </div>

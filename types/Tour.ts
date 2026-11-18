@@ -97,8 +97,6 @@ export type Activity = {
   slug: string;
 };
 
-
-
 export type TourDetail = {
   id: number;
   userId: number;
@@ -126,5 +124,3 @@ export type TourDetail = {
   Region: Region;
   Category: Category | null;
   activities: Activity[];
-  TourDates?: Tour["TourDates"];
-};

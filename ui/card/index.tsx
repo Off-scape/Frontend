@@ -106,10 +106,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
         </p>
 
         <div className="flex items-center">
-          <ParticipantAvatars
+          {/* <ParticipantAvatars
             participants={participants}
-            count={Number(normalized.participantCount ?? 0)}
-          />
+
         </div>
       </div>
     </div>
