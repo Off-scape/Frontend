@@ -29,9 +29,14 @@ export interface Tour {
   slug?: string;
   region?: { name?: string; slug?: string } | string;
   TourDates?: Array<{
+    id?: number;
     startDate?: string;
     endDate?: string;
     price?: number | string;
+    priceForChild?: number | string;
+    availableSeats?: number;
+    minParticipants?: number;
+    maxParticipants?: number;
     currency?: string;
   }>;
 }
@@ -121,4 +126,5 @@ export type TourDetail = {
   Region: Region;
   Category: Category | null;
   activities: Activity[];
+  TourDates?: Tour["TourDates"];
 };

@@ -6,7 +6,7 @@ import { ITours, Tour } from "@/types/Tour";
 import ParticipantAvatars from "@/components/tourcard/Participantavatars";
 import { useRouter } from "next/navigation";
 import { TourImagesService } from "@/services/tourImages.service";
-import { TourDatesService } from "@/services/tourDates.service";
+import { TourDatesService, type TourDate } from "@/services/tourDates.service";
 import { formatDate } from "@/utils/formatDate";
 
 interface CardProps {
@@ -16,11 +16,14 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ data }) => {
   const normalized = data as any;
   const [imageUrl, setImageUrl] = React.useState<string | null>(null);
-  const [tourDates, setTourDates] = React.useState<any[]>([]);
+  const [tourDates, setTourDates] = React.useState<TourDate[]>([]);
   const image = normalized.image || "/default-tour.png";
   const title = normalized.title || normalized.activity || "Tour";
   const price = normalized.price ?? normalized.TourDates?.[0]?.price ?? 0;
-  const date = normalized.date || normalized.TourDates?.[0]?.startDate || "-";
+  const firstDate = tourDates[0] ?? normalized.TourDates?.[0];
+  const date = firstDate?.startDate
+    ? `${formatDate(firstDate.startDate)}${firstDate.endDate ? ` – ${formatDate(firstDate.endDate)}` : ""}`
+    : normalized.date || "-";
   const time = normalized.time || "";
   const organizer =
     normalized.organizer ||
@@ -48,14 +51,15 @@ const Card: React.FC<CardProps> = ({ data }) => {
     const handleTourDate = async () => {
       try {
         const response = await TourDatesService.getDates(Number(data?.id));
-        setTourDates(response.data.data || []);
+        const result = response.data?.data;
+        setTourDates(Array.isArray(result) ? result : []);
       } catch (e) {
         console.error("Error fetching tour date:", e);
       }
     }
     handleTourImage()
     handleTourDate()
-  }, [])
+  }, [data.id])
   return (
     <div
       onClick={() =>
@@ -73,7 +77,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         />
 
         <div className="absolute top-3 right-3 bg-yellow-400 text-black font-semibold px-3 py-1.5 rounded-full transition-all duration-300 group-hover:bg-yellow-200 group-hover:text-black text-sm">
-          {tourDates[0]?.price || price} AZN
+          {tourDates[0]?.price ?? price} {tourDates[0]?.currency ?? "AZN"}
         </div>
       </div>
 
@@ -104,7 +108,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         <div className="flex items-center">
           <ParticipantAvatars
             participants={participants}
-            count={tourDates.length}
+            count={Number(normalized.participantCount ?? 0)}
           />
         </div>
       </div>
