@@ -12,17 +12,26 @@ export interface RegisterPayload {
   password: string;
 }
 
+export type AuthRole = "user" | "superAdmin" | "admin" | "tourOwner" | "guide";
+
 export interface AuthUser {
   id?: string | number;
   name?: string;
+  firstName?: string;
+  lastName?: string;
   surname?: string;
   email: string;
+  role?: AuthRole;
+  permissions?: string[];
 }
 
 // Token body-də gəlmir (HttpOnly cookie ilə gedir), yalnız user qayıdır
 export interface AuthResponse {
   success?: boolean;
   user?: AuthUser;
+  data?: { user?: AuthUser };
+  message?: string;
+  code?: string;
 }
 
 export const AuthService = {
