@@ -1,9 +1,9 @@
 "use client";
 
-import { useAdminUser } from "@/components/admin/AdminShell";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminHomePage() {
-  const user = useAdminUser();
+  const { user } = useAuth();
   const name = user?.name || [user?.firstName, user?.lastName || user?.surname].filter(Boolean).join(" ") || user?.email || "";
 
   return (

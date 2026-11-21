@@ -1,10 +1,8 @@
-'use client";'
+"use client";
 
 import { GlobeIcon } from "@/icons/GlobeIcon";
-import { AuthService } from "@/services/auth.service";
-import { div } from "framer-motion/client";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 
 interface HeaderActionsProps {
@@ -12,24 +10,8 @@ interface HeaderActionsProps {
 }
 
 const HeaderActions = ({ isMobile = false }: HeaderActionsProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const response = await AuthService.getMe();
-        if (response.data.user) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuthentication();
-  }, []);
+  const { user, status } = useAuth();
+  const isAuthenticated = status === "ready" && Boolean(user);
   return (
     <>
       <Link

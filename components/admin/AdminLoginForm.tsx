@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { AuthService } from "@/services/auth.service";
-import { extractAuthUser, getAdminLoginError } from "@/utils/adminAuth";
+import { useAuth } from "@/contexts/AuthContext";
+import { getAdminLoginError } from "@/utils/adminAuth";
 import { safeNext } from "@/utils/safeNext";
 
 const STAFF_ROLES = ["superAdmin", "admin", "tourOwner", "guide"];
@@ -17,31 +17,20 @@ export default function AdminLoginForm({
   reason?: string;
 }) {
   const router = useRouter();
+  const { user, status, pathReady, login, notification } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [retryAfterSeconds, setRetryAfterSeconds] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const isCheckingSession = !pathReady || status === "loading";
 
   useEffect(() => {
-    let active = true;
-    AuthService.getMe()
-      .then(({ data }) => {
-        if (!active) return;
-        const user = extractAuthUser(data);
-        if (user?.role === "user") router.replace("/");
-        else if (user && STAFF_ROLES.includes(user.role ?? "")) router.replace("/admin");
-      })
-      .catch(() => undefined)
-      .finally(() => {
-        if (active) setIsCheckingSession(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [router]);
+    if (!pathReady || status !== "ready" || !user) return;
+    if (user.role === "user") router.replace("/");
+    else if (STAFF_ROLES.includes(user.role ?? "")) router.replace("/admin");
+  }, [pathReady, router, status, user]);
 
   useEffect(() => {
     if (retryAfterSeconds <= 0) return;
@@ -58,22 +47,12 @@ export default function AdminLoginForm({
     setIsSubmitting(true);
 
     try {
-      const response = await AuthService.login({ email: email.trim(), password });
-      let user = extractAuthUser(response.data);
-      if (!user) {
-        const meResponse = await AuthService.getMe();
-        user = extractAuthUser(meResponse.data);
-      }
-
-      if (!user) {
-        setError("Giriş alınmadı. İstifadəçi məlumatı tapılmadı.");
-        return;
-      }
-      if (user.role === "user") {
+      const loggedInUser = await login({ email: email.trim(), password });
+      if (loggedInUser.role === "user") {
         router.replace("/");
         return;
       }
-      if (!STAFF_ROLES.includes(user.role ?? "")) {
+      if (!STAFF_ROLES.includes(loggedInUser.role ?? "")) {
         router.replace("/admin/forbidden");
         return;
       }
@@ -95,11 +74,12 @@ export default function AdminLoginForm({
         <h1 className="mt-3 text-2xl font-bold text-gray-900">Daxil ol</h1>
         <p className="mt-2 text-sm text-gray-600">İşçi hesabınızla admin panelə daxil olun.</p>
 
-        {reason === "deactivated" && (
+        {(reason === "deactivated" || status === "deactivated") && (
           <p role="alert" className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-3 text-sm text-amber-900">
             Hesabınız deaktiv edilib
           </p>
         )}
+        {notification && <p role="alert" className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-3 text-sm text-amber-900">{notification}</p>}
 
         <form onSubmit={submit} className="mt-6 space-y-4">
           <label className="block text-sm font-medium text-gray-700">
