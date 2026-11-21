@@ -7,13 +7,14 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, PassField, PrimaryBtn } from "./formFields";
 import { validations } from "../../utils/validation";
 import { LoginInputs } from "@/types/auth";
-import { AuthService } from "@/services/auth.service";
 import { getErrorMessage } from "@/services/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 const REDIRECT_AFTER_LOGIN = "/";
 
 export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
   const router = useRouter();
+  const { login } = useAuth();
   const [rem, setRem] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -30,19 +31,10 @@ export default function LoginPanel({ onSwitch }: { onSwitch: () => void }) {
     setIsLoading(true);
 
     try {
-      const { data: res } = await AuthService.login({
+      await login({
         email: data.email.trim(),
         password: data.password,
       });
-
-      // Token body-də gəlmir, brauzer HttpOnly cookie-ni özü saxlayır
-      if (!res.user) {
-        setServerError(
-          "Giriş alınmadı: server istifadəçi məlumatını qaytarmadı.",
-        );
-        return;
-      }
-
       router.push(redirectUrl);
     } catch (error) {
       setServerError(getErrorMessage(error));

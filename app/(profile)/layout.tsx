@@ -4,8 +4,8 @@ import ProfileHeader from "@/components/profile/ProfileHeader"
 import ProfileSideBar from "@/components/profile/ProfileSideBar"
 import { ProfileAvatarProvider } from "@/components/profile/ProfileAvatarContext"
 import { useEffect, useState } from "react"
-import { AuthService } from "@/services/auth.service"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function ProfileLayout({
   children,
@@ -14,30 +14,19 @@ export default function ProfileLayout({
 }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isTokenAvailable, setIsTokenAvailable] = useState<boolean>(false);
+  const { status, pathReady } = useAuth();
 
   useEffect(() => {
-    const getAuthToken = async () => {
-      try {
-        const token = await AuthService.getMe();
+    if (!pathReady || (status !== "guest" && status !== "deactivated")) return;
+    router.replace(status === "deactivated" ? "/login?reason=deactivated" : "/login");
+  }, [pathReady, router, status]);
 
-        if (token.data) {
-          setIsTokenAvailable(true);
-          return;
-        }
-
-        router.push("/login");
-      } catch (error) {
-        console.error("Error fetching auth token:", error);
-        router.push("/login");
-      }
-    };
-
-    getAuthToken();
-  }, [router]);
-
-  if (!isTokenAvailable) {
-    return null;
+  if (pathReady && (status === "guest" || status === "deactivated")) return null;
+  if (!pathReady || status === "loading") {
+    return <main className="flex min-h-screen items-center justify-center">Yüklənir...</main>;
+  }
+  if (status === "error") {
+    return <main className="flex min-h-screen items-center justify-center" role="alert">Bağlantı xətası</main>;
   }
 
   return (
