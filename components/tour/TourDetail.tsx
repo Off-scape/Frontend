@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import ReviewsSection from "@/components/tour/ReviewsSection";
-import { ITourDate, type TourDetail } from "@/types/Tour";
-// import Avatar from "@/ui/shared/Avatar";
+
 import RatingStars from "@/ui/shared/RatingStars";
 import { ratingSummary } from "@/data/Reviews";
 import { FiHeart, FiMapPin, FiPhoneCall } from "react-icons/fi";
@@ -21,8 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { TourImagesService } from "@/services/tourImages.service";
 import BookingModal from "@/components/modal/BookingModal";
-import { AuthService } from "@/services/auth.service";
-import Booking from "@/components/booking/Booking";
+
 import { TourDatesService } from "@/services/tourDates.service";
 
 interface TourDetailProps {
@@ -38,10 +36,7 @@ interface BookData {
 
 const TourDetail = ({ tour }: TourDetailProps) => {
   const [tourImage, setTourImage] = useState<string>();
-  const [tourDate, setTourDate] = useState<ITourDate[]>([])
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -84,7 +79,29 @@ const TourDetail = ({ tour }: TourDetailProps) => {
     getTourDate()
     getAuthToken()
     getTourImage()
-  }, [])
+  }, [tour.id])
+  useEffect(() => {
+    let active = true;
+    const loadDates = async () => {
+      try {
+        const response = await TourDatesService.getDates(tour.id);
+        let result: unknown = response.data;
+        if (result && typeof result === "object" && "data" in result) {
+          result = (result as { data: unknown }).data;
+          if (result && typeof result === "object" && "data" in result) {
+            result = (result as { data: unknown }).data;
+          }
+        }
+        if (active && Array.isArray(result)) setTourDates(result);
+      } catch (error) {
+        console.error("Error fetching tour dates:", error);
+      } finally {
+        if (active) setDatesLoading(false);
+      }
+    };
+    void loadDates();
+    return () => { active = false; };
+  }, [tour.id]);
   const handleBookNow = () => {
     if (isAuthLoading) return;
 
@@ -234,6 +251,32 @@ const TourDetail = ({ tour }: TourDetailProps) => {
             >
               Bilet al
             </button>
+
+            <div className="mt-4 rounded-xl border border-zinc-200 p-4">
+              <h4 className="m-0 text-sm font-bold text-zinc-900">Mövcud tur tarixləri</h4>
+              {datesLoading ? (
+                <p className="mb-0 mt-2 text-sm text-zinc-500">Tarixlər yüklənir…</p>
+              ) : tourDates.length === 0 ? (
+                <p className="mb-0 mt-2 text-sm text-zinc-500">Hazırda açıq tarix yoxdur.</p>
+              ) : (
+                <ul className="mb-0 mt-3 space-y-2 p-0">
+                  {tourDates.map((date, index) => (
+                    <li key={date.id ?? `${date.startDate}-${index}`} className="list-none rounded-lg bg-zinc-50 px-3 py-2 text-sm">
+                      <p className="m-0 font-semibold text-zinc-800">
+                        {date.startDate ? new Date(date.startDate).toLocaleDateString("az-AZ") : "Tarix qeyd edilməyib"}
+                        {date.endDate ? ` – ${new Date(date.endDate).toLocaleDateString("az-AZ")}` : ""}
+                      </p>
+                      <p className="mb-0 mt-1 text-xs text-zinc-600">
+                        Böyük: {date.price ?? "—"} {date.currency ?? "USD"} · Uşaq: {date.priceForChild ?? "—"} {date.currency ?? "USD"}
+                      </p>
+                      <p className="mb-0 mt-1 text-xs text-zinc-500">
+                        Qalan yer: {date.availableSeats ?? "—"} · İştirakçı sayı: {date.minParticipants ?? "—"}–{date.maxParticipants ?? "—"}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
             <div className="mt-4 flex items-start gap-2 rounded-xl bg-zinc-50 p-3 text-sm text-zinc-600">
               <GoShieldCheck className="mt-0.5 size-4 shrink-0 text-zinc-500" />
